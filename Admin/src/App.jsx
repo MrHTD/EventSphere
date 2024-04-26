@@ -1,12 +1,19 @@
-import { useState } from 'react'
 import './App.css'
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import Login from './login'
+import Register from './register'
+import Dashboard from './dashboard'
 
 function App() {
 
   return (
-    <>
-      <h1 className='position-absolute top-50 start-50 translate-middle'>Admin</h1>
-    </>
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Login/>}/>
+      <Route path="/register" element={<Register/>}/>
+      <Route path="/dashboard" element={<Dashboard/>}/>
+    </Routes>
+  </BrowserRouter>
   )
 }
 
