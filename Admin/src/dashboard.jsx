@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Form, FloatingLabel, Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
+import { Navbar, Nav, Dropdown, Form, FloatingLabel, Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
+import { Header } from './header';
+import { Sidebar } from './sidebar';
+import { Charts } from './charts';
+import { SmallCard1 } from './smallcard1';
+import { SmallCard2 } from './smallcard2';
+import { Table } from './table';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-
-  const Logout = () => {
-    // Remove user information from local storage
-    localStorage.removeItem('user');
-    // Redirect to the login page or another appropriate page
-    navigate('/');
-  };
 
   useEffect(() => {
     // Check if the user is logged in
@@ -25,8 +24,46 @@ const Dashboard = () => {
 
   return (
     <>
-      <div>Dashboard</div>
-      <Button onClick={Logout}>Logout</Button>
+      {/* Body Wrapper */}
+      <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+        data-sidebar-position="fixed" data-header-position="fixed">
+        <Sidebar />
+        <div className="body-wrapper">
+          <header className="app-header">
+            <Header />
+          </header>
+          <Container fluid>
+            <Row>
+              <Col lg={8}>
+                <Charts />
+              </Col>
+              <Col lg={4}>
+                <Row>
+                  <Col lg={12}>
+                    <SmallCard1 />
+                  </Col>
+                  <Col lg={12}>
+                    <SmallCard2 />
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+            <Row>
+            </Row>
+
+            {/* Table */}
+            <Row>
+              <Col lg={12}>
+                <Table />
+              </Col>
+            </Row>
+
+            <Row>
+              {/* Product Cards */}
+            </Row>
+          </Container>
+        </div>
+      </div>
     </>
   )
 }

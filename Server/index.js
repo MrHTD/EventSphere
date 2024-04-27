@@ -4,6 +4,9 @@ const cors = require("cors")
 const bcrypt = require('bcryptjs-react');
 const multer = require('multer');
 const UserModel = require("./User");
+const ExpoModel = require("./Expo");
+const FloorPlanModel = require("./FloorPlan");
+const BoothModel = require("./Booth");
 
 const app = express()
 app.use(cors())
@@ -17,6 +20,44 @@ app.post('/register', (req, res) => {
         .then(users => res.json(users))
         .catch(error => res.json(error))
 });
+
+// Expo Management
+app.post('/addexpoevent', (req, res) => {
+    ExpoModel.create(req.body)
+        .then(expos => res.json(expos))
+        .catch(error => res.json(error))
+});
+
+app.get("/getexpoevents", (req, res) => {
+    ExpoModel.find({})
+        .then(expos => res.json(expos))
+        .catch(error => res.json(error))
+})
+
+app.post('/addfloorplan', (req, res) => {
+    FloorPlanModel.create(req.body)
+        .then(floorplans => res.json(floorplans))
+        .catch(error => res.json(error))
+});
+
+app.get("/getfloorplans", (req, res) => {
+    FloorPlanModel.find({})
+        .then(floorplans => res.json(floorplans))
+        .catch(error => res.json(error))
+})
+
+// 
+app.post('/addbooth', (req, res) => {
+    BoothModel.create(req.body)
+        .then(booths => res.json(booths))
+        .catch(error => res.json(error))
+});
+
+app.get("/getbooths", (req, res) => {
+    BoothModel.find({})
+        .then(booths => res.json(booths))
+        .catch(error => res.json(error))
+})
 
 // // Login endpoint
 // app.post('/login', async (req, res) => {

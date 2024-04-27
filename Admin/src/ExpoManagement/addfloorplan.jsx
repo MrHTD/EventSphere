@@ -1,0 +1,114 @@
+import React, { useEffect, useState } from 'react'
+import { Form, FloatingLabel, Container, Row, Col, Card, Button, Alert, InputGroup } from 'react-bootstrap';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios'
+
+const AddFloorPlan = () => {
+    const [data, setdata] = useState({ expoId: "", boothNumber: "", exhibitor: "", description: "" });
+    const [events, setEvents] = useState([]);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    const navigate = useNavigate();
+
+    const GetFormValue = (e) => {
+        setdata({ ...data, [e.target.name]: e.target.value });
+    };
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/getexpoevents')
+            .then(response => {
+                setEvents(response.data);
+            })
+            .catch(error => console.log(error));
+    }, []);
+
+    const BoothBtn = (e) => {
+        e.preventDefault();
+        if (!data.expoId || !data.boothNumber || !data.exhibitor || !data.description) {
+            setError("Please fill in all fields.");
+            setTimeout(() => {
+                setError("");
+            }, 3000);
+            return;
+        }
+        axios.post("http://localhost:3000/addfloorplan", data)
+            .then(result => {
+                console.log(result);
+                setSuccess("Event added successfully");
+            })
+            .catch(error => {
+                console.log(error);
+                setError("Please try again.");
+                setTimeout(() => {
+                    setError("");
+                }, 3000);
+            });
+    };
+
+    const handleEventChange = (e) => {
+        const selectedEventTitle = e.target.value;
+        const selectedEvent = events.find(event => event._id === selectedEventTitle);
+
+        if (selectedEvent) {
+            // Update boothNumber and expoId in the state
+            setdata(prevData => ({
+                ...prevData,
+                boothNumber: selectedEvent.boothNumber || "",
+                expoId: selectedEvent._id || ""
+            }));
+        }
+    };
+
+
+    return (
+        <>
+            <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+                data-sidebar-position="fixed" data-header-position="fixed">
+                <div className="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+                    <Container>
+                        <Row className="justify-content-center">
+                            <Col sm={12} md={12} lg={6} xxl={6}>
+                                {error && <Alert className="alert alert-danger" role="alert">{error}</Alert>}
+                                {success && <Alert className="alert alert-danger" role="alert">{success}</Alert>}
+                                <Card className="mb-0">
+                                    <Card.Header></Card.Header>
+                                    <h2 className="text-center fw-bold text-uppercase">Add Booth</h2>
+                                    <Card.Body>
+                                        <Form>
+                                            <Form.Group controlId='expoId' label='expoId' className='mb-3 overflow-hidden'>
+                                                <Form.Label>Expo Id</Form.Label>
+                                                <Form.Select className='rounded-2' name='expoId' onChange={handleEventChange} value={data.expoId || ''} required>
+                                                    <option disabled value=''>Select an Event</option>
+                                                    {events.map(event => (
+                                                        <option key={event._id} value={event._id}>
+                                                            {event.title}
+                                                        </option>
+                                                    ))}
+                                                </Form.Select>
+                                            </Form.Group>
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Booth Number</Form.Label>
+                                                <Form.Control type='text' rows={2} name='boothNumber' onChange={GetFormValue} value={data.boothNumber || ''} required />
+                                            </Form.Group>
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Exhibitor</Form.Label>
+                                                <Form.Control type='text' rows={2} name='exhibitor' onChange={GetFormValue} value={data.exhibitor || ''} required />
+                                            </Form.Group>
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Description</Form.Label>
+                                                <Form.Control as={"textarea"} rows={3} name='description' onChange={GetFormValue} value={data.description || ''} required />
+                                            </Form.Group>
+                                            <Button variant="primary" className="w-100 py-2 fs-4 mb-4 rounded-2" onClick={BoothBtn}>Add Booth</Button>
+                                        </Form>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        </Row>
+                    </Container>
+                </div>
+            </div>
+        </>
+    );
+};
+
+export default AddFloorPlan;
