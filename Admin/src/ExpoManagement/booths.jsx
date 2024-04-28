@@ -76,21 +76,27 @@ export const Booths = () => {
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            paginatedData.map((booth, index) => (
-                                                                <tr key={index}>
-                                                                    <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{booth.boothNumber}</h6></td>
-                                                                    <td className="border-bottom-0">
-                                                                        <span className="fw-normal">{booth.floor}</span>
-                                                                    </td>
-                                                                    <td className="border-bottom-0">
-                                                                        <span className="fw-normal">{booth.description}</span>
-                                                                    </td>
-                                                                    <td className="border-bottom-0">
-                                                                        <button type="button" className="btn btn-success m-1">Edit</button>
-                                                                        <button type="button" className="btn btn-danger m-1">Delete</button>
-                                                                    </td>
+                                                            paginatedData.length === 0 ? (
+                                                                <tr>
+                                                                    <td colSpan="4"><h4 className='fw-semibold'>No data available</h4></td>
                                                                 </tr>
-                                                            )
+                                                            ) : (
+                                                                paginatedData.map((booth, index) => (
+                                                                    <tr key={index}>
+                                                                        <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{booth.boothNumber}</h6></td>
+                                                                        <td className="border-bottom-0">
+                                                                            <span className="fw-normal">{booth.floor}</span>
+                                                                        </td>
+                                                                        <td className="border-bottom-0">
+                                                                            <span className="fw-normal">{booth.description}</span>
+                                                                        </td>
+                                                                        <td className="border-bottom-0">
+                                                                            <Link to={`/editbooth/${booth._id}`} type="button" className="btn btn-success m-1">Edit</Link>
+                                                                            <Link to={`/deletebooth/${booth._id}`} type="button" className="btn btn-danger m-1">Delete</Link>
+                                                                        </td>
+                                                                    </tr>
+                                                                )
+                                                                )
                                                             )
                                                         }
                                                     </tbody>

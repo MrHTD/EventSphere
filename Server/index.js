@@ -15,11 +15,30 @@ app.use(express.json())
 mongoose.connect("mongodb://localhost:27017/eventsphere")
 
 // Registration endpoint
+
+
 app.post('/register', (req, res) => {
-    UserModel.create(req.body)
-        .then(users => res.json(users))
-        .catch(error => res.json(error))
+    const { username, email, password } = req.body;
+
+    // Check if the username or email already exists in the database
+    UserModel.findOne({ $or: [{ username }, { email }] })
+        .then(existingUser => {
+            if (existingUser) {
+                // User with the same username or email already exists
+                res.json({ exists: true });
+            } else {
+                UserModel.create(req.body)
+                    .then(users => {
+                        // Send success response
+                        res.json(users);
+                    })
+                    .catch(error => res.json(error));
+            }
+        })
+        .catch(error => res.json(error));
+
 });
+
 
 // Expo Management
 app.post('/addexpoevent', (req, res) => {
@@ -30,6 +49,20 @@ app.post('/addexpoevent', (req, res) => {
 
 app.get("/getexpoevents", (req, res) => {
     ExpoModel.find({})
+        .then(expos => res.json(expos))
+        .catch(error => res.json(error))
+})
+
+app.put("/editexpoevent/:id", (req, res) => {
+    const id = req.params.id;
+    ExpoModel.findByIdAndUpdate({ _id: id }, { $set: req.body })
+        .then(expos => res.json(expos))
+        .catch(error => res.json(error))
+})
+
+app.delete("/deleteexpoevent/:id", (req, res) => {
+    const id = req.params.id;
+    ExpoModel.findByIdAndDelete({ _id: id })
         .then(expos => res.json(expos))
         .catch(error => res.json(error))
 })
@@ -46,7 +79,20 @@ app.get("/getfloorplans", (req, res) => {
         .catch(error => res.json(error))
 })
 
-// 
+app.put("/editfloorplan/:id", (req, res) => {
+    const id = req.params.id;
+    FloorPlanModel.findByIdAndUpdate({ _id: id }, { $set: req.body })
+        .then(floorplans => res.json(floorplans))
+        .catch(error => res.json(error))
+})
+
+app.delete("/deletefloorplan/:id", (req, res) => {
+    const id = req.params.id;
+    FloorPlanModel.findByIdAndDelete({ _id: id })
+        .then(floorplans => res.json(floorplans))
+        .catch(error => res.json(error))
+})
+
 app.post('/addbooth', (req, res) => {
     BoothModel.create(req.body)
         .then(booths => res.json(booths))
@@ -55,6 +101,20 @@ app.post('/addbooth', (req, res) => {
 
 app.get("/getbooths", (req, res) => {
     BoothModel.find({})
+        .then(booths => res.json(booths))
+        .catch(error => res.json(error))
+})
+
+app.put("/editbooth/:id", (req, res) => {
+    const id = req.params.id;
+    BoothModel.findByIdAndUpdate({ _id: id }, { $set: req.body })
+        .then(booths => res.json(booths))
+        .catch(error => res.json(error))
+})
+
+app.delete("/deletebooth/:id", (req, res) => {
+    const id = req.params.id;
+    BoothModel.findByIdAndDelete({ _id: id })
         .then(booths => res.json(booths))
         .catch(error => res.json(error))
 })

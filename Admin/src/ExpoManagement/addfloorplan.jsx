@@ -6,6 +6,7 @@ import axios from 'axios'
 const AddFloorPlan = () => {
     const [data, setdata] = useState({ expoId: "", boothNumber: "", exhibitor: "", description: "" });
     const [events, setEvents] = useState([]);
+    const [booths, setBooths] = useState([]);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
@@ -18,6 +19,14 @@ const AddFloorPlan = () => {
         axios.get('http://localhost:3000/getexpoevents')
             .then(response => {
                 setEvents(response.data);
+            })
+            .catch(error => console.log(error));
+    }, []);
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/getbooths')
+            .then(response => {
+                setBooths(response.data);
             })
             .catch(error => console.log(error));
     }, []);
@@ -35,6 +44,7 @@ const AddFloorPlan = () => {
             .then(result => {
                 console.log(result);
                 setSuccess("Event added successfully");
+                navigate('/floorplan');
             })
             .catch(error => {
                 console.log(error);
@@ -53,8 +63,21 @@ const AddFloorPlan = () => {
             // Update boothNumber and expoId in the state
             setdata(prevData => ({
                 ...prevData,
-                boothNumber: selectedEvent.boothNumber || "",
+                // boothNumber: selectedEvent.boothNumber || "",
                 expoId: selectedEvent._id || ""
+            }));
+        }
+    };
+
+    const handleBooth = (e) => {
+        const selectedEventTitle = e.target.value;
+        const selectedEvent = booths.find(booth => booth._id === selectedEventTitle);
+
+        if (selectedEvent) {
+            // Update boothNumber and expoId in the state
+            setdata(prevData => ({
+                ...prevData,
+                boothNumber: selectedEvent.boothNumber || "",
             }));
         }
     };
@@ -86,10 +109,19 @@ const AddFloorPlan = () => {
                                                     ))}
                                                 </Form.Select>
                                             </Form.Group>
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Booth Number</Form.Label>
-                                                <Form.Control type='text' rows={2} name='boothNumber' onChange={GetFormValue} value={data.boothNumber || ''} required />
+
+                                            <Form.Group controlId='boothNumber' label='boothNumber' className='mb-3 overflow-hidden'>
+                                                <Form.Label>Expo Id</Form.Label>
+                                                <Form.Select className='rounded-2' name='boothNumber' onChange={handleBooth} value={data.boothNumber || ''} required>
+                                                    <option disabled value=''>Select an Event</option>
+                                                    {booths.map(booth => (
+                                                        <option key={booth._id} value={booth._id}>
+                                                            {booth.boothNumber}
+                                                        </option>
+                                                    ))}
+                                                </Form.Select>
                                             </Form.Group>
+
                                             <Form.Group className="mb-3">
                                                 <Form.Label>Exhibitor</Form.Label>
                                                 <Form.Control type='text' rows={2} name='exhibitor' onChange={GetFormValue} value={data.exhibitor || ''} required />

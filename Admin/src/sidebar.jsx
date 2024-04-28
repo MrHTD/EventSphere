@@ -60,7 +60,7 @@ export const Sidebar = () => {
                             <span className="hide-menu">Exhibitor  Management</span>
                         </li>
                         <li className="sidebar-item">
-                            <NavLink className="sidebar-link" to="./ui-buttons.html" aria-expanded="false">
+                            <NavLink className="sidebar-link" to="/exhibitor" aria-expanded="false">
                                 <span>
                                     <IconPhoto />
                                 </span>
@@ -73,12 +73,12 @@ export const Sidebar = () => {
                             <span className="hide-menu">Schedule  Management</span>
                         </li>
                         <li className="sidebar-item">
-                            <Link className="sidebar-link" to="./ui-buttons.html" aria-expanded="false">
+                            <NavLink className="sidebar-link" to="./ui-buttons.html" aria-expanded="false">
                                 <span>
                                     <IconCalendar />
                                 </span>
                                 <span className="hide-menu">Schedule</span>
-                            </Link>
+                            </NavLink>
                         </li>
 
                         {/*  */}
@@ -86,20 +86,20 @@ export const Sidebar = () => {
                             <span className="hide-menu">Analytics and Reporting</span>
                         </li>
                         <li className="sidebar-item">
-                            <Link className="sidebar-link" to="./ui-buttons.html" aria-expanded="false">
+                            <NavLink className="sidebar-link" to="/report" aria-expanded="false">
                                 <span>
                                     <IconReportAnalytics />
                                 </span>
                                 <span className="hide-menu">Report</span>
-                            </Link>
+                            </NavLink>
                         </li>
                         <li className="sidebar-item">
-                            <Link className="sidebar-link" to="./ui-buttons.html" aria-expanded="false">
+                            <NavLink className="sidebar-link" to="/traffic" aria-expanded="false">
                                 <span>
                                     <IconDeviceAnalytics />
                                 </span>
                                 <span className="hide-menu">Booth Traffic</span>
-                            </Link>
+                            </NavLink>
                         </li>
 
                     </ul>

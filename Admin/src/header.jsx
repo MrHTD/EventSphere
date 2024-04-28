@@ -1,4 +1,4 @@
-import { Navbar, Nav, Dropdown } from 'react-bootstrap';
+import { Navbar, Nav, Dropdown, Button } from 'react-bootstrap';
 import { IconBellRinging, IconUser, IconMail, IconListCheck, IconMenu2 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import user from './assets/images/profile/user-1.jpg'
@@ -6,14 +6,11 @@ import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
     const navigate = useNavigate();
-
     const Logout = () => {
         // Remove user information from local storage
         localStorage.removeItem('user');
-        // Redirect to the login page or another appropriate page
         navigate('/');
     };
-
     return (
         <nav className="navbar navbar-expand-lg navbar-light">
             <ul className="navbar-nav">
@@ -22,12 +19,47 @@ export const Header = () => {
                         <IconMenu2 />
                     </Link>
                 </li>
-                <li className="nav-item">
-                    <Link className="nav-link nav-icon-hover" href="">
-                        <IconBellRinging />
-                        <div className="notification bg-primary rounded-circle"></div>
-                    </Link>
-                </li>
+                <div className="navbar-collapse justify-content-end px-0" id="navbarNav">
+                    <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+                        <li className="nav-item dropdown">
+                            <Link className="nav-link nav-icon-hover" href="" id="notification" data-bs-toggle="dropdown">
+                                <IconBellRinging />
+                                <div className="notification bg-primary rounded-circle"></div>
+                            </Link>
+                            <div className="dropdown-menu dropdown-menu-start p-0" aria-labelledby="notification">
+                                <div className="col-lg-12 w-100 d-flex align-items-stretch">
+                                    <div className="card pb-5 mb-0">
+                                        <div className="card-body p-4">
+                                            <div className="mb-4">
+                                                <h6 className="card-title fw-semibold">Notification</h6>
+                                            </div>
+                                            <ul className="timeline-widget mb-0 position-relative mb-n5">
+                                                <li className="timeline-item d-flex position-relative overflow-hidden">
+                                                    <div className="timeline-badge-wrap d-flex flex-column align-items-center">
+                                                        <span className="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
+                                                        <span className="timeline-badge-border d-block flex-shrink-0"></span>
+                                                    </div>
+                                                    <div className="timeline-desc fs-3 text-dark mt-n1">Payment received from John Doe of $385.90</div>
+                                                </li>
+                                                <li className="timeline-item d-flex position-relative">
+                                                    <div className="timeline-time text-dark flex-shrink-0 text-end">10:00 am</div>
+                                                    <div className="timeline-badge-wrap d-flex flex-column align-items-center">
+                                                        <span className="timeline-badge border-2 border border-info flex-shrink-0 my-8"></span>
+                                                        <span className="timeline-badge-border d-block flex-shrink-0"></span>
+                                                    </div>
+                                                    <div className="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New sale recorded
+                                                        <a
+                                                            href="" className="text-primary d-block fw-normal">#ML-3467</a>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </ul>
             <div className="navbar-collapse justify-content-end px-0" id="navbarNav">
                 <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-end">
@@ -51,7 +83,7 @@ export const Header = () => {
                                     <IconListCheck />
                                     <p className="mb-0 fs-3">My Task</p>
                                 </Link>
-                                <Link className="btn btn-outline-primary mx-3 mt-2 d-block" onClick={Logout}>Logout</Link>
+                                <Button className="btn btn-primary mx-auto mt-2 d-block" onClick={Logout}>Logout</Button>
                             </div>
                         </div>
                     </li>

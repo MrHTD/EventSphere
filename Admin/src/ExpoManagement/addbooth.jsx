@@ -41,7 +41,7 @@ const AddBooth = () => {
             .then(result => {
                 console.log(result);
                 setSuccess("Booth added successfully");
-                navigate('/expo');
+                navigate('/booths');
             })
             .catch(error => {
                 console.log(error);
