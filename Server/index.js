@@ -1,22 +1,130 @@
 const express = require("express")
 const mongoose = require("mongoose")
 const cors = require("cors")
-const bcrypt = require('bcryptjs-react');
+const bcrypt = require('bcrypt');
 const multer = require('multer');
 const UserModel = require("./User");
 const ExpoModel = require("./Expo");
 const FloorPlanModel = require("./FloorPlan");
 const BoothModel = require("./Booth");
+const jwt = require('jsonwebtoken');
+var nodemailer = require('nodemailer');
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const app = express()
 app.use(cors())
 app.use(express.json())
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: false }));
 
 mongoose.connect("mongodb://localhost:27017/eventsphere")
 
+app.post("/forget-password", async (req, res) => {
+    try {
+        const { email } = req.body;
+        const oldUser = await UserModel.findOne({ email });
+        if (!oldUser) {
+            return res.json({ status: "User not exists." });
+        } else {
+            // Generate token with unique secret per user
+            const secret = JWT_SECRET + oldUser.password;
+            const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, {
+                expiresIn: "5m",
+            });
+            const link = `http://localhost:3000/reset-password/${oldUser._id}/${token}`;
+
+            var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'mughis01@gmail.com',
+                    pass: 'nrtb pskk llwl hapv',
+                }
+            });
+
+            var mailOptions = {
+                from: user,
+                to: oldUser.email,
+                subject: 'Sending Email using Node.js',
+                text: link,
+            };
+
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+
+            console.log(link);
+        }
+    } catch (error) {
+        console.error("Error occurred:", error);
+        res.json({ error: "Internal server error." });
+    }
+});
+
+app.get("/reset-password/:id/:token", async (req, res) => {
+    const { id, token } = req.params;
+
+    const oldUser = await UserModel.findOne({ _id: id });
+    if (!oldUser) {
+        return res.json({ status: "User not exists." });
+    } else {
+        const secret = JWT_SECRET + oldUser.password;
+        try {
+            const verify = jwt.verify(token, secret);
+            res.render("index", { email: verify.email, status: "Not Verified" })
+        }
+        catch (error) {
+            console.log(error);
+            res.json("Token is not Verified");
+        }
+    }
+});
+
+app.post("/reset-password/:id/:token", async (req, res) => {
+    const { id, token } = req.params;
+    const { password } = req.body;
+
+    const oldUser = await UserModel.findById(id);
+
+    // Ensure user exists
+    if (!oldUser) {
+        return res.json({ status: "User not exists." });
+    }
+    else {
+        // Concatenate JWT_SECRET and user's password
+        const secret = JWT_SECRET + oldUser.password;
+        try {
+            const verify = jwt.verify(token, secret);
+
+            // Hash the new password
+            const encryptedPassword = await bcrypt.hash(password, 10);
+
+            // Update user's password in the database
+            await UserModel.updateOne(
+                {
+                    _id: id,
+                },
+                {
+                    $set: {
+                        password: encryptedPassword,
+                    }
+                },
+            );
+            // Send success response
+            // res.json({ status: "Password Updated" });
+            res.render("index", { email: verify.email, status: "Verified" });
+        } catch (error) {
+            console.error(error);
+            res.json("Something went wrong");
+        }
+    }
+});
+
 // Registration endpoint
-
-
 app.post('/register', (req, res) => {
     const { username, email, password } = req.body;
 
@@ -39,6 +147,20 @@ app.post('/register', (req, res) => {
 
 });
 
+app.get("/getUserbyid/:id", (req, res) => {
+    const id = req.params.id
+    UserModel.findById({ _id: id })
+        .then(users => res.json(users))
+        .catch(error => res.json(error))
+})
+
+app.put("/edituser/:id", (req, res) => {
+    const id = req.params.id;
+    const { username } = req.body;
+    UserModel.findByIdAndUpdate({ _id: id }, { $set: { username: username } })
+        .then(users => res.json(users))
+        .catch(error => res.json(error))
+})
 
 // Expo Management
 app.post('/addexpoevent', (req, res) => {
@@ -119,25 +241,6 @@ app.delete("/deletebooth/:id", (req, res) => {
         .catch(error => res.json(error))
 })
 
-// // Login endpoint
-// app.post('/login', async (req, res) => {
-//     const { username, password } = req.body;
-//     try {
-//         const user = await User.findOne({ username });
-//         if (!user) {
-//             return res.status(404).send('User not found');
-//         }
-//         const passwordMatch = await bcrypt.compare(password, user.password);
-//         if (!passwordMatch) {
-//             return res.status(401).send('Invalid password');
-//         }
-//         // Authentication successful
-//         res.send('Login successful');
-//     } catch (error) {
-//         res.status(500).send(error.message);
-//     }
-// });
-
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -147,10 +250,8 @@ app.post("/login", async (req, res) => {
 
         // If the user doesn't exist, respond with an error
         if (!user) {
-            return res.status(404).json({ error: 'User not found.' });
-        }
-
-        try {
+            return res.json({ status: 'Usernotfound' });
+        } else {
             const passwordMatch = await bcrypt.compare(password, user.password);
 
             if (passwordMatch) {
@@ -158,10 +259,8 @@ app.post("/login", async (req, res) => {
             } else {
                 return res.status(401).json({ error: 'Invalid email or password.' });
             }
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ error: 'Server error.' });
         }
+
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ error: 'Internal server error.' });

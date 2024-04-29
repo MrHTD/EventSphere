@@ -11,6 +11,11 @@ export const Header = () => {
         localStorage.removeItem('user');
         navigate('/');
     };
+
+    const user_id = localStorage.getItem('user')
+
+    var object = JSON.parse(user_id);
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light">
             <ul className="navbar-nav">
@@ -26,15 +31,16 @@ export const Header = () => {
                                 <IconBellRinging />
                                 <div className="notification bg-primary rounded-circle"></div>
                             </Link>
-                            <div className="dropdown-menu dropdown-menu-start p-0" aria-labelledby="notification">
-                                <div className="col-lg-12 w-100 d-flex align-items-stretch">
-                                    <div className="card pb-5 mb-0">
-                                        <div className="card-body p-4">
+                            <div className="dropdown-menu dropdown-menu-start p-0" aria-labelledby="notification" style={{ width: 'max-content' }}>
+                                <div className="col-lg-12 d-flex align-items-stretch">
+                                    <div className="card mb-0">
+                                        <div className="card-body p-4 pb-5">
                                             <div className="mb-4">
                                                 <h6 className="card-title fw-semibold">Notification</h6>
                                             </div>
                                             <ul className="timeline-widget mb-0 position-relative mb-n5">
                                                 <li className="timeline-item d-flex position-relative overflow-hidden">
+                                                    <div className="timeline-time text-dark flex-shrink-0 text-end">12:00 pm</div>
                                                     <div className="timeline-badge-wrap d-flex flex-column align-items-center">
                                                         <span className="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
                                                         <span className="timeline-badge-border d-block flex-shrink-0"></span>
@@ -70,15 +76,15 @@ export const Header = () => {
                         </Link>
                         <div className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                             <div className="message-body">
-                                <h6 className='text-center'>Username</h6>
-                                <Link href="" className="d-flex align-items-center gap-2 dropdown-item">
+                                <h6 className='text-center overflow-hidden'>{object.username}</h6>
+                                <Link to={`/myprofile/${object._id}`} className="d-flex align-items-center gap-2 dropdown-item">
                                     <IconUser />
                                     <p className="mb-0 fs-3">My Profile</p>
                                 </Link>
-                                <Link href="" className="d-flex align-items-center gap-2 dropdown-item">
+                                {/* <Link to="/myprofile" className="d-flex align-items-center gap-2 dropdown-item">
                                     <IconMail />
                                     <p className="mb-0 fs-3">My Account</p>
-                                </Link>
+                                </Link> */}
                                 <Link href="" className="d-flex align-items-center gap-2 dropdown-item">
                                     <IconListCheck />
                                     <p className="mb-0 fs-3">My Task</p>

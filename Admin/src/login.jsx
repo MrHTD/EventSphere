@@ -6,9 +6,10 @@ import logo from './assets/dark-logo.svg';
 
 
 const Login = () => {
-    const [data, setdata] = useState({ email: "", password: "" })
+    const [data, setdata] = useState({ email: "", password: "", role: "" })
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [rememberDevice, setRememberDevice] = useState(false); // State for Remember this Device
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -47,13 +48,17 @@ const Login = () => {
                 } else {
                     // Data Stored
                     localStorage.setItem('user', JSON.stringify(result.data.user));
+                    // Remember device functionality
+                    if (rememberDevice) {
+                        localStorage.setItem('rememberDevice', 'true');
+                    } else {
+                        localStorage.removeItem('rememberDevice');
+                    }
                     navigate('/dashboard');
                 }
             })
             .catch(error => {
-                console.log(error);
                 setError("Invalid email or password. Please try again.");
-                // Hide the error after 3 seconds (adjust the duration as needed)
                 setTimeout(() => {
                     setError("");
                 }, 3000);
@@ -91,8 +96,14 @@ const Login = () => {
                                                 </InputGroup>
                                             </Form.Group>
                                             <div className="d-flex align-items-center justify-content-between mb-4">
-                                                <Form.Check id="flexCheckChecked" type={"checkbox"} label={"Remeber this Device"} />
-                                                <Link to="./index.html" className="text-primary fw-bold">Forgot Password ?</Link>
+                                                <Form.Check
+                                                    id="flexCheckChecked"
+                                                    type={"checkbox"}
+                                                    label={"Remember this Device"}
+                                                    checked={rememberDevice}
+                                                    onChange={(e) => setRememberDevice(e.target.checked)}
+                                                />
+                                                <Link to="/forgetpassword" className="text-primary fw-bold">Forgot Password ?</Link>
                                             </div>
 
                                             <Button variant="primary" className="w-100 py-2 fs-4 mb-4 rounded-2" onClick={LoginBtn}>Sign In</Button>

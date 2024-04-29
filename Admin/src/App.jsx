@@ -14,6 +14,9 @@ import DeleteFloorPlan from './Delete/deletefloorplan'
 import { ExhibitorManagement } from './ExhibitorManagement/exhibitormanagement'
 import { Report } from './report'
 import { Traffic } from './traffic'
+import EditUser from './Edit/edituser'
+import ForgetPassword from './forgetpassword'
+import ResetPassword from './reset-password'
 
 function App() {
 
@@ -25,6 +28,9 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/report" element={<Report />} />
         <Route path="/traffic" element={<Traffic />} />
+        <Route path="/myprofile/:id" element={<EditUser />} />
+        <Route path="/forgetpassword" element={<ForgetPassword />} />
+        <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
 
         {/* Expo Routes */}
         <Route path="/expo" element={<ExpoManagement />} />
