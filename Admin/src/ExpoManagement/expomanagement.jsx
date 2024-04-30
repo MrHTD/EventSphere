@@ -64,7 +64,7 @@ export const ExpoManagement = () => {
                                         <div className="card-body p-4">
                                             <Row>
                                                 <Col>
-                                                    <h5 className="card-title fw-semibold mb-4">Expo Management</h5>
+                                                    <h5 className="card-title fw-semibold mb-4">Expo Event Management</h5>
                                                 </Col>
                                                 <Col className='text-end'>
                                                     <Link to="/addevent" type="button" className="w-auto btn btn-primary">Add Event</Link>
@@ -122,14 +122,14 @@ export const ExpoManagement = () => {
                                                                     <td className="border-bottom-0">
                                                                         <h6 className="fw-normal mb-0">{expo.organizer}</h6>
                                                                     </td>
-                                                                    <td className="border-bottom-0">
+                                                                    <td className="border-bottom-0 d-flex align-items-center justify-content-center">
                                                                         <div className="d-flex align-items-center gap-2">
                                                                             <span className={`badge rounded-5 text-uppercase fw-semibold ${getStatusColor(expo.status)}`}>{expo.status}</span>
                                                                         </div>
                                                                     </td>
                                                                     <td className="border-bottom-0">
-                                                                        <button type="button" className="btn btn-success m-1">Edit</button>
-                                                                        <button type="button" className="btn btn-danger m-1">Delete</button>
+                                                                        <Link to={`/editexpoevent/${expo._id}`} type="button" className="btn btn-success m-1">Edit</Link>
+                                                                        <Link to={`/deleteexpoevent/${expo._id}`} type="button" className="btn btn-danger m-1">Delete</Link>
                                                                     </td>
                                                                 </tr>
                                                             )

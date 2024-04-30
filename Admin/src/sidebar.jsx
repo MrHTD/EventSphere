@@ -40,7 +40,7 @@ export const Sidebar = () => {
                                 <span>
                                     <IconBuilding />
                                 </span>
-                                <span className="hide-menu">Expo</span>
+                                <span className="hide-menu">Expo Event</span>
                             </NavLink>
                             <NavLink className="sidebar-link" to="/booths" aria-expanded="false">
                                 <span>

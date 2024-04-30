@@ -154,6 +154,12 @@ app.get("/getUserbyid/:id", (req, res) => {
         .catch(error => res.json(error))
 })
 
+app.get("/getUser", (req, res) => {
+    UserModel.find({})
+        .then(users => res.json(users))
+        .catch(error => res.json(error))
+})
+
 app.put("/edituser/:id", (req, res) => {
     const id = req.params.id;
     const { username } = req.body;
@@ -168,6 +174,13 @@ app.post('/addexpoevent', (req, res) => {
         .then(expos => res.json(expos))
         .catch(error => res.json(error))
 });
+
+app.get("/getexpoeventsbyid/:id", (req, res) => {
+    const id = req.params.id;
+    ExpoModel.findByIdAndUpdate({ _id: id }, { $set: req.body })
+        .then(expos => res.json(expos))
+        .catch(error => res.json(error))
+})
 
 app.get("/getexpoevents", (req, res) => {
     ExpoModel.find({})

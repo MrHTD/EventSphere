@@ -13,7 +13,7 @@ export const ExhibitorManagement = () => {
     const [postsPerPage] = useState(10); // Number of users per page
 
     useEffect(() => {
-        axios.get('http://localhost:3000/getexpoevents')
+        axios.get('http://localhost:3000/getUser')
             .then(response => {
                 setEvents(response.data);
             })
@@ -23,11 +23,11 @@ export const ExhibitorManagement = () => {
     // status
     const getStatusColor = (status) => {
         switch (status) {
-            case 'upcoming':
+            case 'Pending':
                 return 'bg-secondary';
-            case 'ongoing':
-                return 'bg-warning';
-            case 'ended':
+            case 'Rejected':
+                return 'bg-danger';
+            case 'Approved':
                 return 'bg-success';
             default:
                 return 'bg-dark';
@@ -75,22 +75,13 @@ export const ExhibitorManagement = () => {
                                                     <thead className="text-dark fs-4">
                                                         <tr>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Title</h6>
+                                                                <h6 className="fw-semibold mb-0">Username</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Date</h6>
+                                                                <h6 className="fw-semibold mb-0">Email</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Location</h6>
-                                                            </th>
-                                                            <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Theme</h6>
-                                                            </th>
-                                                            <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Contact</h6>
-                                                            </th>
-                                                            <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Organizer</h6>
+                                                                <h6 className="fw-semibold mb-0">Role</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
                                                                 <h6 className="fw-semibold mb-0">Status</h6>
@@ -102,35 +93,29 @@ export const ExhibitorManagement = () => {
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            paginatedData.map((expo, index) => (
+                                                            paginatedData.map((exhibitor, index) => (
                                                                 <tr key={index}>
-                                                                    <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{expo.title}</h6></td>
-                                                                    <td className="border-bottom-0">
-                                                                        <p className="mb-0 fw-normal">{new Date(expo.date).toLocaleDateString()}</p>
-                                                                    </td>
-                                                                    <td className="border-bottom-0">
-                                                                        <h6 className="fw-semibold mb-1"></h6>
-                                                                        <span className="fw-normal">{expo.location}</span>
-                                                                    </td>
-                                                                    <td className="border-bottom-0">
-                                                                        <p className="mb-0 fw-normal">{expo.theme}</p>
-                                                                    </td>
-                                                                    <td className="border-bottom-0">
-                                                                        <h6 className="fw-semibold mb-1">{expo.contact.name}</h6>
-                                                                        <span className="fw-normal">{expo.contact.email}</span>
-                                                                    </td>
-                                                                    <td className="border-bottom-0">
-                                                                        <h6 className="fw-normal mb-0">{expo.organizer}</h6>
-                                                                    </td>
-                                                                    <td className="border-bottom-0">
-                                                                        <div className="d-flex align-items-center gap-2">
-                                                                            <span className={`badge rounded-5 text-uppercase fw-semibold ${getStatusColor(expo.status)}`}>{expo.status}</span>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td className="border-bottom-0">
-                                                                        <button type="button" className="btn btn-success m-1">Edit</button>
-                                                                        <button type="button" className="btn btn-danger m-1">Delete</button>
-                                                                    </td>
+                                                                    {
+                                                                        (exhibitor.role === "Attendee" || exhibitor.role === "Exhibitor") && (
+                                                                            <>
+                                                                                <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{exhibitor.username}</h6></td>
+                                                                                <td className="border-bottom-0">
+                                                                                    <p className="mb-0 fw-normal">{exhibitor.email}</p>
+                                                                                </td>
+                                                                                <td className="border-bottom-0">
+                                                                                    <p className="mb-0 fw-normal">{exhibitor.role}</p>
+                                                                                </td>
+                                                                                <td className="border-bottom-0">
+                                                                                    <div className="d-flex align-items-center gap-2">
+                                                                                        <span className={`badge rounded-5 text-uppercase fw-semibold ${getStatusColor(exhibitor.approvalStatus)}`}>{exhibitor.approvalStatus}</span>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td className="border-bottom-0">
+                                                                                    <button type="button" className="btn btn-sm btn-success m-1">Approve</button>
+                                                                                    <button type="button" className="btn btn-sm btn-danger m-1">Reject</button>
+                                                                                </td>
+                                                                            </>
+                                                                        )}
                                                                 </tr>
                                                             )
                                                             )

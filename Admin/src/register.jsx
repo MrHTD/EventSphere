@@ -6,7 +6,7 @@ import axios from 'axios'
 import logo from './assets/dark-logo.svg';
 
 const Register = () => {
-    const [data, setdata] = useState({ username: "", email: "", password: "", role: "Organizer" })
+    const [data, setdata] = useState({ username: "", email: "", password: "", role: "Organizer", approvalStatus: "Approved" })
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
@@ -44,18 +44,24 @@ const Register = () => {
                         setError("");
                     }, 2000);
                 } else {
-                    // Username or email doesn't exist, proceed with registration
-                    axios.post("http://localhost:3000/register", data)
-                        .then(result => {
-                            setSuccess("User registered successfully");
-                            setTimeout(() => {
-                                setSuccess("");
-                                navigate('/');
-                            }, 2000);
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
+                    bcrypt.hash(data.password, 10)
+                        .then((hashedPassword) => {
+                            // Update the data object with the hashed password
+                            const updatedData = { ...data, password: hashedPassword };
+
+                            axios.post("http://localhost:3000/register", updatedData)
+                                .then(result => {
+                                    setSuccess("User registered successfully");
+                                    setTimeout(() => {
+                                        setSuccess("");
+                                        navigate('/');
+                                    }, 2000);
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                });
+                        }
+                        )
                 }
             })
             .catch(error => {

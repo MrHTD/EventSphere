@@ -6,16 +6,15 @@ import { useNavigate } from 'react-router-dom';
 
 export const DashboardHeader = () => {
     const navigate = useNavigate();
-    
+
     const Logout = () => {
         // Remove user information from local storage
         localStorage.removeItem('publicuser');
         navigate('/');
     };
 
-    const user_id = localStorage.getItem('publicuser')
-
-    var object = JSON.parse(user_id);
+    const user_id = localStorage.getItem('user');
+    const object = user_id ? JSON.parse(user_id) : null;
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light">
@@ -77,11 +76,15 @@ export const DashboardHeader = () => {
                         </Link>
                         <div className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                             <div className="message-body">
-                                <h6 className='text-center overflow-hidden'>{object.username}</h6>
-                                <Link to={`/myprofile/${object._id}`} className="d-flex align-items-center gap-2 dropdown-item">
-                                    <IconUser />
-                                    <p className="mb-0 fs-3">My Profile</p>
-                                </Link>
+                                {object && (
+                                    <>
+                                        <h6 className='text-center overflow-hidden'>{object.username}</h6>
+                                        <Link to={`/myprofile/${object._id}`} className="d-flex align-items-center gap-2 dropdown-item">
+                                            <IconUser />
+                                            <p className="mb-0 fs-3">My Profile</p>
+                                        </Link>
+                                    </>
+                                )}
                                 {/* <Link to="/myprofile" className="d-flex align-items-center gap-2 dropdown-item">
                                     <IconMail />
                                     <p className="mb-0 fs-3">My Account</p>

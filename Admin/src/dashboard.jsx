@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { Header } from './header';
 import { Sidebar } from './sidebar';
-import { Charts } from './charts';
-import { SmallCard1 } from './smallcard1';
-import { SmallCard2 } from './smallcard2';
-import { Table } from './table';
+import { Charts } from './Components/charts';
+import { SmallCard1 } from './Components/smallcard1';
+import { SmallCard2 } from './Components/smallcard2';
+import { Table } from './Components/table';
 
 const Dashboard = () => {
   const navigate = useNavigate();

@@ -6,7 +6,7 @@ import axios from 'axios'
 import logo from './assets/dark-logo.svg';
 
 const Register = () => {
-    const [data, setdata] = useState({ username: "", email: "", password: "", role: "Organizer" })
+    const [data, setdata] = useState({ username: "", email: "", password: "", role: "Exhibitor", approvalStatus: "Pending" })
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
@@ -15,10 +15,11 @@ const Register = () => {
         setdata({ ...data, [e.target.name]: e.target.value })
     }
 
+
     const RegisterBtn = (e) => {
         e.preventDefault();
 
-        if (!data.username || !data.email || !data.password) {
+        if (!data.username || !data.email || !data.password || !data.role) {
             setError("Please fill in all fields");
             setTimeout(() => {
                 setError("");
@@ -34,17 +35,30 @@ const Register = () => {
                         setError("");
                     }, 2000);
                 } else {
-                    // Username or email doesn't exist, proceed with registration
-                    axios.post("http://localhost:3000/register", data)
-                        .then(result => {
-                            setSuccess("User registered successfully");
-                            setTimeout(() => {
-                                setSuccess("");
-                                navigate('/');
-                            }, 2000);
-                        })
-                        .catch(error => {
-                            console.log(error);
+                    bcrypt.hash(data.password, 10)
+                        .then((hashedPassword) => {
+                            // Update the data object with the hashed password
+                            const updatedData = { ...data, password: hashedPassword };
+
+                            // Set approval status based on role
+                            if (data.role == 'Exhibitor') {
+                                updatedData.approvalStatus = 'Pending';
+                            } else if (data.role == 'Attendee') {
+                                updatedData.approvalStatus = 'Approved';
+                            }
+
+                            axios.post("http://localhost:3000/register", updatedData)
+                                .then(result => {
+                                    console.log(result);
+                                    setSuccess("User registered successfully");
+                                    setTimeout(() => {
+                                        setSuccess("");
+                                        navigate('/signin');
+                                    }, 2000);
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                });
                         });
                 }
             })
@@ -85,6 +99,16 @@ const Register = () => {
                                                 <Form.Label>Email</Form.Label>
                                                 <Form.Control type="email" id="exampleInputEmail1" aria-describedby="emailHelp" name='email' onChange={GetFormValue} value={data.email} required />
                                             </Form.Group>
+
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Role</Form.Label>
+                                                <Form.Select name="role" onChange={GetFormValue} value={data.role}>
+                                                    <option disabled>Select Value</option>
+                                                    <option value="Exhibitor">Exhibitor</option>
+                                                    <option value="Attendee">Attendee</option>
+                                                </Form.Select>
+                                            </Form.Group>
+
                                             <Form.Group className="mb-4">
                                                 <Form.Label>Password</Form.Label>
                                                 <InputGroup>

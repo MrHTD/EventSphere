@@ -9,14 +9,16 @@ import AddFloorPlan from './ExpoManagement/addfloorplan'
 import AddBooth from './ExpoManagement/addbooth'
 import { Booths } from './ExpoManagement/booths'
 import DeleteBooth from './Delete/deletebooth'
-import DeleteExpo from './Delete/deleteexpo'
 import DeleteFloorPlan from './Delete/deletefloorplan'
 import { ExhibitorManagement } from './ExhibitorManagement/exhibitormanagement'
-import { Report } from './report'
-import { Traffic } from './traffic'
+import { Report } from './Analytics-Reporting/report'
+import { Traffic } from './Analytics-Reporting/traffic'
 import EditUser from './Edit/edituser'
 import ForgetPassword from './forgetpassword'
 import ResetPassword from './reset-password'
+import EditExpoEvent from './Edit/editexpoevent'
+import EditBooth from './Edit/editbooth'
+import DeleteExpoEvent from './Delete/deleteexpoevent'
 
 function App() {
 
@@ -43,8 +45,12 @@ function App() {
         {/* Exhibitor Routes */}
         <Route path="/exhibitor" element={<ExhibitorManagement />} />
 
+        {/* Edit Routes */}
+        <Route path="/editexpoevent/:id" element={<EditExpoEvent />} />
+        <Route path="/editbooth/:id" element={<EditBooth />} />
+
         {/* Delete Routes */}
-        <Route path="/deleteexpoevent/:id" element={<DeleteExpo />} />
+        <Route path="/deleteexpoevent/:id" element={<DeleteExpoEvent />} />
         <Route path="/deletefloorplan/:id" element={<DeleteFloorPlan />} />
         <Route path="/deletebooth/:id" element={<DeleteBooth />} />
 

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Navbar, Nav, Dropdown, Form, FloatingLabel, Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
-import { Sidebar } from './sidebar';
-import { Header } from './header';
+import { Sidebar } from '../sidebar';
+import { Header } from '../header';
 import { Link } from 'react-router-dom';
-import APagination from './pagination';
+import APagination from '../pagination';
 
 export const Traffic = () => {
     const [events, setEvents] = useState([]);

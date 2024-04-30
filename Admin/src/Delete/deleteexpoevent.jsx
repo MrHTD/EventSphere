@@ -1,9 +1,9 @@
 import React from 'react'
 
-const DeleteExpo = () => {
+const DeleteExpoEvent = () => {
   return (
     <div>DeleteExpo</div>
   )
 }
 
-export default DeleteExpo
+export default DeleteExpoEvent
