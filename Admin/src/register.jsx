@@ -6,7 +6,7 @@ import axios from 'axios'
 import logo from './assets/dark-logo.svg';
 
 const Register = () => {
-    const [data, setdata] = useState({ username: "", email: "", password: "", role: "Organizer", approvalStatus: "Approved" })
+    const [data, setdata] = useState({ username: "", email: "", password: "", role: "Organizer"})
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();

@@ -6,7 +6,7 @@ import axios from 'axios'
 import logo from './assets/dark-logo.svg';
 
 const Register = () => {
-    const [data, setdata] = useState({ username: "", email: "", password: "", role: "Exhibitor", approvalStatus: "Pending" })
+    const [data, setdata] = useState({ username: "", email: "", password: "", role: "Exhibitor" })
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
@@ -39,13 +39,6 @@ const Register = () => {
                         .then((hashedPassword) => {
                             // Update the data object with the hashed password
                             const updatedData = { ...data, password: hashedPassword };
-
-                            // Set approval status based on role
-                            if (data.role == 'Exhibitor') {
-                                updatedData.approvalStatus = 'Pending';
-                            } else if (data.role == 'Attendee') {
-                                updatedData.approvalStatus = 'Approved';
-                            }
 
                             axios.post("http://localhost:3000/register", updatedData)
                                 .then(result => {
