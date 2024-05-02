@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 // Define the schema for the Expo collection
 const ExpoSchema = new Schema({
   title: { type: String, required: true },        // Title field, required
-  date: { type: Date, required: true },           // Date field, required
+  startDate: { type: Date, required: true },      // Start date field, required
+  endDate: { type: Date, required: true },        // End date field, required
   location: { type: String, required: true },     // Location field, required
   description: { type: String },                  // Description field
   theme: { type: String },                        // Theme field

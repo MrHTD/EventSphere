@@ -3,12 +3,15 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 const bcrypt = require('bcrypt');
 const multer = require('multer');
+const cron = require('node-cron');
+const axios = require('axios');
 const UserModel = require("./User");
 const ExpoModel = require("./Expo");
 const FloorPlanModel = require("./FloorPlan");
 const BoothModel = require("./Booth");
 const jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
+const { EventModel, TimeSlotModel, SessionModel, SpeakerModel, LocationModel } = require("./Models/Schedule");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -279,6 +282,111 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ error: 'Internal server error.' });
     }
 });
+
+// Schedule Models
+
+app.post('/createSchedule', (req, res) => {
+    EventModel.create(req.body)
+        .then(events => res.json(events))
+        .catch(error => res.json(error))
+});
+
+app.get("/getSchedule", (req, res) => {
+    EventModel.find({})
+        .then(events => res.json(events))
+        .catch(error => res.json(error))
+})
+
+app.post('/createTimeSlot', (req, res) => {
+    TimeSlotModel.create(req.body)
+        .then(timeslots => res.json(timeslots))
+        .catch(error => res.json(error))
+});
+
+app.get("/getTimeSlot", (req, res) => {
+    TimeSlotModel.find({})
+        .then(timeslots => res.json(timeslots))
+        .catch(error => res.json(error))
+})
+
+app.post('/createSession', (req, res) => {
+    SessionModel.create(req.body)
+        .then(sessions => res.json(sessions))
+        .catch(error => res.json(error))
+});
+
+app.get("/getSession", (req, res) => {
+    SessionModel.find({})
+        .then(sessions => res.json(sessions))
+        .catch(error => res.json(error))
+})
+
+app.post('/createSpeaker', (req, res) => {
+    SpeakerModel.create(req.body)
+        .then(speakers => res.json(speakers))
+        .catch(error => res.status(400).json({ error: error.message }));
+});
+
+app.get("/getSpeaker", (req, res) => {
+    SpeakerModel.find({})
+        .then(speakers => res.json(speakers))
+        .catch(error => res.json(error))
+})
+
+app.post('/createLocation', (req, res) => {
+    LocationModel.create(req.body)
+        .then(locations => res.json(locations))
+        .catch(error => res.status(400).json({ error: error.message }));
+});
+
+app.get("/getLocations", (req, res) => {
+    LocationModel.find({})
+        .then(locations => res.json(locations))
+        .catch(error => res.json(error))
+})
+
+
+// Scheduling of Event Status
+
+app.post('/updateEventStatus', async (req, res) => {
+    try {
+        // Find events with start date less than or equal to current date and status is not 'ongoing' or 'ended'
+        const eventsToUpdate = await ExpoModel.find({
+            startDate: { $lte: new Date() },
+            $or: [
+                { status: { $ne: 'ongoing' } },
+                { status: { $ne: 'ended' } }
+            ]
+        });
+
+        // Update status of events
+        eventsToUpdate.forEach(async (event) => {
+            // Update event status based on logic
+            if (new Date() >= event.startDate && new Date() <= event.endDate) {
+                event.status = 'ongoing';
+            } else if (new Date() > event.endDate) {
+                event.status = 'ended';
+            }
+            await event.save(); // Save updated event
+        });
+
+        res.status(200).json({ message: 'Event statuses updated successfully' });
+    } catch (error) {
+        console.error('Error updating event statuses:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+cron.schedule('* * * * *', async () => {
+    try {
+        // Call the endpoint to update event statuses
+        await axios.post('http://localhost:3000/updateEventStatus');
+        console.log('Event statuses updated successfully');
+    } catch (error) {
+        console.error('Error updating event statuses:', error);
+    }
+});
+
 
 app.listen(3000, () => {
     console.log("Server is running port 3000....");

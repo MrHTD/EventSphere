@@ -78,7 +78,10 @@ export const ExpoManagement = () => {
                                                                 <h6 className="fw-semibold mb-0">Title</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Date</h6>
+                                                                <h6 className="fw-semibold mb-0">Start Date</h6>
+                                                            </th>
+                                                            <th className="border-bottom-0">
+                                                                <h6 className="fw-semibold mb-0">End Date</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
                                                                 <h6 className="fw-semibold mb-0">Location</h6>
@@ -106,7 +109,10 @@ export const ExpoManagement = () => {
                                                                 <tr key={index}>
                                                                     <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{expo.title}</h6></td>
                                                                     <td className="border-bottom-0">
-                                                                        <p className="mb-0 fw-normal">{new Date(expo.date).toLocaleDateString()}</p>
+                                                                        <p className="mb-0 fw-normal">{new Date(expo.startDate).toLocaleDateString()}</p>
+                                                                    </td>
+                                                                    <td className="border-bottom-0">
+                                                                        <p className="mb-0 fw-normal">{new Date(expo.endDate).toLocaleDateString()}</p>
                                                                     </td>
                                                                     <td className="border-bottom-0">
                                                                         <h6 className="fw-semibold mb-1"></h6>

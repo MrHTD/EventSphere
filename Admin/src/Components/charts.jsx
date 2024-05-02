@@ -11,10 +11,8 @@ export const Charts = () => {
                         </div>
                         <div>
                             <select className="form-select">
-                                <option value="1">March 2023</option>
-                                <option value="2">April 2023</option>
-                                <option value="3">May 2023</option>
-                                <option value="4">June 2023</option>
+                                <option value="1">March 2024</option>
+                                <option value="2">April 2024</option>
                             </select>
                         </div>
                     </div>

@@ -9,7 +9,8 @@ const EditExpoEvent = () => {
     const { id } = useParams();
     const [data, setdata] = useState({
         title: "",
-        date: "",
+        startDate: "",
+        endDate: "",
         description: "",
         location: "",
         theme: "",
@@ -69,7 +70,8 @@ const EditExpoEvent = () => {
         axios.get("http://localhost:3000/getexpoeventsbyid/" + id)
             .then(result => {
                 console.log(result);
-                result.data.date = formatDate(result.data.date);
+                result.data.startDate = formatDate(result.data.startDate);
+                result.data.endDate = formatDate(result.data.endDate);
                 setdata(result.data);
             })
             .catch(error => console.log(error));
@@ -78,7 +80,7 @@ const EditExpoEvent = () => {
     const EditExpoEventBtn = (e) => {
         e.preventDefault();
 
-        if (!data.title || !data.date || !data.status || !data.description || !data.location || !data.theme || !data.organizer || !data.contact.name || !data.contact.email || !data.contact.phone) {
+        if (!data.title || !data.startDate || !data.endDate || !data.status || !data.description || !data.location || !data.theme || !data.organizer || !data.contact.name || !data.contact.email || !data.contact.phone) {
             setError("Please fill in all fields");
             setTimeout(() => {
                 setError("");
@@ -88,7 +90,8 @@ const EditExpoEvent = () => {
 
         const updatedUserData = {
             title: data.title,
-            date: data.date,
+            startDate: data.startDate,
+            endDate: data.endDate,
             description: data.description,
             location: data.location,
             theme: data.theme,
@@ -137,19 +140,21 @@ const EditExpoEvent = () => {
                                         <p className="text-center">Edit User</p>
                                         {data ?
                                             <Form>
-
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>Title</Form.Label>
+                                                    <Form.Control type="text" aria-describedby="emailHelp" name='title' onChange={GetFormValue} value={data.title} required />
+                                                </Form.Group>
                                                 <Row>
-
                                                     <Col>
                                                         <Form.Group className="mb-3">
-                                                            <Form.Label>Title</Form.Label>
-                                                            <Form.Control type="text" aria-describedby="emailHelp" name='title' onChange={GetFormValue} value={data.title} required />
+                                                            <Form.Label>Start Date</Form.Label>
+                                                            <Form.Control type="date" aria-describedby="emailHelp" name='startDate' onChange={GetFormValue} value={data.startDate} required />
                                                         </Form.Group>
                                                     </Col>
                                                     <Col>
                                                         <Form.Group className="mb-3">
-                                                            <Form.Label>Date</Form.Label>
-                                                            <Form.Control type="date" aria-describedby="emailHelp" name='date' onChange={GetFormValue} value={data.date} required />
+                                                            <Form.Label>End Date</Form.Label>
+                                                            <Form.Control type="date" aria-describedby="emailHelp" name='endDate' onChange={GetFormValue} value={data.endDate} required />
                                                         </Form.Group>
                                                     </Col>
                                                 </Row>

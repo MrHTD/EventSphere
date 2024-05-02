@@ -11,6 +11,7 @@ const ExpoRegistrationSchema = new Schema({
   contactPhone: { type: String },                  // Contact phone number
   productsServices: { type: [String] },           // Array of products/services offered
   requiredDocuments: { type: [String], required: true }, // Array of required documents, required
+  approvalStatus: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' }
 });
 
 // Create a Mongoose model based on the schema

@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconLayoutDashboardFilled, IconX, IconArticle, IconReportAnalytics, IconDeviceAnalytics, IconMap, IconBuilding, IconPhoto, IconCalendar, IconArchive } from '@tabler/icons-react';
+import { IconLayoutDashboardFilled, IconX, IconArticle, IconReportAnalytics, IconDeviceAnalytics, IconMap, IconBuilding, IconPhoto, IconCalendar, IconArchive, IconClock, IconCalendarEvent, IconMicrophone2, IconLocation, IconListDetails } from '@tabler/icons-react';
 import { Link, NavLink } from 'react-router-dom';
 import icon from './assets/images/logos/dark-logo.svg'
 
@@ -73,11 +73,35 @@ export const Sidebar = () => {
                             <span className="hide-menu">Schedule  Management</span>
                         </li>
                         <li className="sidebar-item">
-                            <NavLink className="sidebar-link" to="./ui-buttons.html" aria-expanded="false">
+                            <NavLink className="sidebar-link" to="/session" aria-expanded="false">
                                 <span>
-                                    <IconCalendar />
+                                    <IconCalendarEvent />
+                                </span>
+                                <span className="hide-menu">Schedule Session</span>
+                            </NavLink>
+                            <NavLink className="sidebar-link" to="/schedule" aria-expanded="false">
+                                <span>
+                                    <IconListDetails />
                                 </span>
                                 <span className="hide-menu">Schedule</span>
+                            </NavLink>
+                            <NavLink className="sidebar-link" to="/timeslot" aria-expanded="false">
+                                <span>
+                                    <IconClock />
+                                </span>
+                                <span className="hide-menu">TimeSlot</span>
+                            </NavLink>
+                            <NavLink className="sidebar-link" to="/speaker" aria-expanded="false">
+                                <span>
+                                    <IconMicrophone2 />
+                                </span>
+                                <span className="hide-menu">Speaker</span>
+                            </NavLink>
+                            <NavLink className="sidebar-link" to="/location" aria-expanded="false">
+                                <span>
+                                    <IconLocation />
+                                </span>
+                                <span className="hide-menu">Location</span>
                             </NavLink>
                         </li>
 
@@ -94,11 +118,11 @@ export const Sidebar = () => {
                             </NavLink>
                         </li>
                         <li className="sidebar-item">
-                            <NavLink className="sidebar-link" to="/traffic" aria-expanded="false">
+                            <NavLink className="sidebar-link" to="/analytics" aria-expanded="false">
                                 <span>
                                     <IconDeviceAnalytics />
                                 </span>
-                                <span className="hide-menu">Booth Traffic</span>
+                                <span className="hide-menu">Analytics</span>
                             </NavLink>
                         </li>
 

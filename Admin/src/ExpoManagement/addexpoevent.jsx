@@ -6,8 +6,8 @@ import axios from 'axios'
 const AddExpoEvent = () => {
     const [data, setdata] = useState({
         title: "",
-        date: "",
-        description: "",
+        startDate: "",
+        endDate: "",
         location: "",
         theme: "",
         organizer: "",
@@ -56,7 +56,19 @@ const AddExpoEvent = () => {
 
     const LoginBtn = (e) => {
         e.preventDefault();
-        if (!data.title || !data.date || !data.description || !data.location || !data.theme || !data.organizer || !data.contact.name || !data.contact.email || !data.contact.phone) {
+
+        const startDate = new Date(data.startDate);
+        const endDate = new Date(data.endDate);
+
+        if (endDate < startDate) {
+            setError("End date cannot be older than the start date.");
+            setTimeout(() => {
+                setError("");
+            }, 3000);
+            return;
+        }
+
+        if (!data.title || !data.startDate || !data.endDate || !data.description || !data.location || !data.theme || !data.organizer || !data.contact.name || !data.contact.email || !data.contact.phone) {
             setError("Please fill in all fields.");
             setTimeout(() => {
                 setError("");
@@ -96,18 +108,23 @@ const AddExpoEvent = () => {
                                     <h2 className="text-center fw-bold text-uppercase">Add Event</h2>
                                     <Card.Body>
                                         <Form>
-                                            <Row>
 
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Title</Form.Label>
+                                                <Form.Control type="text" aria-describedby="emailHelp" name='title' onChange={GetFormValue} value={data.title} required />
+                                            </Form.Group>
+
+                                            <Row>
                                                 <Col>
                                                     <Form.Group className="mb-3">
-                                                        <Form.Label>Title</Form.Label>
-                                                        <Form.Control type="text" aria-describedby="emailHelp" name='title' onChange={GetFormValue} value={data.title} required />
+                                                        <Form.Label>Start Date</Form.Label>
+                                                        <Form.Control type="date" aria-describedby="emailHelp" name='startDate' onChange={GetFormValue} value={data.startDate} required />
                                                     </Form.Group>
                                                 </Col>
                                                 <Col>
                                                     <Form.Group className="mb-3">
-                                                        <Form.Label>Date</Form.Label>
-                                                        <Form.Control type="date" aria-describedby="emailHelp" name='date' onChange={GetFormValue} value={data.date} required />
+                                                        <Form.Label>End Date</Form.Label>
+                                                        <Form.Control type="date" aria-describedby="emailHelp" name='endDate' onChange={GetFormValue} value={data.endDate} required />
                                                     </Form.Group>
                                                 </Col>
                                             </Row>

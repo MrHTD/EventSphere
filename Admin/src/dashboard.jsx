@@ -54,7 +54,7 @@ const Dashboard = () => {
             {/* Table */}
             <Row>
               <Col lg={12}>
-                <Table />
+                {/* <Table /> */}
               </Col>
             </Row>
 

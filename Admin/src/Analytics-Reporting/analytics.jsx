@@ -6,7 +6,7 @@ import { Header } from '../header';
 import { Link } from 'react-router-dom';
 import APagination from '../pagination';
 
-export const Traffic = () => {
+export const Analytics = () => {
     const [events, setEvents] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10); // Number of users per page
@@ -41,14 +41,15 @@ export const Traffic = () => {
                                         <div className="card-body p-4">
                                             <Row>
                                                 <Col>
-                                                    <h5 className="card-title fw-semibold mb-4 text-center">Traffic</h5>
+                                                    <h5 className="card-title fw-semibold mb-4 text-center">Analytics</h5>
                                                 </Col>
                                             </Row>
                                             <div className="table-responsive">
+                                                <h1 className='text-centerz'>Loading ...</h1>
                                                 <table className="table text-nowrap mb-0 align-middle text-center">
                                                     <thead className="text-dark fs-4">
                                                         <tr>
-                                                            <th className="border-bottom-0">
+                                                            {/* <th className="border-bottom-0">
                                                                 <h6 className="fw-semibold mb-0">Title</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
@@ -71,7 +72,7 @@ export const Traffic = () => {
                                                             </th>
                                                             <th className="border-bottom-0">
                                                                 <h6 className="fw-semibold mb-0">Action</h6>
-                                                            </th>
+                                                            </th> */}
                                                         </tr>
                                                     </thead>
                                                     <tbody>

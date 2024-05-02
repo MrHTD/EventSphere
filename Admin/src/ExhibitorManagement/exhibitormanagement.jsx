@@ -98,12 +98,12 @@ export const ExhibitorManagement = () => {
                                                                     {
                                                                         (exhibitor.role === "Attendee" || exhibitor.role === "Exhibitor") && (
                                                                             <>
-                                                                                <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{exhibitor.username}</h6></td>
+                                                                                <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{exhibitor.companyName}</h6></td>
                                                                                 <td className="border-bottom-0">
-                                                                                    <p className="mb-0 fw-normal">{exhibitor.email}</p>
+                                                                                    <p className="mb-0 fw-normal">{exhibitor.companyWebsite}</p>
                                                                                 </td>
                                                                                 <td className="border-bottom-0">
-                                                                                    <p className="mb-0 fw-normal">{exhibitor.role}</p>
+                                                                                    <p className="mb-0 fw-normal">{exhibitor.companyAddress}</p>
                                                                                 </td>
                                                                                 <td className="border-bottom-0">
                                                                                     <div className="d-flex align-items-center gap-2">

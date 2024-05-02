@@ -12,13 +12,23 @@ import DeleteBooth from './Delete/deletebooth'
 import DeleteFloorPlan from './Delete/deletefloorplan'
 import { ExhibitorManagement } from './ExhibitorManagement/exhibitormanagement'
 import { Report } from './Analytics-Reporting/report'
-import { Traffic } from './Analytics-Reporting/traffic'
+import { Analytics } from './Analytics-Reporting/analytics'
 import EditUser from './Edit/edituser'
 import ForgetPassword from './forgetpassword'
 import ResetPassword from './reset-password'
 import EditExpoEvent from './Edit/editexpoevent'
 import EditBooth from './Edit/editbooth'
 import DeleteExpoEvent from './Delete/deleteexpoevent'
+import { Speaker } from './ScheduleManagement/speaker'
+import { Schedule } from './ScheduleManagement/schedule'
+import { SessionManagement } from './ScheduleManagement/sessionmanagement'
+import AddSession from './ScheduleManagement/addsession'
+import { TimeSLot } from './ScheduleManagement/timeslot'
+import { Location } from './ScheduleManagement/location'
+import AddSchedule from './ScheduleManagement/addschedule'
+import AddTimeslot from './ScheduleManagement/addtimeslot'
+import AddSpeaker from './ScheduleManagement/addspeaker'
+import AddLocation from './ScheduleManagement/addlocation'
 
 function App() {
 
@@ -29,7 +39,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/report" element={<Report />} />
-        <Route path="/traffic" element={<Traffic />} />
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="/myprofile/:id" element={<EditUser />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
@@ -38,12 +48,29 @@ function App() {
         <Route path="/expo" element={<ExpoManagement />} />
         <Route path="/floorplan" element={<FloorPlan />} />
         <Route path="/booths" element={<Booths />} />
+        {/* Add */}
         <Route path="/addevent" element={<AddExpoEvent />} />
         <Route path="/addfloorplan" element={<AddFloorPlan />} />
         <Route path="/addbooth" element={<AddBooth />} />
+        {/* Expo Routes End */}
 
         {/* Exhibitor Routes */}
         <Route path="/exhibitor" element={<ExhibitorManagement />} />
+        {/* Exhibitor Routes End */}
+
+        {/* Schedule Routes */}
+        <Route path="/session" element={<SessionManagement />} />
+        <Route path="/schedule" element={<Schedule />} />
+        <Route path="/timeslot" element={<TimeSLot />} />
+        <Route path="/speaker" element={<Speaker />} />
+        <Route path="/location" element={<Location />} />
+        {/* Add */}
+        <Route path="/addsession" element={<AddSession />} />
+        <Route path="/addschedule" element={<AddSchedule />} />
+        <Route path="/addtimeslot" element={<AddTimeslot />} />
+        <Route path="/addspeaker" element={<AddSpeaker />} />
+        <Route path="/addlocation" element={<AddLocation />} />
+        {/* Schedule Routes End */}
 
         {/* Edit Routes */}
         <Route path="/editexpoevent/:id" element={<EditExpoEvent />} />
