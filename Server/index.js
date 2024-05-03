@@ -40,15 +40,16 @@ app.post("/forget-password", async (req, res) => {
             var transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: 'mughis01@gmail.com',
-                    pass: 'nrtb pskk llwl hapv',
+                    user: 'mughisuddinahmed@gmail.com',
+                    pass: 'pimq iyzh rwhl eyfm',
                 }
             });
+            const user ='EventSphere <mughisuddinahmed@gmail.com>';
 
             var mailOptions = {
                 from: user,
                 to: oldUser.email,
-                subject: 'Sending Email using Node.js',
+                subject: 'Your Password Reset Link: ',
                 text: link,
             };
 
@@ -370,7 +371,7 @@ app.post('/updateEventStatus', async (req, res) => {
             await event.save(); // Save updated event
         });
 
-        res.status(200).json({ message: 'Event statuses updated successfully' });
+        // res.status(200).json({ message: 'Event statuses updated successfully' });
     } catch (error) {
         console.error('Error updating event statuses:', error);
         res.status(500).json({ error: 'Internal server error' });
