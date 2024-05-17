@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios'
 
 const AddFloorPlan = () => {
-    const [data, setdata] = useState({ expoId: "", boothNumber: "", exhibitor: "", description: "" });
+    const [data, setdata] = useState({ expoId: "", boothNumber: "", description: "" });
     const [events, setEvents] = useState([]);
     const [booths, setBooths] = useState([]);
     const [error, setError] = useState("");
@@ -33,7 +33,7 @@ const AddFloorPlan = () => {
 
     const BoothBtn = (e) => {
         e.preventDefault();
-        if (!data.expoId || !data.boothNumber || !data.exhibitor || !data.description) {
+        if (!data.expoId || !data.boothNumber || !data.description) {
             setError("Please fill in all fields.");
             setTimeout(() => {
                 setError("");
@@ -77,7 +77,7 @@ const AddFloorPlan = () => {
             // Update boothNumber and expoId in the state
             setdata(prevData => ({
                 ...prevData,
-                boothNumber: selectedEvent.boothNumber || "",
+                boothNumber: selectedEvent._id || "",
             }));
         }
     };
@@ -95,7 +95,7 @@ const AddFloorPlan = () => {
                                 {success && <Alert className="alert alert-danger" role="alert">{success}</Alert>}
                                 <Card className="mb-0">
                                     <Card.Header></Card.Header>
-                                    <h2 className="text-center fw-bold text-uppercase">Add Booth</h2>
+                                    <h2 className="text-center fw-bold text-uppercase">Add Floor Plan</h2>
                                     <Card.Body>
                                         <Form>
                                             <Form.Group controlId='expoId' label='expoId' className='mb-3 overflow-hidden'>
@@ -111,9 +111,9 @@ const AddFloorPlan = () => {
                                             </Form.Group>
 
                                             <Form.Group controlId='boothNumber' label='boothNumber' className='mb-3 overflow-hidden'>
-                                                <Form.Label>Expo Id</Form.Label>
+                                                <Form.Label>Booth Number</Form.Label>
                                                 <Form.Select className='rounded-2' name='boothNumber' onChange={handleBooth} value={data.boothNumber || ''} required>
-                                                    <option disabled value=''>Select an Event</option>
+                                                    <option disabled value=''>Select an Booth Number</option>
                                                     {booths.map(booth => (
                                                         <option key={booth._id} value={booth._id}>
                                                             {booth.boothNumber}
@@ -122,10 +122,6 @@ const AddFloorPlan = () => {
                                                 </Form.Select>
                                             </Form.Group>
 
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Exhibitor</Form.Label>
-                                                <Form.Control type='text' rows={2} name='exhibitor' onChange={GetFormValue} value={data.exhibitor || ''} required />
-                                            </Form.Group>
                                             <Form.Group className="mb-3">
                                                 <Form.Label>Description</Form.Label>
                                                 <Form.Control as={"textarea"} rows={3} name='description' onChange={GetFormValue} value={data.description || ''} required />

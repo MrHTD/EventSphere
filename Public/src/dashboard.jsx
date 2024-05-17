@@ -8,6 +8,7 @@ import { SmallCard1 } from './Components/smallcard1';
 import { SmallCard2 } from './Components/smallcard2';
 import { Table } from './Components/table';
 import { DashboardHeader } from './dashboardheader';
+import { Expos } from './ExhibitorManagement/expos';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -33,33 +34,11 @@ const Dashboard = () => {
             <DashboardHeader />
           </header>
           <Container fluid>
-            <Row>
-              <Col lg={8}>
-                <Charts />
-              </Col>
-              <Col lg={4}>
-                <Row>
-                  <Col lg={12}>
-                    <SmallCard1 />
-                  </Col>
-                  <Col lg={12}>
-                    <SmallCard2 />
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-            <Row>
-            </Row>
-
             {/* Table */}
             <Row>
               <Col lg={12}>
-                <Table />
+                <Expos />
               </Col>
-            </Row>
-
-            <Row>
-              {/* Product Cards */}
             </Row>
           </Container>
         </div>

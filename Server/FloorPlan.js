@@ -3,9 +3,8 @@ const Schema = mongoose.Schema;
 
 // Define the schema for booth allocation
 const FloorPlanSchema = new Schema({
-  expoId: { type: mongoose.Schema.Types.ObjectId, ref: 'expos', required: true }, // Reference to the Expo collection
-  boothNumber: { type: Number, required: true },   // Booth number, required
-  exhibitor: { type: String },                     // Name of the exhibitor
+  expoId: { type: mongoose.Schema.Types.ObjectId, ref: 'expos', required: true },
+  boothNumber: { type: mongoose.Schema.Types.ObjectId, ref: 'booths', required: true },
   description: { type: String },                   // Description of the booth
 });
 

@@ -3,23 +3,33 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Form, FloatingLabel, Container, Row, Col, Card, Button, Alert, InputGroup } from 'react-bootstrap';
 import bcrypt from 'bcryptjs-react';
 import axios from 'axios'
-import logo from './assets/dark-logo.svg';
+import logo from '/logo.png';
 
 const Register = () => {
     const [data, setdata] = useState({ username: "", email: "", password: "", role: "Exhibitor" })
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [previewImage, setPreviewImage] = useState(null);
+
     const navigate = useNavigate();
 
     const GetFormValue = (e) => {
         setdata({ ...data, [e.target.name]: e.target.value })
     }
 
+    const handleFileChange = (e) => {
+        setdata({ ...data, image: e.target.files[0] });
+        const file = e.target.files[0];
+        setdata({ ...data, image: file })
+
+        const imageUrl = URL.createObjectURL(file);
+        setPreviewImage(imageUrl); // Set the preview URL in state
+    };
 
     const RegisterBtn = (e) => {
         e.preventDefault();
 
-        if (!data.username || !data.email || !data.password || !data.role) {
+        if (!data.username || !data.email || !data.password || !data.role || !data.image) {
             setError("Please fill in all fields");
             setTimeout(() => {
                 setError("");
@@ -40,7 +50,14 @@ const Register = () => {
                             // Update the data object with the hashed password
                             const updatedData = { ...data, password: hashedPassword };
 
-                            axios.post("http://localhost:3000/register", updatedData)
+                            const formData = new FormData();
+                            formData.append("username", data.username);
+                            formData.append("email", data.email);
+                            formData.append("password", hashedPassword);
+                            formData.append("role", data.role);
+                            formData.append("image", data.image);
+
+                            axios.post("http://localhost:3000/register", formData)
                                 .then(result => {
                                     console.log(result);
                                     setSuccess("User registered successfully");
@@ -77,12 +94,18 @@ const Register = () => {
                                 <Card className="mb-0">
                                     <Card.Body>
                                         <Link to="./index.html" className="text-nowrap logo-img text-center d-block py-3 w-100">
-                                            <img src={logo} width="180" alt="" />
+                                            <img src={logo} width="350" alt="" />
                                         </Link>
                                         <p className="text-center">Register</p>
                                         <Form>
                                             <Form.Control type="hidden" className='rounded-2' placeholder="role" name='role' />
 
+                                            {previewImage && <img src={previewImage} width={150} alt="Selected User" className="img-fluid rounded-auto rounded-4" />}
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Profile Image</Form.Label>
+                                                <Form.Control type="file" name='image' onChange={handleFileChange} required />
+                                            </Form.Group>
+                                            
                                             <Form.Group className="mb-3">
                                                 <Form.Label>Username</Form.Label>
                                                 <Form.Control type="text" id="exampleInputUsername" aria-describedby="emailHelp" name='username' onChange={GetFormValue} value={data.username} required />

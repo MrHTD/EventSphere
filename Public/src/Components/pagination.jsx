@@ -1,7 +1,7 @@
 import React from 'react';
 import Pagination from 'react-bootstrap/Pagination';
 
-const APagination = ({ totalPages, currentPage, onPageChange }) => {
+const PPagination = ({ totalPages, currentPage, onPageChange }) => {
     return (
         <Pagination className='shadow-lg'>
             <Pagination.Prev
@@ -29,4 +29,4 @@ const APagination = ({ totalPages, currentPage, onPageChange }) => {
     );
 };
 
-export default APagination;
+export default PPagination;

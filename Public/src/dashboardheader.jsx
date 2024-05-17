@@ -1,11 +1,15 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Navbar, Nav, Dropdown, Button } from 'react-bootstrap';
-import { IconBellRinging, IconUser, IconMail, IconListCheck, IconMenu2 } from '@tabler/icons-react';
+import { IconBellRinging, IconUser, IconLockOff, IconListCheck, IconMenu2 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import user from './assets/images/profile/user-1.jpg'
 import { useNavigate } from 'react-router-dom';
+import { Notification } from "./Components/notification";
 
 export const DashboardHeader = () => {
     const navigate = useNavigate();
+    const [data, setData] = useState({});
 
     const Logout = () => {
         // Remove user information from local storage
@@ -13,8 +17,17 @@ export const DashboardHeader = () => {
         navigate('/');
     };
 
-    const user_id = localStorage.getItem('user');
+    const user_id = localStorage.getItem('publicuser');
     const object = user_id ? JSON.parse(user_id) : null;
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/getUserbyid/' + object._id)
+            .then(response => {
+                setData(response.data);
+                // console.log(response.data);
+            })
+            .catch(error => console.log(error));
+    }, []);
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light">
@@ -32,36 +45,7 @@ export const DashboardHeader = () => {
                                 <div className="notification bg-primary rounded-circle"></div>
                             </Link>
                             <div className="dropdown-menu dropdown-menu-start p-0" aria-labelledby="notification" style={{ width: 'max-content' }}>
-                                <div className="col-lg-12 d-flex align-items-stretch">
-                                    <div className="card mb-0">
-                                        <div className="card-body p-4 pb-5">
-                                            <div className="mb-4">
-                                                <h6 className="card-title fw-semibold">Notification</h6>
-                                            </div>
-                                            <ul className="timeline-widget mb-0 position-relative mb-n5">
-                                                <li className="timeline-item d-flex position-relative overflow-hidden">
-                                                    <div className="timeline-time text-dark flex-shrink-0 text-end">12:00 pm</div>
-                                                    <div className="timeline-badge-wrap d-flex flex-column align-items-center">
-                                                        <span className="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-                                                        <span className="timeline-badge-border d-block flex-shrink-0"></span>
-                                                    </div>
-                                                    <div className="timeline-desc fs-3 text-dark mt-n1">Payment received from John Doe of $385.90</div>
-                                                </li>
-                                                <li className="timeline-item d-flex position-relative">
-                                                    <div className="timeline-time text-dark flex-shrink-0 text-end">10:00 am</div>
-                                                    <div className="timeline-badge-wrap d-flex flex-column align-items-center">
-                                                        <span className="timeline-badge border-2 border border-info flex-shrink-0 my-8"></span>
-                                                        <span className="timeline-badge-border d-block flex-shrink-0"></span>
-                                                    </div>
-                                                    <div className="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New sale recorded
-                                                        <a
-                                                            href="" className="text-primary d-block fw-normal">#ML-3467</a>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                                <Notification />
                             </div>
                         </li>
                     </ul>
@@ -70,28 +54,31 @@ export const DashboardHeader = () => {
             <div className="navbar-collapse justify-content-end px-0" id="navbarNav">
                 <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-end">
                     <li className="nav-item dropdown">
-                        <Link className="nav-link nav-icon-hover" href="" id="drop2" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <img src={user} alt="" width="35" height="35" className="rounded-circle" />
+                        <Link className="" to="" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div className="d-flex align-items-center">
+                                <div className="nav-link nav-icon-hover"
+                                    aria-expanded="false">
+                                    <img src={`http://localhost:3000/Uploads/${data.image}`} alt="" width="35" className="rounded-circle img-fluid" />
+                                </div>
+                                {object && (
+                                    <span className="text-hover-dark">{object.username}</span>
+                                )}
+                            </div>
                         </Link>
                         <div className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                             <div className="message-body">
                                 {object && (
                                     <>
-                                        <h6 className='text-center overflow-hidden'>{object.username}</h6>
+                                        {/* <h6 className='text-center overflow-hidden'>{object.username}</h6> */}
                                         <Link to={`/myprofile/${object._id}`} className="d-flex align-items-center gap-2 dropdown-item">
                                             <IconUser />
                                             <p className="mb-0 fs-3">My Profile</p>
                                         </Link>
                                     </>
                                 )}
-                                {/* <Link to="/myprofile" className="d-flex align-items-center gap-2 dropdown-item">
-                                    <IconMail />
-                                    <p className="mb-0 fs-3">My Account</p>
-                                </Link> */}
-                                <Link href="" className="d-flex align-items-center gap-2 dropdown-item">
-                                    <IconListCheck />
-                                    <p className="mb-0 fs-3">My Task</p>
+                                <Link to="/forgetpassword" className="d-flex align-items-center gap-2 dropdown-item">
+                                    <IconLockOff />
+                                    <p className="mb-0 fs-3">Forget Paasword</p>
                                 </Link>
                                 <Button className="btn btn-primary mx-auto mt-2 d-block" onClick={Logout}>Logout</Button>
                             </div>

@@ -1,17 +1,20 @@
 import React from 'react'
-import { IconLayoutDashboardFilled, IconX, IconArticle, IconReportAnalytics, IconDeviceAnalytics, IconMap, IconBuilding, IconPhoto, IconCalendar, IconArchive } from '@tabler/icons-react';
+import { IconLayoutDashboardFilled, IconX, IconArticle, IconReportAnalytics, IconDeviceAnalytics, IconMap, IconBuilding, IconPhoto, IconCalendar, IconArchive, IconTicket, IconBookmark, IconReservedLine, IconRegistered } from '@tabler/icons-react';
 import { Link, NavLink } from 'react-router-dom';
-import icon from './assets/images/logos/dark-logo.svg'
+import logo from '/logo.png';
 
 export const Sidebar = () => {
+    const user_id = localStorage.getItem('publicuser');
+    const object = user_id ? JSON.parse(user_id) : null;
+
     return (
         // < !--Sidebar Start-- >
         <aside className="left-sidebar">
             {/* <!-- Sidebar scroll--> */}
             <div>
-                <div className="brand-logo d-flex align-items-center justify-content-between">
+            <div className="brand-logo d-flex align-items-center justify-content-center">
                     <Link to="/dashboard" className="text-nowrap logo-img">
-                        <img src={icon} width="180" alt="" />
+                        <img src={logo} width="200" alt="" />
                     </Link>
                     <div className="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
                         <IconX />
@@ -32,69 +35,100 @@ export const Sidebar = () => {
                             </NavLink>
                         </li>
 
-                        <li className="nav-small-cap">
-                            <span className="hide-menu">Exhibitor  Management</span>
-                        </li>
-                        <li className="sidebar-item">
-                            <NavLink className="sidebar-link" to="/expo" aria-expanded="false">
-                                <span>
-                                    <IconBuilding />
-                                </span>
-                                <span className="hide-menu">Exhibitor</span>
-                            </NavLink>
-                            <NavLink className="sidebar-link" to="/booths" aria-expanded="false">
-                                <span>
-                                    <IconArchive />
-                                </span>
-                                <span className="hide-menu">Booths</span>
-                            </NavLink>
-                            <NavLink className="sidebar-link" to="/floorplan" aria-expanded="false">
-                                <span>
-                                    <IconMap />
-                                </span>
-                                <span className="hide-menu">Floor Plan</span>
-                            </NavLink>
-                        </li>
+                        {object.role === "Exhibitor" ? (
+                            <>
+                                <li className="nav-small-cap">
+                                    <span className="hide-menu">Profile Management</span>
+                                </li>
+                                <li className="sidebar-item">
+                                    <NavLink className="sidebar-link" to="/registeredevent" aria-expanded="false">
+                                        <span>
+                                            <IconRegistered />
+                                        </span>
+                                        <span className="hide-menu">Registered Event</span>
+                                    </NavLink>
+                                    <NavLink className="sidebar-link" to="/viewfloorplan" aria-expanded="false">
+                                        <span>
+                                            <IconArchive />
+                                        </span>
+                                        <span className="hide-menu">View Space</span>
+                                    </NavLink>
+                                    <NavLink className="sidebar-link" to="/booths" aria-expanded="false">
+                                        <span>
+                                            <IconReservedLine />
+                                        </span>
+                                        <span className="hide-menu">Reserve booth</span>
+                                    </NavLink>
+                                </li>
+                                <li className="nav-small-cap">
+                                    <span className="hide-menu">Communication:</span>
+                                </li>
+                                <li className="sidebar-item">
+                                    <NavLink className="sidebar-link" to="/expo" aria-expanded="false">
+                                        <span>
+                                            <IconTicket />
+                                        </span>
+                                        <span className="hide-menu">View Events</span>
+                                    </NavLink>
+                                </li>
+                            </>
+                        ) : (
+                            <>
+                                {/* For Attendee */}
+                                <li className="nav-small-cap">
+                                    <span className="hide-menu">Event and Registration:</span>
+                                </li>
+                                <li className="sidebar-item">
+                                    <NavLink className="sidebar-link" to="/expo" aria-expanded="false">
+                                        <span>
+                                            <IconTicket />
+                                        </span>
+                                        <span className="hide-menu">View Events</span>
+                                    </NavLink>
+                                    <NavLink className="sidebar-link" to="/booths" aria-expanded="false">
+                                        <span>
+                                            <IconArchive />
+                                        </span>
+                                        <span className="hide-menu">Booths</span>
+                                    </NavLink>
+                                </li>
+                                <li className="nav-small-cap">
+                                    <span className="hide-menu">Schedule  Management</span>
+                                </li>
+                                <li className="sidebar-item">
+                                    <NavLink className="sidebar-link" to="./ui-buttons.html" aria-expanded="false">
+                                        <span>
+                                            <IconCalendar />
+                                        </span>
+                                        <span className="hide-menu">Browse Schedule</span>
+                                    </NavLink>
+                                    <NavLink className="sidebar-link" to="./ui-buttons.html" aria-expanded="false">
+                                        <span>
+                                            <IconBookmark />
+                                        </span>
+                                        <span className="hide-menu">Bookmarked Events</span>
+                                    </NavLink>
+                                </li>
 
-                        {/*  */}
-                        <li className="nav-small-cap">
-                            <span className="hide-menu">Schedule  Management</span>
-                        </li>
-                        <li className="sidebar-item">
-                            <NavLink className="sidebar-link" to="./ui-buttons.html" aria-expanded="false">
-                                <span>
-                                    <IconCalendar />
-                                </span>
-                                <span className="hide-menu">Schedule</span>
-                            </NavLink>
-                        </li>
-
-                        {/*  */}
-                        <li className="nav-small-cap">
-                            <span className="hide-menu">Analytics and Reporting</span>
-                        </li>
-                        <li className="sidebar-item">
-                            <NavLink className="sidebar-link" to="/report" aria-expanded="false">
-                                <span>
-                                    <IconReportAnalytics />
-                                </span>
-                                <span className="hide-menu">Report</span>
-                            </NavLink>
-                        </li>
-                        <li className="sidebar-item">
-                            <NavLink className="sidebar-link" to="/traffic" aria-expanded="false">
-                                <span>
-                                    <IconDeviceAnalytics />
-                                </span>
-                                <span className="hide-menu">Booth Traffic</span>
-                            </NavLink>
-                        </li>
+                                <li className="nav-small-cap">
+                                    <span className="hide-menu">Feedback and Support</span>
+                                </li>
+                                <li className="sidebar-item">
+                                    <NavLink className="sidebar-link" to="./ui-buttons.html" aria-expanded="false">
+                                        <span>
+                                            <IconCalendar />
+                                        </span>
+                                        <span className="hide-menu">Browse Schedule</span>
+                                    </NavLink>
+                                </li>
+                            </>
+                        )}
 
                     </ul>
                 </nav>
                 {/* <!-- End Sidebar navigation --> */}
             </div>
             {/* <!-- End Sidebar scroll--> */}
-        </aside>
+        </aside >
     )
 }

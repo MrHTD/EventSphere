@@ -20158,3 +20158,22 @@ ul {
 .timeline-widget .timeline-item .timeline-badge.badge-primary {
     border: 2px solid #5D87FF
 }
+
+.custom-indicators {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.custom-indicators span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.custom-indicators span.active {
+    background-color: #333;
+}

@@ -15,7 +15,9 @@ export const ExpoManagement = () => {
     useEffect(() => {
         axios.get('http://localhost:3000/getexpoevents')
             .then(response => {
-                setEvents(response.data);
+                // setEvents(response.data);
+                const sortedEvents = response.data.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+                setEvents(sortedEvents);
             })
             .catch(error => console.log(error));
     }, []);
@@ -78,19 +80,16 @@ export const ExpoManagement = () => {
                                                                 <h6 className="fw-semibold mb-0">Title</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Start Date</h6>
+                                                                <h6 className="fw-semibold mb-0">Start / End Date</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">End Date</h6>
+                                                                <h6 className="fw-semibold mb-0">Start / End Date</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
                                                                 <h6 className="fw-semibold mb-0">Location</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
                                                                 <h6 className="fw-semibold mb-0">Theme</h6>
-                                                            </th>
-                                                            <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Contact</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
                                                                 <h6 className="fw-semibold mb-0">Organizer</h6>
@@ -107,23 +106,20 @@ export const ExpoManagement = () => {
                                                         {
                                                             paginatedData.map((expo, index) => (
                                                                 <tr key={index}>
-                                                                    <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{expo.title}</h6></td>
+                                                                    <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.title}</h6></td>
                                                                     <td className="border-bottom-0">
-                                                                        <p className="mb-0 fw-normal">{new Date(expo.startDate).toLocaleDateString()}</p>
+                                                                        <h6 className="fw-semibold">{new Date(expo.startDate).toLocaleDateString()}</h6>
+                                                                        <span className="mb-0 fw-normal">{new Date(expo.endDate).toLocaleDateString()}</span>
                                                                     </td>
                                                                     <td className="border-bottom-0">
-                                                                        <p className="mb-0 fw-normal">{new Date(expo.endDate).toLocaleDateString()}</p>
+                                                                        <h6 className="fw-semibold mb-1">{new Date(expo.startTime).toLocaleTimeString('en-US')}</h6>
+                                                                        <span className="fw-normal">{new Date(expo.endTime).toLocaleTimeString('en-US')}</span>
                                                                     </td>
                                                                     <td className="border-bottom-0">
-                                                                        <h6 className="fw-semibold mb-1"></h6>
-                                                                        <span className="fw-normal">{expo.location}</span>
+                                                                        <h6 className="mb-0 fw-normal">{expo.location}</h6>
                                                                     </td>
                                                                     <td className="border-bottom-0">
-                                                                        <p className="mb-0 fw-normal">{expo.theme}</p>
-                                                                    </td>
-                                                                    <td className="border-bottom-0">
-                                                                        <h6 className="fw-semibold mb-1">{expo.contact.name}</h6>
-                                                                        <span className="fw-normal">{expo.contact.email}</span>
+                                                                        <h6 className="mb-0 fw-normal">{expo.theme}</h6>
                                                                     </td>
                                                                     <td className="border-bottom-0">
                                                                         <h6 className="fw-normal mb-0">{expo.organizer}</h6>

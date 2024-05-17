@@ -1,11 +1,22 @@
 import React from 'react'
 import Container from 'react-bootstrap/Container';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
 export const Header = () => {
+    const navigate = useNavigate();
+
+    const Logout = () => {
+        // Remove user information from local storage
+        localStorage.removeItem('publicuser');
+        navigate('/');
+    };
+
+    const user_id = localStorage.getItem('publicuser');
+    const object = user_id ? JSON.parse(user_id) : null;
+
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
             <Container>
@@ -26,7 +37,18 @@ export const Header = () => {
                             </NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
-                    <NavLink to="/signin">Signin</NavLink>
+                    {object ? (
+                        <Nav className="ms-auto">
+                            {/* <Nav.Link href="#link">Link</Nav.Link> */}
+                            <NavDropdown className='text-hover-dark' title={object.username} id="basic-nav-dropdown">
+                                <NavLink className={"dropdown-item"} title={object.username} to="/signin">Dashboard</NavLink>
+                                <hr className='my-0'/>
+                                <NavDropdown.Item className="btn btn-primary" onClick={Logout}>Logout</NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+                    ) : (
+                        <NavLink to="/signin">Signin</NavLink>
+                    )}
                 </Navbar.Collapse>
             </Container>
         </Navbar>

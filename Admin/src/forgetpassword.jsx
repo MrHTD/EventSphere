@@ -3,7 +3,7 @@ import { useNavigate, Link, useParams } from 'react-router-dom';
 import { Form, FloatingLabel, Container, Row, Col, Card, Button, Alert, InputGroup } from 'react-bootstrap';
 import bcrypt from 'bcryptjs-react';
 import axios from 'axios'
-import logo from './assets/dark-logo.svg';
+import logo from '/logo.png';
 
 const ForgetPassword = () => {
     const [data, setdata] = useState({ email: "" })
@@ -39,7 +39,17 @@ const ForgetPassword = () => {
         axios.post("http://localhost:3000/forget-password", { email: data.email })
             .then(response => {
                 console.log(response);
-                // Handle response accordingly
+                if (response.data.status === 'User not exists.') {
+                    setError(response.data.status);
+                    setTimeout(() => {
+                        setError("");
+                    }, 2000);
+                } else {
+                    setSuccess("Email Sent.");
+                    setTimeout(() => {
+                        setSuccess("");
+                    }, 2000);
+                }
             })
             .catch(error => {
                 console.log(error);
@@ -63,7 +73,7 @@ const ForgetPassword = () => {
                                 <Card className="mb-0">
                                     <Card.Body>
                                         <Link to="./index.html" className="text-nowrap logo-img text-center d-block py-3 w-100">
-                                            <img src={logo} width="180" alt="" />
+                                            <img src={logo} className='img-fluid' width={350} alt="" />
                                         </Link>
                                         <h4 className="text-center">Forget Password</h4>
                                         <Form>

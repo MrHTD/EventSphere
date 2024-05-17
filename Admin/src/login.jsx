@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Form, FloatingLabel, Container, Row, Col, Card, Button, Alert, InputGroup } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios'
-import logo from './assets/dark-logo.svg';
-
+import logo from '/logo.png';
 
 const Login = () => {
     const [data, setdata] = useState({ email: "", password: "", role: "" })
@@ -81,7 +80,7 @@ const Login = () => {
                                 <Card className="mb-0">
                                     <Card.Body>
                                         <Link to="./index.html" className="text-nowrap logo-img text-center d-block py-3 w-100">
-                                            <img src={logo} width="180" alt="" />
+                                            <img src={logo} className='img-fluid' width={350} alt="" />
                                         </Link>
                                         <p className="text-center">Sign In</p>
                                         <Form>

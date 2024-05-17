@@ -6,15 +6,17 @@ const ExpoSchema = new Schema({
   title: { type: String, required: true },        // Title field, required
   startDate: { type: Date, required: true },      // Start date field, required
   endDate: { type: Date, required: true },        // End date field, required
+  startTime: { type: Date, required: true },
+  endTime: { type: Date, required: true },
   location: { type: String, required: true },     // Location field, required
   description: { type: String },                  // Description field
   theme: { type: String },                        // Theme field
   organizer: { type: String },                    // Organizer field
-  contact: {                                      // Contact information
-    name: { type: String },
-    email: { type: String },
-    phone: { type: String }
-  },
+  // contact: {                                      // Contact information
+  //   name: { type: String },
+  //   email: { type: String },
+  //   phone: { type: String }
+  // },
   status: { type: String, enum: ['upcoming', 'ongoing', 'ended'], default: 'upcoming' },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

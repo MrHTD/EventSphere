@@ -3,7 +3,7 @@ import { useNavigate, Link, useParams } from 'react-router-dom';
 import { Form, FloatingLabel, Container, Row, Col, Card, Button, Alert, InputGroup } from 'react-bootstrap';
 import bcrypt from 'bcryptjs-react';
 import axios from 'axios'
-import logo from './assets/dark-logo.svg';
+import logo from '/logo.png';
 
 const ResetPassword = () => {
     const [error, setError] = useState("");

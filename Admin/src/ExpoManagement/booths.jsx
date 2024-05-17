@@ -64,10 +64,10 @@ export const Booths = () => {
                                                                 <h6 className="fw-semibold mb-0">Booth #</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Floor</h6>
+                                                                <h6 className="fw-semibold mb-0">Total Space</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Description</h6>
+                                                                <h6 className="fw-semibold mb-0">Reserved</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
                                                                 <h6 className="fw-semibold mb-0">Action</h6>
@@ -85,10 +85,10 @@ export const Booths = () => {
                                                                     <tr key={index}>
                                                                         <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{booth.boothNumber}</h6></td>
                                                                         <td className="border-bottom-0">
-                                                                            <span className="fw-normal">{booth.floor}</span>
+                                                                            <span className="fw-normal">{booth.totalSpaces}</span>
                                                                         </td>
                                                                         <td className="border-bottom-0">
-                                                                            <span className="fw-normal">{booth.description}</span>
+                                                                            <span className="fw-normal">{booth.reservedSpaces}</span>
                                                                         </td>
                                                                         <td className="border-bottom-0">
                                                                             <Link to={`/editbooth/${booth._id}`} type="button" className="btn btn-success m-1">Edit</Link>

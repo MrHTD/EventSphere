@@ -7,20 +7,38 @@ import { Link } from 'react-router-dom'
 import APagination from '../pagination';
 
 export const FloorPlan = () => {
+    const [data, setdata] = useState([]);
     const [events, setEvents] = useState([]);
+    const [booths, setBooths] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10); // Number of users per page
 
     useEffect(() => {
-        axios.get('http://localhost:3000/getfloorplans')
+        axios.get('http://localhost:3000/getexpoevents')
             .then(response => {
                 setEvents(response.data);
             })
             .catch(error => console.log(error));
     }, []);
 
+    useEffect(() => {
+        axios.get('http://localhost:3000/getbooths')
+            .then(response => {
+                setBooths(response.data);
+            })
+            .catch(error => console.log(error));
+    }, []);
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/getfloorplans')
+            .then(response => {
+                setdata(response.data);
+            })
+            .catch(error => console.log(error));
+    }, []);
+
     // Pagination
-    const totalPages = Math.ceil(events.length / postsPerPage);
+    const totalPages = Math.ceil(data.length / postsPerPage);
 
     const handlePageChange = page => {
         setCurrentPage(page);
@@ -29,7 +47,7 @@ export const FloorPlan = () => {
     const startIndex = (currentPage - 1) * postsPerPage;
     const endIndex = startIndex + postsPerPage;
 
-    const paginatedData = events.slice(startIndex, endIndex);
+    const paginatedData = data.slice(startIndex, endIndex);
 
     return (
         <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
@@ -60,10 +78,10 @@ export const FloorPlan = () => {
                                                     <thead className="text-dark fs-4">
                                                         <tr>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Booth Number</h6>
+                                                                <h6 className="fw-semibold mb-0">Expo</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Exhibitor</h6>
+                                                                <h6 className="fw-semibold mb-0">Booth Number</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
                                                                 <h6 className="fw-semibold mb-0">Description</h6>
@@ -74,18 +92,18 @@ export const FloorPlan = () => {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {
-                                                            paginatedData.length === 0 ? (
-                                                                <tr>
-                                                                    <td colSpan="4"><h4 className='fw-semibold'>No data available</h4></td>
-                                                                </tr>
-                                                            ) : (
-                                                                paginatedData.map((floor, index) => (
+                                                        {paginatedData.length === 0 ? (
+                                                            <tr>
+                                                                <td colSpan="4"><h4 className='fw-semibold'>No data available</h4></td>
+                                                            </tr>
+                                                        ) : (
+                                                            paginatedData.map((floor, index) => {
+                                                                const expo = events.find(expo => expo._id === floor.expoId);
+                                                                const booth = booths.find(booth => booth._id === floor.boothNumber);
+                                                                return (
                                                                     <tr key={index}>
-                                                                        <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{floor.boothNumber}</h6></td>
-                                                                        <td className="border-bottom-0">
-                                                                            <span className="fw-normal">{floor.exhibitor}</span>
-                                                                        </td>
+                                                                        <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.title}</h6></td>
+                                                                        <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{booth.boothNumber}</h6></td>
                                                                         <td className="border-bottom-0">
                                                                             <span className="fw-normal">{floor.description}</span>
                                                                         </td>
@@ -94,9 +112,10 @@ export const FloorPlan = () => {
                                                                             <Link to={`/deletefloorplan/${floor._id}`} type="button" className="btn btn-danger m-1">Delete</Link>
                                                                         </td>
                                                                     </tr>
-                                                                )
-                                                                )
+                                                                );
+                                                            }
                                                             )
+                                                        )
                                                         }
                                                     </tbody>
                                                 </table>

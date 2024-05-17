@@ -7,9 +7,7 @@ const AddTimeslot = () => {
   const [data, setdata] = useState({
     startTime: "",
     endTime: "",
-    event: "",
   });
-  const [events, setEvents] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
@@ -27,40 +25,39 @@ const AddTimeslot = () => {
     setdata({ ...data, [e.target.name]: e.target.value })
   }
 
-  useEffect(() => {
-    axios.get('http://localhost:3000/getSchedule')
-      .then(response => {
-        setEvents(response.data);
-        console.log(response.data)
-      })
-      .catch(error => console.log(error));
-  }, []);
-
   const BoothBtn = (e) => {
     e.preventDefault();
 
-    const startTime = new Date(data.startTime);
-    const endTime = new Date(data.endTime);
-
+    const startTime = new Date();
+    startTime.setHours(parseInt(data.startTime.split(":")[0]));
+    startTime.setMinutes(parseInt(data.startTime.split(":")[1]));
+  
+    const endTime = new Date();
+    endTime.setHours(parseInt(data.endTime.split(":")[0]));
+    endTime.setMinutes(parseInt(data.endTime.split(":")[1]));
+  
     if (endTime < startTime) {
-      setError("End Date & Time cannot be older than the start Date & time.");
-      setTimeout(() => {
-        setError("");
-      }, 3000);
+      setError("End Time cannot be earlier than Start Time.");
       return;
     }
+  
+    const requestData = {
+      startTime: startTime.toISOString(),
+      endTime: endTime.toISOString()
+    };
+  
 
-    if (!data.startTime || !data.endTime || !data.event) {
+    if (!data.startTime || !data.endTime) {
       setError("Please fill in all fields.");
       setTimeout(() => {
         setError("");
       }, 3000);
       return;
     }
-    axios.post("http://localhost:3000/createTimeSlot", data)
+    axios.post("http://localhost:3000/createTimeSlot", requestData)
       .then(result => {
         console.log(result);
-        setSuccess("Booth added successfully");
+        setSuccess("Timeslot added successfully");
         navigate('/timeslot');
       })
       .catch(error => {
@@ -72,20 +69,6 @@ const AddTimeslot = () => {
         }, 3000);
       });
   }
-
-  const handleEventChange = (e) => {
-    const selectedEventTitle = e.target.value;
-    const selectedEvent = events.find(event => event._id === selectedEventTitle);
-
-    if (selectedEvent) {
-      // Update boothNumber and expoId in the state
-      setdata(prevData => ({
-        ...prevData,
-        // boothNumber: selectedEvent.boothNumber || "",
-        event: selectedEvent._id || ""
-      }));
-    }
-  };
 
   return (
     <>
@@ -107,24 +90,12 @@ const AddTimeslot = () => {
                     <Form>
                       <Form.Group className="mb-3">
                         <Form.Label>Start Time</Form.Label>
-                        <Form.Control type="datetime-local" name='startTime' onChange={GetFormValue} value={data.startTime} required />
+                        <Form.Control type="time" name='startTime' onChange={GetFormValue} value={data.startTime} required />
                       </Form.Group>
 
                       <Form.Group className="mb-3">
                         <Form.Label>End Time</Form.Label>
-                        <Form.Control type="datetime-local" name='endTime' onChange={GetFormValue} value={data.endTime} required />
-                      </Form.Group>
-
-                      <Form.Group controlId='event' label='event' className='mb-3 overflow-hidden'>
-                        <Form.Label>Expo Id</Form.Label>
-                        <Form.Select className='rounded-2' name='event' onChange={handleEventChange} value={data.event || ''} required>
-                          <option disabled value=''>Select an Event</option>
-                          {events.map(event => (
-                            <option key={event._id} value={event._id}>
-                              {event.title}
-                            </option>
-                          ))}
-                        </Form.Select>
+                        <Form.Control type="time" name='endTime' onChange={GetFormValue} value={data.endTime} required />
                       </Form.Group>
 
                       <Button variant="primary" className="w-100 py-2 fs-4 mb-4 rounded-2" onClick={BoothBtn}>Add Timeslot</Button>

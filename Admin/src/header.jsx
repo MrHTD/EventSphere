@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Navbar, Nav, Dropdown, Button } from 'react-bootstrap';
 import { IconBellRinging, IconUser, IconMail, IconListCheck, IconMenu2, IconLockOff } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
@@ -7,6 +9,7 @@ import { Notification } from './Components/notification';
 
 export const Header = () => {
     const navigate = useNavigate();
+    const [data, setData] = useState({});
 
     const Logout = () => {
         // Remove user information from local storage
@@ -16,6 +19,15 @@ export const Header = () => {
 
     const user_id = localStorage.getItem('user');
     const object = user_id ? JSON.parse(user_id) : null;
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/getUserbyid/' + object._id)
+            .then(response => {
+                setData(response.data);
+                console.log(response.data);
+            })
+            .catch(error => console.log(error));
+    }, []);
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light">
@@ -46,7 +58,7 @@ export const Header = () => {
                             <div className="d-flex align-items-center">
                                 <div className="nav-link nav-icon-hover"
                                     aria-expanded="false">
-                                    <img src={user} alt="" width="35" height="35" className="rounded-circle" />
+                                    <img src={`http://localhost:3000/Uploads/${data.image}`} alt="" width="35" className="rounded-circle img-fluid" />
                                 </div>
                                 {object && (
                                     <span className="text-hover-dark">{object.username}</span>

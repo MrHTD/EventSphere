@@ -137,7 +137,7 @@ const AddSession = () => {
     const endTime = new Date(data.endTime);
 
     if (endTime < startTime) {
-      setError("End Date & Time cannot be older than the start Date & time.");
+      setError("End Date cannot be older than the start Date.");
       setTimeout(() => {
         setError("");
       }, 3000);
@@ -198,9 +198,8 @@ const AddSession = () => {
         data-sidebar-position="fixed" data-header-position="fixed">
         <div className="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
           <Container>
-            <Row className="justify-content-center">
-              <Col sm={12} md={12} lg={6} xxl={6}>
-
+            <Row className="justify-content-center p-5">
+              <Col md={8} lg={8}>
                 {/* error */}
                 {error && <Alert className="alert alert-danger" role="alert">{error}</Alert>}
                 {success && <Alert className="alert alert-danger" role="alert">{success}</Alert>}
@@ -224,13 +223,13 @@ const AddSession = () => {
                       </Form.Group>
 
                       <Form.Group className="mb-3">
-                        <Form.Label>Start Time</Form.Label>
-                        <Form.Control type="datetime-local" name='startTime' onChange={GetFormValue} value={data.startTime} required />
+                        <Form.Label>Start Date</Form.Label>
+                        <Form.Control type="date" name='startTime' onChange={GetFormValue} value={data.startTime} required />
                       </Form.Group>
 
                       <Form.Group className="mb-3">
-                        <Form.Label>End Time</Form.Label>
-                        <Form.Control type="datetime-local" name='endTime' onChange={GetFormValue} value={data.endTime} required />
+                        <Form.Label>End Date</Form.Label>
+                        <Form.Control type="date" name='endTime' onChange={GetFormValue} value={data.endTime} required />
                       </Form.Group>
 
                       <Form.Group controlId='event' label='event' className='mb-3 overflow-hidden'>
@@ -251,7 +250,7 @@ const AddSession = () => {
                           <option disabled value=''>Select an TimeSlots</option>
                           {timeslots.map(timeSlot => (
                             <option key={timeSlot._id} value={timeSlot._id}>
-                              {timeSlot.startTime}
+                              {new Date(timeSlot.startTime).toLocaleTimeString('en-US')} - {new Date(timeSlot.endTime).toLocaleTimeString('en-US')}
                             </option>
                           ))}
                         </Form.Select>
@@ -270,7 +269,7 @@ const AddSession = () => {
                       </Form.Group> */}
 
                       <Form.Group controlId='speakers' label='speakers' className='mb-3 overflow-hidden'>
-                        <Form.Label>Speakers</Form.Label>
+                        {/* <Form.Label>Speakers</Form.Label> */}
                         <AddSpeakerButton />
                       </Form.Group>
 

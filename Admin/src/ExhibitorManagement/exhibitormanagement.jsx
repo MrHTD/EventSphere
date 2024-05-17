@@ -8,34 +8,76 @@ import APagination from '../pagination';
 
 
 export const ExhibitorManagement = () => {
-    const [events, setEvents] = useState([]);
+    const [exporegister, setExporegister] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10); // Number of users per page
 
     useEffect(() => {
-        axios.get('http://localhost:3000/getUser')
+        axios.get('http://localhost:3000/getregisterexpo')
             .then(response => {
-                setEvents(response.data);
+                setExporegister(response.data);
             })
             .catch(error => console.log(error));
     }, []);
 
     // status
-    const getStatusColor = (status) => {
-        switch (status) {
+    const getApprovedStatus = (approvalStatus) => {
+        switch (approvalStatus) {
             case 'Pending':
-                return 'bg-secondary';
-            case 'Rejected':
-                return 'bg-danger';
+                return 'text-warning';
             case 'Approved':
-                return 'bg-success';
+                return 'text-success';
+            case 'Rejected':
+                return 'text-danger';
             default:
-                return 'bg-dark';
+                return 'text-dark';
         }
     };
 
+    const approveStatus = {
+        approvalStatus: "Approved",
+    };
+    const rejectStatus = {
+        approvalStatus: "Rejected",
+    };
+
+    // Handle approval
+    const handleApprove = (id) => {
+        axios.put("http://localhost:3000/updateapprovalstatus/" + id, { ...approveStatus })
+            .then(response => {
+                console.log(response.data);
+                // Update exporegister state after successful approval
+                const updatedExporegister = exporegister.map(expo => {
+                    if (expo._id === id) {
+                        return { ...expo, approvalStatus: 'Approved' };
+                    }
+                    return expo;
+                });
+                setExporegister(updatedExporegister);
+            })
+            .catch(error => console.log(error));
+    };
+
+    // Handle rejection
+    const handleReject = (id) => {
+        axios.put("http://localhost:3000/updateapprovalstatus/" + id, { ...rejectStatus })
+            .then(response => {
+                console.log(response.data);
+                // Update exporegister state after successful rejection
+                const updatedExporegister = exporegister.map(expo => {
+                    if (expo._id === id) {
+                        return { ...expo, approvalStatus: 'Rejected' };
+                    }
+                    return expo;
+                });
+                setExporegister(updatedExporegister);
+            })
+            .catch(error => console.log(error));
+    };
+
+
     // Pagination
-    const totalPages = Math.ceil(events.length / postsPerPage);
+    const totalPages = Math.ceil(exporegister.length / postsPerPage);
 
     const handlePageChange = page => {
         setCurrentPage(page);
@@ -44,7 +86,7 @@ export const ExhibitorManagement = () => {
     const startIndex = (currentPage - 1) * postsPerPage;
     const endIndex = startIndex + postsPerPage;
 
-    const paginatedData = events.slice(startIndex, endIndex);
+    const paginatedData = exporegister.slice(startIndex, endIndex);
 
     return (
         <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
@@ -63,11 +105,8 @@ export const ExhibitorManagement = () => {
                                     <div className="card w-100">
                                         <div className="card-body p-4">
                                             <Row>
-                                                <Col>
-                                                    <h5 className="card-title fw-semibold mb-4">Exhibitor Management</h5>
-                                                </Col>
-                                                <Col className='text-end'>
-                                                    <Link to="/addevent" type="button" className="w-auto btn btn-primary">Add </Link>
+                                                <Col className='text-center'>
+                                                    <h5 className="card-title fw-semibold mb-4">Expo Event Management</h5>
                                                 </Col>
                                             </Row>
                                             <div className="table-responsive">
@@ -75,16 +114,25 @@ export const ExhibitorManagement = () => {
                                                     <thead className="text-dark fs-4">
                                                         <tr>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Username</h6>
+                                                                <h6 className="fw-semibold mb-0">Title</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Email</h6>
+                                                                <h6 className="fw-semibold mb-0">Start / End Date</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Role</h6>
+                                                                <h6 className="fw-semibold mb-0">Start / End Time</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Status</h6>
+                                                                <h6 className="fw-semibold mb-0">Location</h6>
+                                                            </th>
+                                                            <th className="border-bottom-0">
+                                                                <h6 className="fw-semibold mb-0">Theme</h6>
+                                                            </th>
+                                                            <th className="border-bottom-0">
+                                                                <h6 className="fw-semibold mb-0">Organizer</h6>
+                                                            </th>
+                                                            <th className="border-bottom-0">
+                                                                <h6 className="fw-semibold mb-0">Approval Status</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
                                                                 <h6 className="fw-semibold mb-0">Action</h6>
@@ -93,31 +141,33 @@ export const ExhibitorManagement = () => {
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            paginatedData.map((exhibitor, index) => (
-                                                                <tr key={index}>
-                                                                    {
-                                                                        (exhibitor.role === "Attendee" || exhibitor.role === "Exhibitor") && (
-                                                                            <>
-                                                                                <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{exhibitor.companyName}</h6></td>
-                                                                                <td className="border-bottom-0">
-                                                                                    <p className="mb-0 fw-normal">{exhibitor.companyWebsite}</p>
-                                                                                </td>
-                                                                                <td className="border-bottom-0">
-                                                                                    <p className="mb-0 fw-normal">{exhibitor.companyAddress}</p>
-                                                                                </td>
-                                                                                <td className="border-bottom-0">
-                                                                                    <div className="d-flex align-items-center gap-2">
-                                                                                        <span className={`badge rounded-5 text-uppercase fw-semibold ${getStatusColor(exhibitor.approvalStatus)}`}>{exhibitor.approvalStatus}</span>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td className="border-bottom-0">
-                                                                                    <button type="button" className="btn btn-sm btn-success m-1">Approve</button>
-                                                                                    <button type="button" className="btn btn-sm btn-danger m-1">Reject</button>
-                                                                                </td>
-                                                                            </>
-                                                                        )}
-                                                                </tr>
-                                                            )
+                                                            paginatedData.map((expo, index) => {
+                                                                return (
+                                                                    <tr key={index}>
+                                                                        <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.companyName}</h6></td>
+                                                                        <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.companyWebsite}</h6></td>
+                                                                        <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.companyAddress}</h6></td>
+                                                                        <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.contactPersonName}</h6></td>
+                                                                        <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.contactEmail}</h6></td>
+                                                                        <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.contactPhone}</h6></td>
+                                                                        <td className="border-bottom-0 text-wrap"><h6 className={`fw-semibold mb-0 ${getApprovedStatus(expo.approvalStatus)}`}>{expo.approvalStatus}</h6></td>
+                                                                        <td className="border-bottom-0 text-wrap">
+                                                                            {expo.approvalStatus === 'Pending' && (
+                                                                                <>
+                                                                                    <Button type="button" className="btn btn-sm btn-success m-1" onClick={() => handleApprove(expo._id)}>Approve</Button>
+                                                                                    <Button type="button" className="btn btn-sm btn-danger m-1" onClick={() => handleReject(expo._id)}>Reject</Button>
+                                                                                </>
+                                                                            )}
+                                                                            {expo.approvalStatus === 'Approved' && (
+                                                                                <Button type="button" className="btn btn-sm btn-danger m-1" onClick={() => handleReject(expo._id)}>Reject</Button>
+                                                                            )}
+                                                                            {expo.approvalStatus === 'Rejected' && (
+                                                                                <Button type="button" className="btn btn-sm btn-success m-1" onClick={() => handleApprove(expo._id)}>Approve</Button>
+                                                                            )}
+                                                                        </td>
+                                                                    </tr>
+                                                                );
+                                                            }
                                                             )
                                                         }
                                                     </tbody>

@@ -75,8 +75,8 @@ export const TimeSLot = () => {
                                                         {
                                                             paginatedData.map((timeslot, index) => (
                                                                 <tr key={index}>
-                                                                    <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{timeslot.startTime}</h6></td>
-                                                                    <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{timeslot.endTime}</h6></td>
+                                                                    <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{new Date(timeslot.startTime).toLocaleTimeString('en-US')}</h6></td>
+                                                                    <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{new Date(timeslot.endTime).toLocaleTimeString('en-US')}</h6></td>
                                                                     <td className="border-bottom-0">
                                                                         <Link to={`//${timeslot._id}`} type="button" className="btn btn-success m-1">Edit</Link>
                                                                         <Link to={`//${timeslot._id}`} type="button" className="btn btn-danger m-1">Delete</Link>

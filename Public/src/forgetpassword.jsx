@@ -3,7 +3,7 @@ import { useNavigate, Link, useParams } from 'react-router-dom';
 import { Form, FloatingLabel, Container, Row, Col, Card, Button, Alert, InputGroup } from 'react-bootstrap';
 import bcrypt from 'bcryptjs-react';
 import axios from 'axios'
-import logo from './assets/dark-logo.svg';
+import logo from '/logo.png';
 
 const ForgetPassword = () => {
     const [data, setdata] = useState({ email: "" })
@@ -34,17 +34,26 @@ const ForgetPassword = () => {
                 setError("");
             }, 2000);
             return;
+        } else {
+            axios.post("http://localhost:3000/forget-password", { email: data.email })
+                .then(response => {
+                    console.log(response.data);
+                    if (response.data.status === 'User not exists.') {
+                        setError(response.data.status);
+                        setTimeout(() => {
+                            setError("");
+                        }, 2000);
+                    } else {
+                        setSuccess("Email Sent.");
+                        setTimeout(() => {
+                            setSuccess("");
+                        }, 2000);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
-
-        axios.post("http://localhost:3000/forget-password", { email: data.email })
-            .then(response => {
-                console.log(response);
-                // Handle response accordingly
-            })
-            .catch(error => {
-                console.log(error);
-                // Handle error accordingly
-            });
     };
 
     return (
@@ -56,6 +65,7 @@ const ForgetPassword = () => {
                     <Container>
                         <Row className="justify-content-center">
                             <Col md={12} lg={12} xxl={6}>
+
                                 {/* error */}
                                 {error && <Alert className="alert alert-danger" role="alert">{error}</Alert>}
                                 {success && <Alert className="alert alert-success" role="alert">{success}</Alert>}

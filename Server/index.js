@@ -8,10 +8,11 @@ const axios = require('axios');
 const UserModel = require("./User");
 const ExpoModel = require("./Expo");
 const FloorPlanModel = require("./FloorPlan");
-const BoothModel = require("./Booth");
+const { BoothModel, ExpoBoothAllocationModel } = require("./Booth");
 const jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 const { EventModel, TimeSlotModel, SessionModel, SpeakerModel, LocationModel } = require("./Models/Schedule");
+const ExpoRegistrationModel = require("./Models/ExpoRegistration");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -20,6 +21,8 @@ app.use(cors())
 app.use(express.json())
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
+
+app.use("/Uploads", express.static("Uploads"));
 
 mongoose.connect("mongodb://localhost:27017/eventsphere")
 
@@ -30,6 +33,7 @@ app.post("/forget-password", async (req, res) => {
         if (!oldUser) {
             return res.json({ status: "User not exists." });
         } else {
+            console.log("User exists.");
             // Generate token with unique secret per user
             const secret = JWT_SECRET + oldUser.password;
             const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, {
@@ -44,7 +48,7 @@ app.post("/forget-password", async (req, res) => {
                     pass: 'pimq iyzh rwhl eyfm',
                 }
             });
-            const user ='EventSphere <mughisuddinahmed@gmail.com>';
+            const user = 'EventSphere <mughisuddinahmed@gmail.com>';
 
             var mailOptions = {
                 from: user,
@@ -61,6 +65,7 @@ app.post("/forget-password", async (req, res) => {
                 }
             });
 
+            console.log(res.json({ status: "User exists." }));
             console.log(link);
         }
     } catch (error) {
@@ -118,8 +123,6 @@ app.post("/reset-password/:id/:token", async (req, res) => {
                     }
                 },
             );
-            // Send success response
-            // res.json({ status: "Password Updated" });
             res.render("index", { email: verify.email, status: "Verified" });
         } catch (error) {
             console.error(error);
@@ -128,8 +131,19 @@ app.post("/reset-password/:id/:token", async (req, res) => {
     }
 });
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "Uploads/");
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + "-" + file.originalname);
+    },
+});
+const upload = multer({ storage: storage });
+
 // Registration endpoint
-app.post('/register', (req, res) => {
+app.post('/register', upload.single('image'), (req, res) => {
+
     const { username, email, password } = req.body;
 
     // Check if the username or email already exists in the database
@@ -139,7 +153,14 @@ app.post('/register', (req, res) => {
                 // User with the same username or email already exists
                 res.json({ exists: true });
             } else {
-                UserModel.create(req.body)
+                const eventData = {
+                    username: req.body.username,
+                    email: req.body.email,
+                    password: req.body.password,
+                    role: req.body.role,
+                    image: req.file.filename,
+                };
+                UserModel.create(eventData)
                     .then(users => {
                         // Send success response
                         res.json(users);
@@ -148,7 +169,6 @@ app.post('/register', (req, res) => {
             }
         })
         .catch(error => res.json(error));
-
 });
 
 app.get("/getUserbyid/:id", (req, res) => {
@@ -164,10 +184,14 @@ app.get("/getUser", (req, res) => {
         .catch(error => res.json(error))
 })
 
-app.put("/edituser/:id", (req, res) => {
+app.put("/edituser/:id", upload.single('image'), (req, res) => {
     const id = req.params.id;
-    const { username } = req.body;
-    UserModel.findByIdAndUpdate({ _id: id }, { $set: { username: username } })
+    const Data = {
+        username: req.body.username,
+        image: req.file.filename,
+    };
+
+    UserModel.findByIdAndUpdate({ _id: id }, { $set: Data })
         .then(users => res.json(users))
         .catch(error => res.json(error))
 })
@@ -258,6 +282,34 @@ app.delete("/deletebooth/:id", (req, res) => {
         .catch(error => res.json(error))
 })
 
+// BoothAllocations Api
+
+app.post('/addboothAllocation', (req, res) => {
+    ExpoBoothAllocationModel.create(req.body)
+        .then(boothAllocations => res.json(boothAllocations))
+        .catch(error => res.json(error))
+});
+
+app.get("/getboothsAllocation", (req, res) => {
+    ExpoBoothAllocationModel.find({})
+        .then(boothAllocations => res.json(boothAllocations))
+        .catch(error => res.json(error))
+})
+
+app.put("/editboothAllocation/:id", (req, res) => {
+    const id = req.params.id;
+    ExpoBoothAllocationModel.findByIdAndUpdate({ _id: id }, { $set: req.body })
+        .then(boothAllocations => res.json(boothAllocations))
+        .catch(error => res.json(error))
+})
+
+app.delete("/deleteboothAllocation/:id", (req, res) => {
+    const id = req.params.id;
+    ExpoBoothAllocationModel.findByIdAndDelete({ _id: id })
+        .then(boothAllocations => res.json(boothAllocations))
+        .catch(error => res.json(error))
+})
+
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -285,7 +337,6 @@ app.post("/login", async (req, res) => {
 });
 
 // Schedule Models
-
 app.post('/createSchedule', (req, res) => {
     EventModel.create(req.body)
         .then(events => res.json(events))
@@ -346,15 +397,79 @@ app.get("/getLocations", (req, res) => {
         .catch(error => res.json(error))
 })
 
+// Exhibitor Apis
+
+app.post('/exporegister', (req, res) => {
+    ExpoRegistrationModel.create(req.body)
+        .then(expoRegistration => res.json(expoRegistration))
+        .catch(error => res.status(400).json({ error: error.message }));
+});
+
+app.put("/editexporegister/:id", (req, res) => {
+    const id = req.params.id;
+    ExpoRegistrationModel.findByIdAndUpdate({ _id: id }, { $set: req.body })
+        .then(expoRegistration => res.json(expoRegistration))
+        .catch(error => res.json(error))
+})
+
+app.put("/updateapprovalstatus/:id", (req, res) => {
+    const id = req.params.id;
+    ExpoRegistrationModel.findByIdAndUpdate({ _id: id }, { $set: { approvalStatus: req.body.approvalStatus } })
+        .then(expoRegistration => res.json(expoRegistration))
+        .catch(error => res.json(error))
+});
+
+app.get("/getregisterexpo", (req, res) => {
+    ExpoRegistrationModel.find({})
+        .then(expoRegistration => res.json(expoRegistration))
+        .catch(error => res.json(error))
+})
+
+app.post('/boothAllocations', (req, res) => {
+    ExpoBoothAllocationModel.create(req.body)
+        .then(boothAllocations => res.json(boothAllocations))
+        .catch(error => res.status(400).json({ error: error.message }));
+});
+
+app.get("/getboothAllocations", (req, res) => {
+    ExpoBoothAllocationModel.find({})
+        .then(boothAllocations => res.json(boothAllocations))
+        .catch(error => res.json(error))
+})
+
+app.post("/addboothreservespace", (req, res) => {
+    const { boothId, reservedSpaces } = req.body;
+
+    BoothModel.findById(boothId)
+        .then(booth => {
+            if (!booth) {
+                res.status(404).json({ error: "Booth not found" });
+                return;
+            }
+
+            // Update reservedSpaces field
+            booth.reservedSpaces = reservedSpaces;
+
+            // Save the updated booth
+            return booth.save();
+        })
+        .then(updatedBooth => {
+            res.status(200).json({ message: "Booth updated successfully", booth: updatedBooth });
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).json({ error: "Internal server error" });
+        });
+});
+
 
 // Scheduling of Event Status
-
 app.post('/updateEventStatus', async (req, res) => {
     try {
         // Find events with start date less than or equal to current date and status is not 'ongoing' or 'ended'
         const eventsToUpdate = await ExpoModel.find({
-            startDate: { $lte: new Date() },
             $or: [
+                { status: { $ne: 'upcoming' } },
                 { status: { $ne: 'ongoing' } },
                 { status: { $ne: 'ended' } }
             ]
@@ -367,22 +482,23 @@ app.post('/updateEventStatus', async (req, res) => {
                 event.status = 'ongoing';
             } else if (new Date() > event.endDate) {
                 event.status = 'ended';
+            } else if (new Date() < event.startDate) {
+                event.status = 'upcoming';
             }
             await event.save(); // Save updated event
         });
-
-        // res.status(200).json({ message: 'Event statuses updated successfully' });
+        // res.status(200).json({ message: 'Event status updated successfully' });
     } catch (error) {
         console.error('Error updating event statuses:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-cron.schedule('* * * * *', async () => {
+cron.schedule('* * * * * *', async () => {
     try {
         // Call the endpoint to update event statuses
         await axios.post('http://localhost:3000/updateEventStatus');
-        console.log('Event statuses updated successfully');
+        console.log('Event status updated successfully');
     } catch (error) {
         console.error('Error updating event statuses:', error);
     }

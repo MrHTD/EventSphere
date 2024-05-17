@@ -6,8 +6,7 @@ import axios from 'axios'
 const AddBooth = () => {
     const [data, setdata] = useState({
         boothNumber: "",
-        floor: "",
-        description: "",
+        totalSpaces: "",
     });
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
@@ -30,7 +29,7 @@ const AddBooth = () => {
 
     const BoothBtn = (e) => {
         e.preventDefault();
-        if (!data.boothNumber || !data.floor || !data.description) {
+        if (!data.boothNumber || !data.totalSpaces) {
             setError("Please fill in all fields.");
             setTimeout(() => {
                 setError("");
@@ -77,13 +76,8 @@ const AddBooth = () => {
                                             </Form.Group>
 
                                             <Form.Group className="mb-3">
-                                                <Form.Label>Floor Number</Form.Label>
-                                                <Form.Control type="text" name='floor' onChange={GetFormValue} value={data.floor} required />
-                                            </Form.Group>
-
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Description</Form.Label>
-                                                <Form.Control as="textarea" name='description' onChange={GetFormValue} value={data.description} required />
+                                                <Form.Label>Total Spaces</Form.Label>
+                                                <Form.Control type="number" name='totalSpaces' onChange={GetFormValue} value={data.totalSpaces} required />
                                             </Form.Group>
 
                                             <Button variant="primary" className="w-100 py-2 fs-4 mb-4 rounded-2" onClick={BoothBtn}>Add Booth</Button>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { IconLayoutDashboardFilled, IconX, IconArticle, IconReportAnalytics, IconDeviceAnalytics, IconMap, IconBuilding, IconPhoto, IconCalendar, IconArchive, IconClock, IconCalendarEvent, IconMicrophone2, IconLocation, IconListDetails } from '@tabler/icons-react';
 import { Link, NavLink } from 'react-router-dom';
-import icon from './assets/images/logos/dark-logo.svg'
+import logo from '/logo.png';
 
 export const Sidebar = () => {
     return (
@@ -9,9 +9,9 @@ export const Sidebar = () => {
         <aside className="left-sidebar">
             {/* <!-- Sidebar scroll--> */}
             <div>
-                <div className="brand-logo d-flex align-items-center justify-content-between">
+                <div className="brand-logo d-flex align-items-center justify-content-center">
                     <Link to="/dashboard" className="text-nowrap logo-img">
-                        <img src={icon} width="180" alt="" />
+                        <img src={logo} width="200" alt="" />
                     </Link>
                     <div className="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
                         <IconX />
@@ -66,6 +66,12 @@ export const Sidebar = () => {
                                 </span>
                                 <span className="hide-menu">Exhibitor</span>
                             </NavLink>
+                            <NavLink className="sidebar-link" to="/" aria-expanded="false">
+                                <span>
+                                    <IconPhoto />
+                                </span>
+                                <span className="hide-menu">Seats Reserved</span>
+                            </NavLink>
                         </li>
 
                         {/*  */}
@@ -73,12 +79,6 @@ export const Sidebar = () => {
                             <span className="hide-menu">Schedule  Management</span>
                         </li>
                         <li className="sidebar-item">
-                            <NavLink className="sidebar-link" to="/session" aria-expanded="false">
-                                <span>
-                                    <IconCalendarEvent />
-                                </span>
-                                <span className="hide-menu">Schedule Session</span>
-                            </NavLink>
                             <NavLink className="sidebar-link" to="/schedule" aria-expanded="false">
                                 <span>
                                     <IconListDetails />
@@ -102,6 +102,12 @@ export const Sidebar = () => {
                                     <IconLocation />
                                 </span>
                                 <span className="hide-menu">Location</span>
+                            </NavLink>
+                            <NavLink className="sidebar-link" to="/session" aria-expanded="false">
+                                <span>
+                                    <IconCalendarEvent />
+                                </span>
+                                <span className="hide-menu">Schedule Session</span>
                             </NavLink>
                         </li>
 
