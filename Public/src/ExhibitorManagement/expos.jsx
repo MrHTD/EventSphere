@@ -6,17 +6,15 @@ import { DashboardHeader } from '../dashboardheader';
 import { Link } from 'react-router-dom';
 import PPagination from '../Components/pagination';
 
-
 export const Expos = () => {
     const [events, setEvents] = useState([]);
     const [exporegister, setExporegister] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(10); // Number of users per page
+    const [postsPerPage] = useState(10);
 
     useEffect(() => {
         axios.get('http://localhost:3000/getexpoevents')
             .then(response => {
-                // setEvents(response.data);
                 const sortedEvents = response.data.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
                 setEvents(sortedEvents);
             })
@@ -31,7 +29,6 @@ export const Expos = () => {
             .catch(error => console.log(error));
     }, []);
 
-    // status
     const getStatusColor = (status) => {
         switch (status) {
             case 'upcoming':
@@ -45,7 +42,6 @@ export const Expos = () => {
         }
     };
 
-    // status
     const getApprovedStatus = (approvalStatus) => {
         switch (approvalStatus) {
             case 'Pending':
@@ -59,7 +55,6 @@ export const Expos = () => {
         }
     };
 
-    // Pagination
     const totalPages = Math.ceil(events.length / postsPerPage);
 
     const handlePageChange = page => {
@@ -75,7 +70,6 @@ export const Expos = () => {
     const object = user_id ? JSON.parse(user_id) : null;
 
     return (
-
         <div className="row">
             <div className="col-lg-12 d-flex align-items-stretch">
                 <div className="card w-100">
@@ -120,15 +114,10 @@ export const Expos = () => {
                                         paginatedData.map((expo, index) => {
                                             const currentDate = new Date();
                                             const eventStartDate = new Date(expo.startDate);
-
-                                            // Check if the event date is today or in the future and the status is 'upcoming'
                                             const showRegisterButton = eventStartDate >= currentDate && expo.status === 'upcoming';
-
-                                            // Find the registration entry for the current exhibitor
-                                            const registrationEntry = exporegister.find(entry => entry.expoId === expo._id && entry.exhibitorId === object._id);
-
-                                            // Extract the status from the registration entry
+                                            const registrationEntry = exporegister.find(entry => entry.expoId === expo._id && entry.exhibitorId === (object?._id || ''));
                                             const status = registrationEntry ? registrationEntry.approvalStatus : "Not Registered";
+
                                             return (
                                                 <tr key={index}>
                                                     <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.title}</h6></td>
@@ -153,7 +142,7 @@ export const Expos = () => {
                                                         <span className={`badge rounded-5 text-uppercase fw-semibold ${getStatusColor(expo.status)}`}>{expo.status}</span>
                                                     </td>
                                                     <td className="border-bottom-0">
-                                                        {status ? (
+                                                        {status !== "Not Registered" ? (
                                                             <span className={`badge ${getApprovedStatus(status)}`}>{status}</span>
                                                         ) : (
                                                             showRegisterButton && (
@@ -163,8 +152,7 @@ export const Expos = () => {
                                                     </td>
                                                 </tr>
                                             );
-                                        }
-                                        )
+                                        })
                                     }
                                 </tbody>
                             </table>
@@ -172,7 +160,6 @@ export const Expos = () => {
                     </div>
                 </div>
             </div>
-            {/* Pagination */}
             <Row className='mx-lg-auto'>
                 <Col className='col-lg-12 d-flex justify-content-center'>
                     <PPagination
@@ -183,6 +170,5 @@ export const Expos = () => {
                 </Col>
             </Row>
         </div>
-
-    )
+    );
 }

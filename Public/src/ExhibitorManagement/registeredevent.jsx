@@ -6,12 +6,11 @@ import { DashboardHeader } from '../dashboardheader';
 import { Link } from 'react-router-dom';
 import PPagination from '../Components/pagination';
 
-
 export const RegisteredEvent = () => {
     const [events, setEvents] = useState([]);
     const [expos, setExpos] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(10); // Number of users per page
+    const [postsPerPage] = useState(10);
 
     const user_id = localStorage.getItem('publicuser');
     const object = user_id ? JSON.parse(user_id) : null;
@@ -19,10 +18,12 @@ export const RegisteredEvent = () => {
     useEffect(() => {
         axios.get('http://localhost:3000/getregisterexpo')
             .then(response => {
-                setEvents(response.data.filter(data => data.exhibitorId === object._id));
+                if (object) {
+                    setEvents(response.data.filter(data => data.exhibitorId === object._id));
+                }
             })
             .catch(error => console.log(error));
-    }, []);
+    }, [object]);
 
     useEffect(() => {
         axios.get('http://localhost:3000/getexpoevents')
@@ -45,7 +46,6 @@ export const RegisteredEvent = () => {
         }
     };
 
-    // Pagination
     const totalPages = Math.ceil(events.length / postsPerPage);
 
     const handlePageChange = page => {
@@ -105,29 +105,36 @@ export const RegisteredEvent = () => {
                                                     <tbody>
                                                         {paginatedData.length === 0 ? (
                                                             <tr>
-                                                                <td colSpan="4"><h4 className='fw-semibold'>No data available</h4></td>
+                                                                <td colSpan="6"><h4 className='fw-semibold'>No data available</h4></td>
                                                             </tr>
                                                         ) : (
                                                             paginatedData.map((event, index) => {
                                                                 const expo = expos.find(expo => expo._id === event.expoId);
                                                                 return (
                                                                     <tr key={index}>
-                                                                        <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.title}</h6></td>
-                                                                        <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{event.companyName}</h6></td>
-                                                                        <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{event.companyWebsite}</h6></td>
+                                                                        <td className="border-bottom-0 text-wrap">
+                                                                            <h6 className="fw-semibold mb-0">{expo ? expo.title : 'N/A'}</h6>
+                                                                        </td>
+                                                                        <td className="border-bottom-0 text-wrap">
+                                                                            <h6 className="fw-semibold mb-0">{event.companyName}</h6>
+                                                                        </td>
+                                                                        <td className="border-bottom-0">
+                                                                            <h6 className="fw-semibold mb-0">{event.companyWebsite}</h6>
+                                                                        </td>
                                                                         <td className="border-bottom-0">
                                                                             <span className="fw-normal">{event.companyAddress}</span>
                                                                         </td>
-                                                                        <td className="border-bottom-0"><h6 className={`fw-semibold mb-0 ${getApprovedStatus(event.approvalStatus)}`}>{event.approvalStatus}</h6></td>
                                                                         <td className="border-bottom-0">
-                                                                            <Link to={``} type="button" className="btn btn-success m-1">Edit</Link>
+                                                                            <h6 className={`fw-semibold mb-0 ${getApprovedStatus(event.approvalStatus)}`}>{event.approvalStatus}</h6>
                                                                         </td>
+                                                                        <td className="border-bottom-0">
+                                                                            {event.approvalStatus === 'Approved' && (
+                                                                                <Link to={`/editexporegister/${event._id}`} type="button" className="btn btn-success m-1">Edit</Link>
+                                                                            )}                                                                        </td>
                                                                     </tr>
                                                                 );
-                                                            }
-                                                            )
-                                                        )
-                                                        }
+                                                            })
+                                                        )}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -147,9 +154,8 @@ export const RegisteredEvent = () => {
                             />
                         </Col>
                     </Row>
-
                 </Container>
             </div>
         </div>
-    )
-}
+    );
+};

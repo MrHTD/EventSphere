@@ -12,6 +12,11 @@ import { BoothAllocations } from './ExhibitorManagement/boothAllocations'
 import ReserveBooth from './ExhibitorManagement/reservebooth'
 import { FloorPlan } from './ExhibitorManagement/flooplan'
 import { RegisteredEvent } from './ExhibitorManagement/registeredevent'
+import EditExpoRegister from './Edit/editexporegistration'
+import EventRegister from './AttendeeManagement/eventregister'
+import PublicChat from './AttendeeManagement/PublicChat'
+import ExhibitorChat from './ExhibitorManagement/exhibitorchat'
+import { ViewExhibitors } from './ExhibitorManagement/viewexhibitors'
 
 function App() {
 
@@ -29,10 +34,17 @@ function App() {
         <Route path="/registerexpo/:id" element={<ExpoRegister />} />
         {/* <Route path="/viewbooths" element={<ViewBooths />} /> */}
         <Route path="/reservebooth/:id" element={<ReserveBooth />} />
+        <Route path="/editexporegister/:id" element={<EditExpoRegister />} />
         <Route path="/booths" element={<BoothAllocations />} />
         <Route path="/viewfloorplan" element={<FloorPlan />} />
         <Route path="/registeredevent" element={<RegisteredEvent />} />
 
+        {/* Attendee Routes */}
+        <Route path="/eventregister/:id" element={<EventRegister />} />
+        <Route path="/chat" element={<PublicChat />} />
+        <Route path="/viewexhibitors" element={<ViewExhibitors />} />
+        <Route path="/exhibitorchat/:id" element={<ExhibitorChat />} />
+        
         {/* Attendee Routes */}
       </Routes>
     </BrowserRouter>

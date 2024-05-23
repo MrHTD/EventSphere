@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Form, FloatingLabel, Container, Row, Col, Card, Button, Alert, InputGroup } from 'react-bootstrap';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import axios from 'axios'
 
 const ReserveBooth = () => {
     const user_id = localStorage.getItem('publicuser');
     const object = user_id ? JSON.parse(user_id) : null;
 
-    const [data, setdata] = useState({ userId: object._id, expo: "", booth: "", spacesReserved: "", status: "reserved" });
+    const { id } = useParams();
+    const [data, setdata] = useState({ userId: object._id, expo: id, booth: "", spacesReserved: "", status: "reserved" });
     const [events, setEvents] = useState([]);
     const [booths, setBooths] = useState([]);
+    const [floorplan, setFloorPlan] = useState([]);
     const [boothsallocation, setBoothsAllocation] = useState([]);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
@@ -31,6 +33,14 @@ const ReserveBooth = () => {
         axios.get('http://localhost:3000/getbooths')
             .then(response => {
                 setBooths(response.data);
+            })
+            .catch(error => console.log(error));
+    }, []);
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/getfloorplans')
+            .then(response => {
+                setFloorPlan(response.data);
             })
             .catch(error => console.log(error));
     }, []);
@@ -93,10 +103,7 @@ const ReserveBooth = () => {
             return;
         }
 
-        axios.post("http://localhost:3000/addboothreservespace", {
-            boothId: data.booth,
-            reservedSpaces: data.spacesReserved
-        })
+        axios.post("http://localhost:3000/addboothreservespace", {boothId: data.booth, reservedSpaces: data.spacesReserved})
             .then(result => {
                 console.log(result);
                 setSuccess("Space Reserve successfully");
@@ -124,6 +131,8 @@ const ReserveBooth = () => {
                 }, 3000);
             });
     };
+
+    console.log(data);
 
     const handleEventChange = (e) => {
         const selectedEventId = e.target.value;
@@ -168,12 +177,12 @@ const ReserveBooth = () => {
                                 {success && <Alert className="alert alert-success" role="alert">{success}</Alert>}
                                 <Card className="mb-0">
                                     <Card.Header></Card.Header>
-                                    <h2 className="text-center fw-bold text-uppercase">Add Booth</h2>
+                                    <h2 className="text-center fw-bold text-uppercase">Reserve Booth</h2>
                                     <Card.Body>
                                         <Form>
                                             <Form.Group controlId='expo' label='expo' className='mb-3 overflow-hidden'>
                                                 <Form.Label>Expo Id</Form.Label>
-                                                <Form.Select className='rounded-2' name='expo' onChange={handleEventChange} value={data.expo || ''} required>
+                                                <Form.Select className='rounded-2' name='expo' onChange={handleEventChange} value={id} required>
                                                     <option disabled value=''>Select an Event</option>
                                                     {events.map(event => (
                                                         <option key={event._id} value={event._id}>

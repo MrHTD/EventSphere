@@ -19,6 +19,7 @@
   "description": "",
   "dependencies": {
     "axios": "^1.6.8",
+    "axios-mock-adapter": "^1.22.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "bcryptjs-react": "^2.4.6",

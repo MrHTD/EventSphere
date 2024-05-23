@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconLayoutDashboardFilled, IconX, IconArticle, IconReportAnalytics, IconDeviceAnalytics, IconMap, IconBuilding, IconPhoto, IconCalendar, IconArchive, IconClock, IconCalendarEvent, IconMicrophone2, IconLocation, IconListDetails } from '@tabler/icons-react';
+import { IconLayoutDashboardFilled, IconX, IconHelpOctagon, IconReportAnalytics, IconDeviceAnalytics, IconMap, IconBuilding, IconPhoto, IconCalendar, IconArchive, IconClock, IconCalendarEvent, IconMicrophone2, IconLocation, IconListDetails } from '@tabler/icons-react';
 import { Link, NavLink } from 'react-router-dom';
 import logo from '/logo.png';
 
@@ -66,7 +66,7 @@ export const Sidebar = () => {
                                 </span>
                                 <span className="hide-menu">Exhibitor</span>
                             </NavLink>
-                            <NavLink className="sidebar-link" to="/" aria-expanded="false">
+                            <NavLink className="sidebar-link" to="/seatsreserved" aria-expanded="false">
                                 <span>
                                     <IconPhoto />
                                 </span>
@@ -129,6 +129,14 @@ export const Sidebar = () => {
                                     <IconDeviceAnalytics />
                                 </span>
                                 <span className="hide-menu">Analytics</span>
+                            </NavLink>
+                        </li>
+                        <li className="sidebar-item">
+                            <NavLink className="sidebar-link" to="/adminchat" aria-expanded="false">
+                                <span>
+                                    <IconHelpOctagon />
+                                </span>
+                                <span className="hide-menu">Support</span>
                             </NavLink>
                         </li>
 

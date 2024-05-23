@@ -15,7 +15,6 @@ const ExpoRegister = () => {
             companyName: "",
             companyWebsite: "",
             companyAddress: "",
-            contactPersonName: "",
             contactEmail: "",
             contactPhone: "",
             productsServices: "",
@@ -45,7 +44,7 @@ const ExpoRegister = () => {
     const RegisterBtn = (e) => {
         e.preventDefault();
 
-        if (!data.expoId || !data.exhibitorId || !data.companyName || !data.companyWebsite || !data.companyAddress || !data.contactPersonName || !data.contactEmail || !data.contactPhone || !data.productsServices || !data.requiredDocuments) {
+        if (!data.expoId || !data.exhibitorId || !data.companyName || !data.companyWebsite || !data.companyAddress || !data.contactEmail || !data.contactPhone || !data.productsServices || !data.requiredDocuments) {
             setError("Please fill in all fields.");
             setTimeout(() => {
                 setError("");
@@ -56,7 +55,7 @@ const ExpoRegister = () => {
             .then(result => {
                 console.log(result);
                 setSuccess("Event added successfully");
-                navigate('/dashboard');
+                navigate('/registeredevent');
             })
             .catch(error => {
                 console.log(error);
@@ -130,12 +129,6 @@ const ExpoRegister = () => {
                                                     </Form.Group>
                                                 </Col>
                                             </Row>
-
-
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Person Name</Form.Label>
-                                                <Form.Control type='text' name='contactPersonName' onChange={GetFormValue} value={data.contactPersonName || ''} required />
-                                            </Form.Group>
 
                                             <Row>
                                                 <Col>

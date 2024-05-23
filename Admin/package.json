@@ -13,6 +13,7 @@
     "@tabler/icons-react": "^3.2.0",
     "apexcharts": "^3.49.0",
     "axios": "^1.6.8",
+    "axios-mock-adapter": "^1.22.0",
     "bcryptjs-react": "^2.4.6",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",

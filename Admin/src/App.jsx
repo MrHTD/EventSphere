@@ -29,6 +29,9 @@ import AddSchedule from './ScheduleManagement/addschedule'
 import AddTimeslot from './ScheduleManagement/addtimeslot'
 import AddSpeaker from './ScheduleManagement/addspeaker'
 import AddLocation from './ScheduleManagement/addlocation'
+import { SeatsReserved } from './ExhibitorManagement/seatsreserved'
+import AdminChat from './adminchat'
+import ReplyAdminChat from './replychat'
 
 function App() {
 
@@ -40,6 +43,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/report" element={<Report />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/adminchat" element={<AdminChat />} />
+        <Route path="/replychat/:id" element={<ReplyAdminChat />} />
         <Route path="/myprofile/:id" element={<EditUser />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
@@ -56,6 +61,7 @@ function App() {
 
         {/* Exhibitor Routes */}
         <Route path="/exhibitor" element={<ExhibitorManagement />} />
+        <Route path="/seatsreserved" element={<SeatsReserved />} />
         {/* Exhibitor Routes End */}
 
         {/* Schedule Routes */}

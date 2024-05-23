@@ -9,10 +9,12 @@ const UserModel = require("./User");
 const ExpoModel = require("./Expo");
 const FloorPlanModel = require("./FloorPlan");
 const { BoothModel, ExpoBoothAllocationModel } = require("./Booth");
+const MockAdapter = require('axios-mock-adapter');
 const jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 const { EventModel, TimeSlotModel, SessionModel, SpeakerModel, LocationModel } = require("./Models/Schedule");
 const ExpoRegistrationModel = require("./Models/ExpoRegistration");
+const {Message, ExhibitorMessage} = require("./Models/Message");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -24,7 +26,47 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/Uploads", express.static("Uploads"));
 
-mongoose.connect("mongodb://localhost:27017/eventsphere")
+mongoose.connect("mongodb://localhost:27017/eventsphere");
+
+// Chat Api's
+
+app.get("/api/messages", (req, res) => {
+    Message.find({})
+        .then(Message => res.json(Message))
+        .catch(error => res.json(error))
+});
+
+app.post('/api/postmessages', (req, res) => {
+    Message.create(req.body)
+        .then(Message => res.json(Message))
+        .catch(error => res.json(error))
+});
+
+app.get("/api/getmessagesbyid/:id", (req, res) => {
+    const userId = req.params.id;
+    Message.find({ userId: userId })
+        .then(Message => res.json(Message))
+        .catch(error => res.status(400).json(error));
+});
+
+app.get("/api/exhibitormessages", (req, res) => {
+    ExhibitorMessage.find({})
+        .then(ExhibitorMessage => res.json(ExhibitorMessage))
+        .catch(error => res.json(error))
+});
+
+app.post('/api/postexhibitormessages', (req, res) => {
+    ExhibitorMessage.create(req.body)
+        .then(ExhibitorMessage => res.json(ExhibitorMessage))
+        .catch(error => res.json(error))
+});
+
+app.get("/api/exhibitormessagesbyid/:id", (req, res) => {
+    const senderId = req.params.id;
+    ExhibitorMessage.find({ senderId: senderId })
+        .then(ExhibitorMessage => res.json(ExhibitorMessage))
+        .catch(error => res.status(400).json(error));
+});
 
 app.post("/forget-password", async (req, res) => {
     try {
@@ -421,6 +463,13 @@ app.put("/updateapprovalstatus/:id", (req, res) => {
 
 app.get("/getregisterexpo", (req, res) => {
     ExpoRegistrationModel.find({})
+        .then(expoRegistration => res.json(expoRegistration))
+        .catch(error => res.json(error))
+})
+
+app.get("/getregisterexpobyid/:id", (req, res) => {
+    const id = req.params.id;
+    ExpoRegistrationModel.findByIdAndUpdate({ _id: id }, { $set: req.body })
         .then(expoRegistration => res.json(expoRegistration))
         .catch(error => res.json(error))
 })

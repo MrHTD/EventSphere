@@ -9,8 +9,12 @@ import { SmallCard2 } from './Components/smallcard2';
 import { Table } from './Components/table';
 import { DashboardHeader } from './dashboardheader';
 import { Expos } from './ExhibitorManagement/expos';
+import { ViewEvents } from './AttendeeManagement/viewevents';
 
 const Dashboard = () => {
+  const user_id = localStorage.getItem('publicuser');
+  const object = user_id ? JSON.parse(user_id) : null;
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,7 +41,15 @@ const Dashboard = () => {
             {/* Table */}
             <Row>
               <Col lg={12}>
-                <Expos />
+                {object.role === "Exhibitor" ? (
+                  <>
+                    <Expos />
+                  </>
+                ) : (
+                  <>
+                    <ViewEvents />
+                  </>
+                )}
               </Col>
             </Row>
           </Container>

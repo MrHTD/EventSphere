@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconLayoutDashboardFilled, IconX, IconArticle, IconReportAnalytics, IconDeviceAnalytics, IconMap, IconBuilding, IconPhoto, IconCalendar, IconArchive, IconTicket, IconBookmark, IconReservedLine, IconRegistered } from '@tabler/icons-react';
+import { IconLayoutDashboardFilled, IconX, IconArticle, IconReportAnalytics, IconDeviceAnalytics, IconMap, IconBuilding, IconPhoto, IconCalendar, IconArchive, IconTicket, IconBookmark, IconReservedLine, IconRegistered, IconCalendarEvent, IconMap2, IconMessageReport, IconMessage } from '@tabler/icons-react';
 import { Link, NavLink } from 'react-router-dom';
 import logo from '/logo.png';
 
@@ -64,11 +64,17 @@ export const Sidebar = () => {
                                     <span className="hide-menu">Communication:</span>
                                 </li>
                                 <li className="sidebar-item">
-                                    <NavLink className="sidebar-link" to="/expo" aria-expanded="false">
+                                    <NavLink className="sidebar-link" to="/chat" aria-expanded="false">
                                         <span>
-                                            <IconTicket />
+                                            <IconMessageReport />
                                         </span>
-                                        <span className="hide-menu">View Events</span>
+                                        <span className="hide-menu">Support Admin</span>
+                                    </NavLink>
+                                    <NavLink className="sidebar-link" to="/viewexhibitors" aria-expanded="false">
+                                        <span>
+                                            <IconMessage />
+                                        </span>
+                                        <span className="hide-menu">View Exhibitor</span>
                                     </NavLink>
                                 </li>
                             </>
@@ -79,17 +85,29 @@ export const Sidebar = () => {
                                     <span className="hide-menu">Event and Registration:</span>
                                 </li>
                                 <li className="sidebar-item">
-                                    <NavLink className="sidebar-link" to="/expo" aria-expanded="false">
+                                    {/* <NavLink className="sidebar-link" to="/expo" aria-expanded="false">
                                         <span>
                                             <IconTicket />
                                         </span>
                                         <span className="hide-menu">View Events</span>
+                                    </NavLink> */}
+                                    <NavLink className="sidebar-link" to="/booths" aria-expanded="false">
+                                        <span>
+                                            <IconCalendarEvent />
+                                        </span>
+                                        <span className="hide-menu">Schedule</span>
                                     </NavLink>
                                     <NavLink className="sidebar-link" to="/booths" aria-expanded="false">
                                         <span>
                                             <IconArchive />
                                         </span>
-                                        <span className="hide-menu">Booths</span>
+                                        <span className="hide-menu">Exhibitor List</span>
+                                    </NavLink>
+                                    <NavLink className="sidebar-link" to="/booths" aria-expanded="false">
+                                        <span>
+                                            <IconMap />
+                                        </span>
+                                        <span className="hide-menu">Floor Plans</span>
                                     </NavLink>
                                 </li>
                                 <li className="nav-small-cap">

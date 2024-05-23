@@ -114,22 +114,19 @@ export const ExhibitorManagement = () => {
                                                     <thead className="text-dark fs-4">
                                                         <tr>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Title</h6>
+                                                                <h6 className="fw-semibold mb-0">Company Name</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Start / End Date</h6>
+                                                                <h6 className="fw-semibold mb-0">Website</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Start / End Time</h6>
+                                                                <h6 className="fw-semibold mb-0">Address</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Location</h6>
+                                                                <h6 className="fw-semibold mb-0">Email</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Theme</h6>
-                                                            </th>
-                                                            <th className="border-bottom-0">
-                                                                <h6 className="fw-semibold mb-0">Organizer</h6>
+                                                                <h6 className="fw-semibold mb-0">Phone</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
                                                                 <h6 className="fw-semibold mb-0">Approval Status</h6>
@@ -147,7 +144,6 @@ export const ExhibitorManagement = () => {
                                                                         <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.companyName}</h6></td>
                                                                         <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.companyWebsite}</h6></td>
                                                                         <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.companyAddress}</h6></td>
-                                                                        <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.contactPersonName}</h6></td>
                                                                         <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.contactEmail}</h6></td>
                                                                         <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.contactPhone}</h6></td>
                                                                         <td className="border-bottom-0 text-wrap"><h6 className={`fw-semibold mb-0 ${getApprovedStatus(expo.approvalStatus)}`}>{expo.approvalStatus}</h6></td>
