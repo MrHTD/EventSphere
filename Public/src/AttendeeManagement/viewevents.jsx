@@ -22,8 +22,9 @@ export const ViewEvents = () => {
     }, []);
 
     useEffect(() => {
-        axios.get('http://localhost:3000/getregisterexpo')
+        axios.get('http://localhost:3000/getattendeeregister')
             .then(response => {
+                console.log(response.data);
                 setExporegister(response.data);
             })
             .catch(error => console.log(error));
@@ -115,8 +116,7 @@ export const ViewEvents = () => {
                                             const currentDate = new Date();
                                             const eventStartDate = new Date(expo.startDate);
                                             const showRegisterButton = eventStartDate >= currentDate && expo.status === 'upcoming';
-                                            const registrationEntry = exporegister.find(entry => entry.expoId === expo._id && entry.exhibitorId === (object?._id || ''));
-                                            const status = registrationEntry ? registrationEntry.approvalStatus : "Not Registered";
+                                            const isRegistered = exporegister.some(entry => entry.expoId === expo._id && entry.attendeeId === (object?._id || ''));
 
                                             return (
                                                 <tr key={index}>
@@ -142,11 +142,11 @@ export const ViewEvents = () => {
                                                         <span className={`badge rounded-5 text-uppercase fw-semibold ${getStatusColor(expo.status)}`}>{expo.status}</span>
                                                     </td>
                                                     <td className="border-bottom-0">
-                                                        {status !== "Not Registered" ? (
-                                                            <span className={`badge ${getApprovedStatus(status)}`}>{status}</span>
+                                                        {isRegistered ? (
+                                                            <span className="badge rounded-pill bg-success">Registered</span>
                                                         ) : (
                                                             showRegisterButton && (
-                                                                <Link to={`/eventregister/${expo._id}`} type="button" className="btn btn-dark m-1 rounded-4">Register</Link>
+                                                                <Link to={`/eventregister/${expo._id}`} className="btn btn-dark m-1 rounded-4">Register</Link>
                                                             )
                                                         )}
                                                     </td>

@@ -16,6 +16,9 @@ export const FloorPlan = () => {
     const [postsPerPage] = useState(10); // Number of users per page
     const [showApprovedOnly, setShowApprovedOnly] = useState(false); // State for filtering
 
+    const user_id = localStorage.getItem('publicuser');
+    const object = user_id ? JSON.parse(user_id) : null;
+
     useEffect(() => {
         axios.get('http://localhost:3000/getexpoevents')
             .then(response => {
@@ -122,6 +125,9 @@ export const FloorPlan = () => {
                                                                 <h6 className="fw-semibold mb-0">Available Space</h6>
                                                             </th>
                                                             <th className="border-bottom-0">
+                                                                <h6 className="fw-semibold mb-0">Space Reserved</h6>
+                                                            </th>
+                                                            <th className="border-bottom-0">
                                                                 <h6 className="fw-semibold mb-0">Action</h6>
                                                             </th>
                                                         </tr>
@@ -143,7 +149,10 @@ export const FloorPlan = () => {
                                                                 // Check if the filter is on and the expo is approved
                                                                 if (!showApprovedOnly || (showApprovedOnly && isApproved)) {
                                                                     const boothAllocation = boothsallocation.find(item => item.booth === booth._id);
-                                                                    const isReserved = boothAllocation && boothAllocation.status === 'reserved';
+                                                                    const isReserved = boothAllocation && boothAllocation.status === 'reserved' && boothAllocation.userId === object._id;
+
+                                                                    const check = boothAllocation && boothAllocation.userId === object._id && boothAllocation.status === 'reserved';
+                                                                    const reservedSpaces = check ? boothAllocation.spacesReserved : 0;
 
                                                                     return (
                                                                         <tr key={index}>
@@ -154,12 +163,13 @@ export const FloorPlan = () => {
                                                                             </td>
                                                                             <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{booth.totalSpaces}</h6></td>
                                                                             <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{availableSpace}</h6></td>
+                                                                            <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{reservedSpaces}</h6></td>
                                                                             <td className="border-bottom-0">
                                                                                 {isReserved && isApproved ? (
                                                                                     <Link type="button" className="btn btn-success m-1">Already Reserved</Link>
                                                                                 ) : (
-                                                                                    isApproved &&  (
-                                                                                        <Link to={`/reservebooth/${expo._id}`} type="button" className="btn btn-danger m-1">Reserve</Link>
+                                                                                    isApproved && (
+                                                                                        <Link to={`/reservebooth/${expo._id}/${booth._id}`} type="button" className="btn btn-danger m-1">Reserve</Link>
                                                                                     )
                                                                                 )}
                                                                             </td>

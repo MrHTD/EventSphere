@@ -53,12 +53,12 @@ export const Sidebar = () => {
                                         </span>
                                         <span className="hide-menu">View Space</span>
                                     </NavLink>
-                                    <NavLink className="sidebar-link" to="/booths" aria-expanded="false">
+                                    {/* <NavLink className="sidebar-link" to="/booths" aria-expanded="false">
                                         <span>
                                             <IconReservedLine />
                                         </span>
                                         <span className="hide-menu">Reserve booth</span>
-                                    </NavLink>
+                                    </NavLink> */}
                                 </li>
                                 <li className="nav-small-cap">
                                     <span className="hide-menu">Communication:</span>
@@ -91,12 +91,12 @@ export const Sidebar = () => {
                                         </span>
                                         <span className="hide-menu">View Events</span>
                                     </NavLink> */}
-                                    <NavLink className="sidebar-link" to="/booths" aria-expanded="false">
+                                    {/* <NavLink className="sidebar-link" to="/booths" aria-expanded="false">
                                         <span>
                                             <IconCalendarEvent />
                                         </span>
-                                        <span className="hide-menu">Schedule</span>
-                                    </NavLink>
+                                        <span className="hide-menu">R</span>
+                                    </NavLink> */}
                                     <NavLink className="sidebar-link" to="/exhibitorlist" aria-expanded="false">
                                         <span>
                                             <IconArchive />
@@ -114,17 +114,11 @@ export const Sidebar = () => {
                                     <span className="hide-menu">Schedule  Management</span>
                                 </li>
                                 <li className="sidebar-item">
-                                    <NavLink className="sidebar-link" to="./ui-buttons.html" aria-expanded="false">
+                                    <NavLink className="sidebar-link" to="/schedulemanagement" aria-expanded="false">
                                         <span>
                                             <IconCalendar />
                                         </span>
                                         <span className="hide-menu">Browse Schedule</span>
-                                    </NavLink>
-                                    <NavLink className="sidebar-link" to="./ui-buttons.html" aria-expanded="false">
-                                        <span>
-                                            <IconBookmark />
-                                        </span>
-                                        <span className="hide-menu">Bookmarked Events</span>
                                     </NavLink>
                                 </li>
 
@@ -132,12 +126,6 @@ export const Sidebar = () => {
                                     <span className="hide-menu">Feedback and Support</span>
                                 </li>
                                 <li className="sidebar-item">
-                                    <NavLink className="sidebar-link" to="./ui-buttons.html" aria-expanded="false">
-                                        <span>
-                                            <IconCalendar />
-                                        </span>
-                                        <span className="hide-menu">Browse Schedule</span>
-                                    </NavLink>
                                     <NavLink className="sidebar-link" to="/viewexhibitors" aria-expanded="false">
                                         <span>
                                             <IconHelpOctagon />

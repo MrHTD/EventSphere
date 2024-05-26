@@ -130,7 +130,8 @@ export const RegisteredEvent = () => {
                                                                         <td className="border-bottom-0">
                                                                             {event.approvalStatus === 'Approved' && (
                                                                                 <Link to={`/editexporegister/${event._id}`} type="button" className="btn btn-success m-1">Edit</Link>
-                                                                            )}                                                                        </td>
+                                                                            )}
+                                                                        </td>
                                                                     </tr>
                                                                 );
                                                             })

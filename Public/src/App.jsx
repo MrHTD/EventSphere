@@ -18,6 +18,7 @@ import PublicChat from './PublicChat'
 import { ViewExhibitors } from './ExhibitorManagement/viewexhibitors'
 import { ExhibitorList } from './AttendeeManagement/ExhibitorList'
 import { ViewFloorPlan } from './AttendeeManagement/viewfloorplan'
+import { ScheduleManagement } from './AttendeeManagement/viewschedule'
 
 function App() {
 
@@ -34,7 +35,7 @@ function App() {
         {/* Exhibitor Routes */}
         <Route path="/registerexpo/:id" element={<ExpoRegister />} />
         {/* <Route path="/viewbooths" element={<ViewBooths />} /> */}
-        <Route path="/reservebooth/:id" element={<ReserveBooth />} />
+        <Route path="/reservebooth/:id/:boothId" element={<ReserveBooth />} />
         <Route path="/editexporegister/:id" element={<EditExpoRegister />} />
         <Route path="/booths" element={<BoothAllocations />} />
         <Route path="/viewfloorplan" element={<FloorPlan />} />
@@ -46,6 +47,7 @@ function App() {
         <Route path="/chat" element={<PublicChat />} />
         <Route path="/exhibitorlist" element={<ExhibitorList />} />
         <Route path="/aviewfloorplan" element={<ViewFloorPlan />} />
+        <Route path="/schedulemanagement" element={<ScheduleManagement />} />
         {/* <Route path="/exhibitorchat/:id" element={<ExhibitorChat />} /> */}
         
         {/* Attendee Routes */}

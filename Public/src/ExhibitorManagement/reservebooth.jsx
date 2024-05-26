@@ -7,8 +7,18 @@ const ReserveBooth = () => {
     const user_id = localStorage.getItem('publicuser');
     const object = user_id ? JSON.parse(user_id) : null;
 
-    const { id } = useParams();
-    const [data, setdata] = useState({ userId: object._id, expo: id, booth: "", spacesReserved: "", status: "reserved" });
+    const { id, boothId } = useParams();
+
+    // Now you have access to the id and boothId parameters
+    // Use them as needed in your component logic
+    useEffect(() => {
+        console.log('Expo ID:', id);
+        console.log('Booth ID:', boothId);
+
+        // Fetch data or perform actions using the expo ID and booth ID
+    }, [id, boothId]);
+
+    const [data, setdata] = useState({ userId: object._id, expo: id, booth: boothId, spacesReserved: "", status: "reserved" });
     const [events, setEvents] = useState([]);
     const [booths, setBooths] = useState([]);
     const [floorplan, setFloorPlan] = useState([]);
@@ -103,34 +113,36 @@ const ReserveBooth = () => {
             return;
         }
 
-        axios.post("http://localhost:3000/addboothreservespace", {boothId: data.booth, reservedSpaces: data.spacesReserved})
-            .then(result => {
-                console.log(result);
-                setSuccess("Space Reserve successfully");
-                navigate('/viewfloorplan');
-            })
-            .catch(error => {
-                console.log(error);
-                setError("Please try again.");
-                setTimeout(() => {
-                    setError("");
-                }, 3000);
-            });
-
+        // Update booth allocation
         axios.post("http://localhost:3000/boothAllocations", data)
             .then(result => {
                 console.log(result);
-                setSuccess("Event added successfully");
-                // navigate('/floorplan');
+                setSuccess("Booth allocated successfully");
+
+                // Reserve booth
+                axios.post("http://localhost:3000/addboothreservespace", { boothId: data.booth, reservedSpaces: data.spacesReserved })
+                    .then(result => {
+                        console.log(result);
+                        setSuccess("Space reserved successfully");
+                        navigate('/viewfloorplan');
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        setError("Failed to reserve space. Please try again.");
+                        setTimeout(() => {
+                            setError("");
+                        }, 3000);
+                    });
             })
             .catch(error => {
                 console.log(error);
-                setError("Please try again.");
+                setError("Failed to allocate booth. Please try again.");
                 setTimeout(() => {
                     setError("");
                 }, 3000);
             });
     };
+
 
     console.log(data);
 
@@ -182,7 +194,7 @@ const ReserveBooth = () => {
                                         <Form>
                                             <Form.Group controlId='expo' label='expo' className='mb-3 overflow-hidden'>
                                                 <Form.Label>Expo Id</Form.Label>
-                                                <Form.Select className='rounded-2' name='expo' onChange={handleEventChange} value={id} required>
+                                                <Form.Select className='rounded-2' name='expo' disabled onChange={handleEventChange} value={id} required>
                                                     <option disabled value=''>Select an Event</option>
                                                     {events.map(event => (
                                                         <option key={event._id} value={event._id}>
@@ -210,7 +222,7 @@ const ReserveBooth = () => {
 
                                             <Form.Group controlId='booth' label='booth' className='mb-3 overflow-hidden'>
                                                 <Form.Label>Booth Number</Form.Label>
-                                                <Form.Select className='rounded-2' name='booth' onChange={handleBooth} value={data.booth || ''} required>
+                                                <Form.Select className='rounded-2' disabled name='booth' onChange={handleBooth} value={boothId} required>
                                                     <option disabled value=''>Select a Booth Number</option>
                                                     {booths.map(booth => (
                                                         <option key={booth._id} value={booth._id}>

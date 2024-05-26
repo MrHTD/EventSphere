@@ -11,15 +11,10 @@ const EventRegister = () => {
     const [data, setdata] = useState(
         {
             expoId: id,
-            exhibitorId: object._id,
-            companyName: "",
-            companyWebsite: "",
-            companyAddress: "",
-            contactEmail: "",
-            contactPhone: "",
-            productsServices: "",
-            requiredDocuments: "",
-            approvalStatus: "Pending",
+            attendeeId: object._id,
+            Name: "",
+            Email: "",
+            Phone: "",
         }
     );
     const [events, setEvents] = useState([]);
@@ -44,18 +39,18 @@ const EventRegister = () => {
     const RegisterBtn = (e) => {
         e.preventDefault();
 
-        if (!data.expoId || !data.exhibitorId || !data.companyName || !data.companyWebsite || !data.companyAddress || !data.contactEmail || !data.contactPhone || !data.productsServices || !data.requiredDocuments) {
+        if (!data.expoId || !data.attendeeId || !data.Name || !data.Email || !data.Phone) {
             setError("Please fill in all fields.");
             setTimeout(() => {
                 setError("");
             }, 3000);
             return;
         }
-        axios.post("http://localhost:3000/exporegister", data)
+        axios.post("http://localhost:3000/attendeeregister", data)
             .then(result => {
                 console.log(result);
                 setSuccess("Event added successfully");
-                navigate('/registeredevent');
+                navigate('/dashboard');
             })
             .catch(error => {
                 console.log(error);
@@ -89,10 +84,10 @@ const EventRegister = () => {
                         <Row className="justify-content-center p-5">
                             <Col sm={12} md={12} lg={8} xxl={8}>
                                 {error && <Alert className="alert alert-danger" role="alert">{error}</Alert>}
-                                {success && <Alert className="alert alert-danger" role="alert">{success}</Alert>}
+                                {success && <Alert className="alert alert-success" role="alert">{success}</Alert>}
                                 <Card className="mb-0">
                                     <Card.Header></Card.Header>
-                                    <h2 className="text-center fw-bold text-uppercase">Register For Expo</h2>
+                                    <h2 className="text-center fw-bold text-uppercase">Register For Event</h2>
                                     <Card.Body>
                                         <Form>
                                             <Form.Group controlId='expoId' label='expoId' className='mb-3 overflow-hidden'>
@@ -114,52 +109,20 @@ const EventRegister = () => {
                                                 </Form.Select>
                                             </Form.Group>
 
-                                            <Row>
-                                                <Col>
-                                                    <Form.Group className="mb-3">
-                                                        <Form.Label>Company Name</Form.Label>
-                                                        <Form.Control type='text' name='companyName' onChange={GetFormValue} value={data.companyName || ''} required />
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col>
-
-                                                    <Form.Group className="mb-3">
-                                                        <Form.Label>Company Website</Form.Label>
-                                                        <Form.Control type='text' name='companyWebsite' onChange={GetFormValue} value={data.companyWebsite || ''} required />
-                                                    </Form.Group>
-                                                </Col>
-                                            </Row>
-
-                                            <Row>
-                                                <Col>
-                                                    <Form.Group className="mb-3">
-                                                        <Form.Label>Contact Email</Form.Label>
-                                                        <Form.Control type='text' name='contactEmail' onChange={GetFormValue} value={data.contactEmail || ''} required />
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col>
-                                                    <Form.Group className="mb-3">
-                                                        <Form.Label>Contact Phone</Form.Label>
-                                                        <Form.Control type='phone' name='contactPhone' onChange={GetFormValue} value={data.contactPhone || ''} required />
-                                                    </Form.Group>
-                                                </Col>
-                                            </Row>
-
                                             <Form.Group className="mb-3">
-                                                <Form.Label>Company Address</Form.Label>
-                                                <Form.Control as="textarea" rows={3} name='companyAddress' onChange={GetFormValue} value={data.companyAddress || ''} required />
+                                                <Form.Label>Name</Form.Label>
+                                                <Form.Control type='text' name='Name' onChange={GetFormValue} value={data.Name || ''} required />
                                             </Form.Group>
 
                                             <Form.Group className="mb-3">
-                                                <Form.Label>Products/Services</Form.Label>
-                                                <Form.Control as="textarea" rows={3} name='productsServices' onChange={GetFormValue} value={data.productsServices || ''} />
+                                                <Form.Label>Email</Form.Label>
+                                                <Form.Control type='email' name='Email' onChange={GetFormValue} value={data.Email || ''} required />
                                             </Form.Group>
 
                                             <Form.Group className="mb-3">
-                                                <Form.Label>Required Documents</Form.Label>
-                                                <Form.Control as="textarea" rows={3} name='requiredDocuments' onChange={GetFormValue} value={data.requiredDocuments || ''} required />
+                                                <Form.Label>Phone</Form.Label>
+                                                <Form.Control type='phone' name='Phone' onChange={GetFormValue} value={data.Phone || ''} required />
                                             </Form.Group>
-
 
                                             <Button variant="primary" className="w-100 py-2 fs-4 mb-4 rounded-2" onClick={RegisterBtn}>Register</Button>
                                         </Form>

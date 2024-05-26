@@ -15,6 +15,7 @@ const jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 const ExpoRegistrationModel = require("./Models/ExpoRegistration");
 const {Message, ExhibitorMessage} = require("./Models/Message");
+const AttendeeRegisterModel = require("./Models/AttendeeRegister");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -449,6 +450,20 @@ app.post('/boothAllocations', (req, res) => {
 app.get("/getboothAllocations", (req, res) => {
     ExpoBoothAllocationModel.find({})
         .then(boothAllocations => res.json(boothAllocations))
+        .catch(error => res.json(error))
+})
+
+// Attendee
+
+app.post('/attendeeregister', (req, res) => {
+    AttendeeRegisterModel.create(req.body)
+        .then(attendeeRegister => res.json(attendeeRegister))
+        .catch(error => res.status(400).json({ error: error.message }));
+});
+
+app.get("/getattendeeregister", (req, res) => {
+    AttendeeRegisterModel.find({})
+        .then(attendeeRegister => res.json(attendeeRegister))
         .catch(error => res.json(error))
 })
 
