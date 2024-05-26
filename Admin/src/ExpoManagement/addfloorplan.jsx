@@ -11,6 +11,16 @@ const AddFloorPlan = () => {
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
 
+    useEffect(() => {
+        // Check if the user is logged in
+        const isLoggedIn = !!localStorage.getItem('user');
+
+        // Redirect to the login page if the user is not logged in
+        if (!isLoggedIn) {
+            navigate('/'); // Adjust the login route accordingly
+        }
+    }, [navigate]);
+
     const GetFormValue = (e) => {
         setdata({ ...data, [e.target.name]: e.target.value });
     };
@@ -100,7 +110,7 @@ const AddFloorPlan = () => {
                                         <Form>
                                             <Form.Group controlId='expoId' label='expoId' className='mb-3 overflow-hidden'>
                                                 <Form.Label>Expo Id</Form.Label>
-                                                <Form.Select className='rounded-2' name='expoId' onChange={handleEventChange} value={data.expoId || ''} required>
+                                                <Form.Select className='rounded-2' name='expoId' onChange={handleEventChange} value={data.expoId} required>
                                                     <option disabled value=''>Select an Event</option>
                                                     {events.map(event => (
                                                         <option key={event._id} value={event._id}>
@@ -112,7 +122,7 @@ const AddFloorPlan = () => {
 
                                             <Form.Group controlId='boothNumber' label='boothNumber' className='mb-3 overflow-hidden'>
                                                 <Form.Label>Booth Number</Form.Label>
-                                                <Form.Select className='rounded-2' name='boothNumber' onChange={handleBooth} value={data.boothNumber || ''} required>
+                                                <Form.Select className='rounded-2' name='boothNumber' onChange={handleBooth} value={data.boothNumber} required>
                                                     <option disabled value=''>Select an Booth Number</option>
                                                     {booths.map(booth => (
                                                         <option key={booth._id} value={booth._id}>
@@ -124,7 +134,7 @@ const AddFloorPlan = () => {
 
                                             <Form.Group className="mb-3">
                                                 <Form.Label>Description</Form.Label>
-                                                <Form.Control as={"textarea"} rows={3} name='description' onChange={GetFormValue} value={data.description || ''} required />
+                                                <Form.Control as={"textarea"} rows={3} name='description' onChange={GetFormValue} value={data.description} required />
                                             </Form.Group>
                                             <Button variant="primary" className="w-100 py-2 fs-4 mb-4 rounded-2" onClick={BoothBtn}>Add Booth</Button>
                                         </Form>

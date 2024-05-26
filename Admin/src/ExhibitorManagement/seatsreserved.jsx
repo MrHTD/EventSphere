@@ -12,7 +12,7 @@ export const SeatsReserved = () => {
   const [exhibitors, setExhibitors] = useState([]);
   const [boothsallocation, setBoothsAllocation] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(10); // Number of users per page
+  const [postsPerPage] = useState(5); // Number of users per page
 
   const user_id = JSON.parse(localStorage.getItem(''));
 
@@ -50,7 +50,7 @@ export const SeatsReserved = () => {
   }, []);
 
   // Pagination
-  const totalPages = Math.ceil(events.length / postsPerPage);
+  const totalPages = Math.ceil(boothsallocation.length / postsPerPage);
 
   const handlePageChange = page => {
     setCurrentPage(page);

@@ -10,6 +10,7 @@ import { IconBookmark, IconBookmarkFilled } from '@tabler/icons-react';
 export const ScheduleManagement = () => {
     const [data, setData] = useState([]);
     const [events, setEvents] = useState([]);
+    const [exporegister, setExporegister] = useState([]);
     const [bookmarkedSessions, setBookmarkedSessions] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -18,15 +19,20 @@ export const ScheduleManagement = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
+    const user_id = localStorage.getItem('publicuser');
+    const object = user_id ? JSON.parse(user_id) : null;
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
                 const sessionResponse = await axios.get('http://localhost:3000/getSession');
                 const eventResponse = await axios.get('http://localhost:3000/getexpoevents');
+                const sessionregisterResponse = await axios.get('http://localhost:3000/getsessionregister');
 
                 setData(sessionResponse.data);
                 setEvents(eventResponse.data);
+                setExporegister(sessionregisterResponse.data);
 
                 setLoading(false);
             } catch (error) {
@@ -118,6 +124,8 @@ export const ScheduleManagement = () => {
                                                         const event = events.find(loc => loc._id === session.title);
                                                         const isBookmarked = bookmarkedSessions.includes(session._id);
 
+                                                        const isRegistered = exporegister.some(entry => entry.sessionId === session._id && entry.attendeeId === (object?._id || ''));
+
                                                         return (
                                                             <tr key={index}>
                                                                 <td>{event.title}</td>
@@ -132,8 +140,12 @@ export const ScheduleManagement = () => {
                                                                         {isBookmarked ? <IconBookmarkFilled /> : <IconBookmark />}
                                                                     </div>
                                                                 </td>
-                                                                <td>
-                                                                    <Link to={`/deletesession/${session._id}`} className="btn btn-primary m-1">Register</Link>
+                                                                <td className="border-bottom-0">
+                                                                    {isRegistered ? (
+                                                                        <span className="badge rounded-pill bg-success">Registered</span>
+                                                                    ) : (
+                                                                        <Link to={`/sessionregister/${session._id}`} className="btn btn-primary m-1">Register</Link>
+                                                                    )}
                                                                 </td>
                                                             </tr>
                                                         );

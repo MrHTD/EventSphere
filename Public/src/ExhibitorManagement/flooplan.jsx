@@ -135,33 +135,32 @@ export const FloorPlan = () => {
                                                     <tbody>
                                                         {paginatedData.length === 0 ? (
                                                             <tr>
-                                                                <td colSpan="4"><h4 className='fw-semibold'>No data available</h4></td>
+                                                                <td colSpan="7"><h4 className='fw-semibold'>No data available</h4></td>
                                                             </tr>
                                                         ) : (
                                                             paginatedData.map((floor, index) => {
                                                                 const expo = events.find(expo => expo._id === floor.expoId);
                                                                 const booth = booths.find(booth => booth._id === floor.boothNumber);
-                                                                const availableSpace = booth.totalSpaces - booth.reservedSpaces;
 
                                                                 const registeredExpo = registeredexpo.find(item => item.expoId === floor.expoId);
                                                                 const isApproved = registeredExpo && registeredExpo.approvalStatus === 'Approved';
 
-                                                                // Check if the filter is on and the expo is approved
                                                                 if (!showApprovedOnly || (showApprovedOnly && isApproved)) {
-                                                                    const boothAllocation = boothsallocation.find(item => item.booth === booth._id);
-                                                                    const isReserved = boothAllocation && boothAllocation.status === 'reserved' && boothAllocation.userId === object._id;
+                                                                    const boothAllocation = boothsallocation.find(item => item.booth === booth?._id);
+                                                                    const isReserved = boothAllocation && boothAllocation.status === 'reserved' && boothAllocation.userId === object?._id;
+                                                                    const availableSpace = booth ? booth.totalSpaces - booth.reservedSpaces : 0;
 
-                                                                    const check = boothAllocation && boothAllocation.userId === object._id && boothAllocation.status === 'reserved';
+                                                                    const check = boothAllocation && boothAllocation.userId === object?._id && boothAllocation.status === 'reserved';
                                                                     const reservedSpaces = check ? boothAllocation.spacesReserved : 0;
 
                                                                     return (
                                                                         <tr key={index}>
-                                                                            <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.title}</h6></td>
-                                                                            <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{booth.boothNumber}</h6></td>
+                                                                            <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo?.title || 'N/A'}</h6></td>
+                                                                            <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{booth?.boothNumber || 'N/A'}</h6></td>
                                                                             <td className="border-bottom-0">
                                                                                 <span className="fw-normal">{floor.description}</span>
                                                                             </td>
-                                                                            <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{booth.totalSpaces}</h6></td>
+                                                                            <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{booth?.totalSpaces || 'N/A'}</h6></td>
                                                                             <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{availableSpace}</h6></td>
                                                                             <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{reservedSpaces}</h6></td>
                                                                             <td className="border-bottom-0">
@@ -169,14 +168,14 @@ export const FloorPlan = () => {
                                                                                     <Link type="button" className="btn btn-success m-1">Already Reserved</Link>
                                                                                 ) : (
                                                                                     isApproved && (
-                                                                                        <Link to={`/reservebooth/${expo._id}/${booth._id}`} type="button" className="btn btn-danger m-1">Reserve</Link>
+                                                                                        <Link to={`/reservebooth/${expo?._id}/${booth?._id}`} type="button" className="btn btn-danger m-1">Reserve</Link>
                                                                                     )
                                                                                 )}
                                                                             </td>
                                                                         </tr>
                                                                     );
                                                                 } else {
-                                                                    return null; // If filter is on and expo is not approved, don't render row
+                                                                    return null;
                                                                 }
                                                             })
                                                         )}

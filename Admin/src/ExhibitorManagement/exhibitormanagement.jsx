@@ -10,7 +10,7 @@ import APagination from '../pagination';
 export const ExhibitorManagement = () => {
     const [exporegister, setExporegister] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(10); // Number of users per page
+    const [postsPerPage] = useState(5);
 
     useEffect(() => {
         axios.get('http://localhost:3000/getregisterexpo')

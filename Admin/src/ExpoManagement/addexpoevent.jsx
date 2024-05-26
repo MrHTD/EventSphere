@@ -18,16 +18,15 @@ const AddExpoEvent = () => {
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     // Check if the user is already logged in
-    //     const loggedInUser = localStorage.getItem('user');
-    //     if (loggedInUser) {
-    //         // Redirect to the admin page
-    //         navigate('/dashboard');
-    //     } else {
-    //         navigate('/');
-    //     }
-    // }, [navigate]);
+    useEffect(() => {
+        // Check if the user is logged in
+        const isLoggedIn = !!localStorage.getItem('user');
+    
+        // Redirect to the login page if the user is not logged in
+        if (!isLoggedIn) {
+          navigate('/'); // Adjust the login route accordingly
+        }
+      }, [navigate]);
 
     const GetFormValue = (e) => {
         setdata({ ...data, [e.target.name]: e.target.value })

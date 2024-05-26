@@ -16,6 +16,7 @@ var nodemailer = require('nodemailer');
 const ExpoRegistrationModel = require("./Models/ExpoRegistration");
 const {Message, ExhibitorMessage} = require("./Models/Message");
 const AttendeeRegisterModel = require("./Models/AttendeeRegister");
+const SessionRegisterModel = require("./Models/SessionRegister");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -285,6 +286,13 @@ app.get("/getfloorplans", (req, res) => {
         .catch(error => res.json(error))
 })
 
+app.get("/getfloorplanbyid/:id", (req, res) => {
+    const id = req.params.id;
+    FloorPlanModel.findByIdAndUpdate({ _id: id }, { $set: req.body })
+        .then(floorplans => res.json(floorplans))
+        .catch(error => res.json(error))
+})
+
 app.put("/editfloorplan/:id", (req, res) => {
     const id = req.params.id;
     FloorPlanModel.findByIdAndUpdate({ _id: id }, { $set: req.body })
@@ -307,6 +315,13 @@ app.post('/addbooth', (req, res) => {
 
 app.get("/getbooths", (req, res) => {
     BoothModel.find({})
+        .then(booths => res.json(booths))
+        .catch(error => res.json(error))
+})
+
+app.get("/getboothbyid/:id", (req, res) => {
+    const id = req.params.id;
+    BoothModel.findByIdAndUpdate({ _id: id }, { $set: req.body })
         .then(booths => res.json(booths))
         .catch(error => res.json(error))
 })
@@ -464,6 +479,18 @@ app.post('/attendeeregister', (req, res) => {
 app.get("/getattendeeregister", (req, res) => {
     AttendeeRegisterModel.find({})
         .then(attendeeRegister => res.json(attendeeRegister))
+        .catch(error => res.json(error))
+})
+
+app.post('/sessionregister', (req, res) => {
+    SessionRegisterModel.create(req.body)
+        .then(sessionregister => res.json(sessionregister))
+        .catch(error => res.status(400).json({ error: error.message }));
+});
+
+app.get("/getsessionregister", (req, res) => {
+    SessionRegisterModel.find({})
+        .then(sessionregister => res.json(sessionregister))
         .catch(error => res.json(error))
 })
 

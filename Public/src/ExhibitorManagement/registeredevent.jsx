@@ -128,9 +128,14 @@ export const RegisteredEvent = () => {
                                                                             <h6 className={`fw-semibold mb-0 ${getApprovedStatus(event.approvalStatus)}`}>{event.approvalStatus}</h6>
                                                                         </td>
                                                                         <td className="border-bottom-0">
-                                                                            {event.approvalStatus === 'Approved' && (
+                                                                            {event.approvalStatus === 'Approved' ? (
                                                                                 <Link to={`/editexporegister/${event._id}`} type="button" className="btn btn-success m-1">Edit</Link>
-                                                                            )}
+                                                                            ) : (
+                                                                                event.approvalStatus === 'Pending' && (
+                                                                                    <div className="badge bg-dark">Awaiting Approval</div>
+                                                                                )
+                                                                            )
+                                                                            }
                                                                         </td>
                                                                     </tr>
                                                                 );

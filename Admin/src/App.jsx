@@ -25,6 +25,7 @@ import { SeatsReserved } from './ExhibitorManagement/seatsreserved'
 import AdminChat from './adminchat'
 import ReplyAdminChat from './replychat'
 import DeleteSessionSchedule from './Delete/deletesessionchedule'
+import EditFloorPlan from './Edit/editfloorplan'
 
 function App() {
 
@@ -66,6 +67,7 @@ function App() {
         {/* Edit Routes */}
         <Route path="/editexpoevent/:id" element={<EditExpoEvent />} />
         <Route path="/editbooth/:id" element={<EditBooth />} />
+        <Route path="/editfloorplan/:id" element={<EditFloorPlan />} />
 
         {/* Delete Routes */}
         <Route path="/deleteexpoevent/:id" element={<DeleteExpoEvent />} />

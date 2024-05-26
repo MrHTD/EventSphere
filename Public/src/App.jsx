@@ -19,6 +19,7 @@ import { ViewExhibitors } from './ExhibitorManagement/viewexhibitors'
 import { ExhibitorList } from './AttendeeManagement/ExhibitorList'
 import { ViewFloorPlan } from './AttendeeManagement/viewfloorplan'
 import { ScheduleManagement } from './AttendeeManagement/viewschedule'
+import SessionRegister from './AttendeeManagement/sessionregister'
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
 
         {/* Attendee Routes */}
         <Route path="/eventregister/:id" element={<EventRegister />} />
+        <Route path="/sessionregister/:id" element={<SessionRegister />} />
         <Route path="/chat" element={<PublicChat />} />
         <Route path="/exhibitorlist" element={<ExhibitorList />} />
         <Route path="/aviewfloorplan" element={<ViewFloorPlan />} />
