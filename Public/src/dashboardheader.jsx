@@ -37,7 +37,7 @@ export const DashboardHeader = () => {
                         <IconMenu2 />
                     </Link>
                 </li>
-                <div className="navbar-collapse justify-content-end px-0" id="navbarNav">
+                {/* <div className="navbar-collapse justify-content-end px-0" id="navbarNav">
                     <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-end">
                         <li className="nav-item dropdown">
                             <Link className="nav-link nav-icon-hover" href="" id="notification" data-bs-toggle="dropdown">
@@ -49,7 +49,7 @@ export const DashboardHeader = () => {
                             </div>
                         </li>
                     </ul>
-                </div>
+                </div> */}
             </ul>
             <div className="navbar-collapse justify-content-end px-0" id="navbarNav">
                 <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-end">

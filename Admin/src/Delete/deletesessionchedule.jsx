@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios'
 import { useParams, useNavigate } from 'react-router-dom';
 
-const DeleteFloorPlan = () => {
+const DeleteSessionSchedule = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -10,9 +10,9 @@ const DeleteFloorPlan = () => {
         // Define an asynchronous function to make the delete request
         const DeleteExpoEvent = async () => {
             try {
-                await axios.delete(`http://localhost:3000/deletefloorplan/${id}`);
+                await axios.delete(`http://localhost:3000/deleteSession/${id}`);
                 console.log(`${id} Deleted`);
-                navigate('/floorplan');
+                navigate('/session');
             } catch (error) {
                 console.error(error);
             }
@@ -22,7 +22,7 @@ const DeleteFloorPlan = () => {
         DeleteExpoEvent();
     }, [id, navigate]);
 
-    return <div>User Deleted</div>
+    return <div>Session Deleted</div>
 }
 
-export default DeleteFloorPlan
+export default DeleteSessionSchedule

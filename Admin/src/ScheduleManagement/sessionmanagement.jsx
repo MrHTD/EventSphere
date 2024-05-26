@@ -11,11 +11,7 @@ import APagination from '../pagination';
 
 export const SessionManagement = () => {
     const [data, setData] = useState([]);
-
     const [events, setEvents] = useState([]);
-    const [timeslots, setTimeslots] = useState([]);
-    const [locations, setLocations] = useState([]);
-    const [speakers, setSpeakers] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [sessionsPerPage] = useState(10);
@@ -28,16 +24,10 @@ export const SessionManagement = () => {
             try {
                 setLoading(true);
                 const sessionResponse = await axios.get('http://localhost:3000/getSession');
-                const eventResponse = await axios.get('http://localhost:3000/getSchedule');
-                const timeslotResponse = await axios.get('http://localhost:3000/getTimeSlot');
-                const locationResponse = await axios.get('http://localhost:3000/getLocations');
-                const speakerResponse = await axios.get('http://localhost:3000/getSpeaker');
+                const eventResponse = await axios.get('http://localhost:3000/getexpoevents');
 
                 setData(sessionResponse.data);
                 setEvents(eventResponse.data);
-                setTimeslots(timeslotResponse.data);
-                setLocations(locationResponse.data);
-                setSpeakers(speakerResponse.data);
 
                 setLoading(false);
             } catch (error) {
@@ -59,6 +49,13 @@ export const SessionManagement = () => {
         setCurrentPage(pageNumber);
     };
 
+    const truncateText = (text, maxLength) => {
+        if (text.length <= maxLength) {
+            return text;
+        }
+        return text.substring(0, maxLength) + '...';
+    };
+
     return (
         <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
             data-sidebar-position="fixed" data-header-position="fixed">
@@ -74,7 +71,7 @@ export const SessionManagement = () => {
                                 <div className="card-body">
                                     <Row>
                                         <Col>
-                                            <h5 className="card-title fw-semibold mb-4">Session Management</h5>
+                                            <h5 className="card-title fw-semibold mb-4">Session & Schedule Management</h5>
                                         </Col>
                                         <Col className='text-end'>
                                             <Link to="/addsession" className="w-auto btn btn-primary">Add Session</Link>
@@ -86,45 +83,33 @@ export const SessionManagement = () => {
                                         <p>{error}</p>
                                     ) : (
                                         <div className="table-responsive">
-                                            <table className="table text-nowrap mb-0 align-middle text-center">
+                                            <table className="table text-wrap mb-0 align-middle text-center">
                                                 <thead className="text-dark fs-4">
                                                     <tr>
                                                         <th>Title</th>
                                                         <th>Description</th>
                                                         <th>Topic</th>
-                                                        <th>Start Date</th>
-                                                        <th>End Date</th>
-                                                        <th>Event</th>
-                                                        <th>Time Slot</th>
-                                                        <th>Speakers</th>
+                                                        <th>Start Time</th>
+                                                        <th>End Time</th>
+                                                        <th>Speaker</th>
                                                         <th>Location</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {paginatedSessions.map((session, index) => {
-                                                        const location = locations.find(loc => loc._id === session.location);
-                                                        const timeslot = timeslots.find(loc => loc._id === session.timeSlot);
-                                                        const event = events.find(loc => loc._id === session.event);
+                                                        const event = events.find(loc => loc._id === session.title);
                                                         return (
                                                             <tr key={index}>
-                                                                <td>{session.title}</td>
-                                                                <td>{session.description}</td>
-                                                                <td>{session.topic}</td>
-                                                                <td>{new Date(session.startTime).toLocaleDateString()}</td>
-                                                                <td>{new Date(session.endTime).toLocaleDateString()}</td>
                                                                 <td>{event.title}</td>
-                                                                <td>{new Date(timeslot.startTime).toLocaleTimeString('en-US')}</td>
+                                                                <td className='text-wrap'>{truncateText(session.description, 60)}</td>
+                                                                <td>{session.topic}</td>
+                                                                <td>{new Date(session.startTime).toLocaleTimeString('en-US')}</td>
+                                                                <td>{new Date(session.endTime).toLocaleDateString('en-US')}</td>
+                                                                <td>{session.speaker}</td>
+                                                                <td>{session.location}</td>
                                                                 <td>
-                                                                    {session.speakers.map((speakerId, index) => {
-                                                                        const speaker = speakers.find(spk => spk._id === speakerId);
-                                                                        return <span key={index}>{speaker ? speaker.name : 'Unknown'}{index !== session.speakers.length - 1 ? ', ' : ''}</span>;
-                                                                    })}
-                                                                </td>
-                                                                <td>{location.name}</td>
-                                                                <td>
-                                                                    <Link to={`/editsessionevent/${session._id}`} className="btn btn-success m-1">Edit</Link>
-                                                                    <Link to={`/deletesessionevent/${session._id}`} className="btn btn-danger m-1">Delete</Link>
+                                                                    <Link to={`/deletesession/${session._id}`} className="btn btn-danger m-1">Delete</Link>
                                                                 </td>
                                                             </tr>
                                                         );

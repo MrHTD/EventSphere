@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Navbar, Nav, Dropdown, Form, FloatingLabel, Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'
 import { Header } from './header';
 import { Sidebar } from './sidebar';
-import { Charts } from './Components/charts';
 import { SmallCard1 } from './Components/smallcard1';
 import { SmallCard2 } from './Components/smallcard2';
-import { Table } from './Components/table';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -33,7 +30,7 @@ const Dashboard = () => {
             <Header />
           </header>
           <Container fluid>
-            <Row>
+            {/* <Row>
               <Col lg={8}>
                 <Charts />
               </Col>
@@ -47,8 +44,14 @@ const Dashboard = () => {
                   </Col>
                 </Row>
               </Col>
-            </Row>
+            </Row> */}
             <Row>
+              <Col lg={8}>
+                <SmallCard1 />
+              </Col>
+              <Col lg={8}>
+                <SmallCard2 />
+              </Col>
             </Row>
 
             {/* Table */}

@@ -10,7 +10,7 @@ export const ViewEvents = () => {
     const [events, setEvents] = useState([]);
     const [exporegister, setExporegister] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(10);
+    const [postsPerPage] = useState(5);
 
     useEffect(() => {
         axios.get('http://localhost:3000/getexpoevents')
@@ -133,7 +133,7 @@ export const ViewEvents = () => {
                                                         <h6 className="mb-0 fw-normal">{expo.location}</h6>
                                                     </td>
                                                     <td className="border-bottom-0">
-                                                        <h6 className="mb-0 fw-normal">{expo.theme}</h6>
+                                                        <h6 className="mb-0 fw-normal text-wrap">{expo.theme}</h6>
                                                     </td>
                                                     <td className="border-bottom-0">
                                                         <h6 className="fw-normal mb-0">{expo.organizer}</h6>

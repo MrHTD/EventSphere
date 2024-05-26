@@ -19,19 +19,12 @@ import ResetPassword from './reset-password'
 import EditExpoEvent from './Edit/editexpoevent'
 import EditBooth from './Edit/editbooth'
 import DeleteExpoEvent from './Delete/deleteexpoevent'
-import { Speaker } from './ScheduleManagement/speaker'
-import { Schedule } from './ScheduleManagement/schedule'
 import { SessionManagement } from './ScheduleManagement/sessionmanagement'
 import AddSession from './ScheduleManagement/addsession'
-import { TimeSLot } from './ScheduleManagement/timeslot'
-import { Location } from './ScheduleManagement/location'
-import AddSchedule from './ScheduleManagement/addschedule'
-import AddTimeslot from './ScheduleManagement/addtimeslot'
-import AddSpeaker from './ScheduleManagement/addspeaker'
-import AddLocation from './ScheduleManagement/addlocation'
 import { SeatsReserved } from './ExhibitorManagement/seatsreserved'
 import AdminChat from './adminchat'
 import ReplyAdminChat from './replychat'
+import DeleteSessionSchedule from './Delete/deletesessionchedule'
 
 function App() {
 
@@ -66,16 +59,8 @@ function App() {
 
         {/* Schedule Routes */}
         <Route path="/session" element={<SessionManagement />} />
-        <Route path="/schedule" element={<Schedule />} />
-        <Route path="/timeslot" element={<TimeSLot />} />
-        <Route path="/speaker" element={<Speaker />} />
-        <Route path="/location" element={<Location />} />
         {/* Add */}
         <Route path="/addsession" element={<AddSession />} />
-        <Route path="/addschedule" element={<AddSchedule />} />
-        <Route path="/addtimeslot" element={<AddTimeslot />} />
-        <Route path="/addspeaker" element={<AddSpeaker />} />
-        <Route path="/addlocation" element={<AddLocation />} />
         {/* Schedule Routes End */}
 
         {/* Edit Routes */}
@@ -86,6 +71,7 @@ function App() {
         <Route path="/deleteexpoevent/:id" element={<DeleteExpoEvent />} />
         <Route path="/deletefloorplan/:id" element={<DeleteFloorPlan />} />
         <Route path="/deletebooth/:id" element={<DeleteBooth />} />
+        <Route path="/deletesession/:id" element={<DeleteSessionSchedule />} />
 
       </Routes>
     </BrowserRouter>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconLayoutDashboardFilled, IconX, IconHelpOctagon, IconReportAnalytics, IconDeviceAnalytics, IconMap, IconBuilding, IconPhoto, IconCalendar, IconArchive, IconClock, IconCalendarEvent, IconMicrophone2, IconLocation, IconListDetails } from '@tabler/icons-react';
+import { IconLayoutDashboardFilled, IconX, IconHelpOctagon, IconReportAnalytics, IconDeviceAnalytics, IconMap, IconBuilding, IconPhoto, IconReservedLine, IconArchive, IconClock, IconCalendarEvent, IconMicrophone2, IconLocation, IconListDetails } from '@tabler/icons-react';
 import { Link, NavLink } from 'react-router-dom';
 import logo from '/logo.png';
 
@@ -68,7 +68,7 @@ export const Sidebar = () => {
                             </NavLink>
                             <NavLink className="sidebar-link" to="/seatsreserved" aria-expanded="false">
                                 <span>
-                                    <IconPhoto />
+                                    <IconReservedLine />
                                 </span>
                                 <span className="hide-menu">Seats Reserved</span>
                             </NavLink>
@@ -79,30 +79,6 @@ export const Sidebar = () => {
                             <span className="hide-menu">Schedule  Management</span>
                         </li>
                         <li className="sidebar-item">
-                            <NavLink className="sidebar-link" to="/schedule" aria-expanded="false">
-                                <span>
-                                    <IconListDetails />
-                                </span>
-                                <span className="hide-menu">Schedule</span>
-                            </NavLink>
-                            <NavLink className="sidebar-link" to="/timeslot" aria-expanded="false">
-                                <span>
-                                    <IconClock />
-                                </span>
-                                <span className="hide-menu">TimeSlot</span>
-                            </NavLink>
-                            <NavLink className="sidebar-link" to="/speaker" aria-expanded="false">
-                                <span>
-                                    <IconMicrophone2 />
-                                </span>
-                                <span className="hide-menu">Speaker</span>
-                            </NavLink>
-                            <NavLink className="sidebar-link" to="/location" aria-expanded="false">
-                                <span>
-                                    <IconLocation />
-                                </span>
-                                <span className="hide-menu">Location</span>
-                            </NavLink>
                             <NavLink className="sidebar-link" to="/session" aria-expanded="false">
                                 <span>
                                     <IconCalendarEvent />

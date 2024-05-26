@@ -37,7 +37,7 @@ export const Header = () => {
                         <IconMenu2 />
                     </Link>
                 </li>
-                <div className="navbar-collapse justify-content-end px-0" id="navbarNav">
+                {/* <div className="navbar-collapse justify-content-end px-0" id="navbarNav">
                     <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-end">
                         <li className="nav-item dropdown">
                             <Link className="nav-link nav-icon-hover" href="" id="notification" data-bs-toggle="dropdown">
@@ -49,7 +49,7 @@ export const Header = () => {
                             </div>
                         </li>
                     </ul>
-                </div>
+                </div> */}
             </ul>
             <div className="navbar-collapse justify-content-end px-0" id="navbarNav">
                 <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-end">
@@ -79,10 +79,6 @@ export const Header = () => {
                                 <Link to="/forgetpassword" className="d-flex align-items-center gap-2 dropdown-item">
                                     <IconLockOff />
                                     <p className="mb-0 fs-3">Forget Paasword</p>
-                                </Link>
-                                <Link href="" className="d-flex align-items-center gap-2 dropdown-item">
-                                    <IconListCheck />
-                                    <p className="mb-0 fs-3">My Task</p>
                                 </Link>
                                 <Button className="btn btn-primary mx-auto mt-2 d-block" onClick={Logout}>Logout</Button>
                             </div>

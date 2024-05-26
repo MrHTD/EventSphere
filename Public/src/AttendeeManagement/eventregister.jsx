@@ -51,7 +51,7 @@ const EventRegister = () => {
             }, 3000);
             return;
         }
-        axios.post("http://localhost:3000/EventRegister", data)
+        axios.post("http://localhost:3000/exporegister", data)
             .then(result => {
                 console.log(result);
                 setSuccess("Event added successfully");

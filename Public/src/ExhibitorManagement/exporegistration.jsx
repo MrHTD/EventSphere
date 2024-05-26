@@ -134,7 +134,7 @@ const ExpoRegister = () => {
                                                 <Col>
                                                     <Form.Group className="mb-3">
                                                         <Form.Label>Contact Email</Form.Label>
-                                                        <Form.Control type='text' name='contactEmail' onChange={GetFormValue} value={data.contactEmail || ''} required />
+                                                        <Form.Control type='email' name='contactEmail' onChange={GetFormValue} value={data.contactEmail || ''} required />
                                                     </Form.Group>
                                                 </Col>
                                                 <Col>

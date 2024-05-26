@@ -1,33 +1,63 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Card, Row, Col } from 'react-bootstrap';
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, ArcElement, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export const SmallCard2 = () => {
+    const [totalUsers, setTotalUsers] = useState(0);
+    const [chartData, setChartData] = useState({ labels: [], datasets: [] });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/getUser');
+                const users = response.data.filter(user => user.role === "Attendee" || user.role === "Exhibitor");
+                setTotalUsers(users.length);
+
+                // Prepare chart data
+                const userRoles = ["Attendee", "Exhibitor"];
+                const roleCounts = userRoles.map(role => users.filter(user => user.role === role).length);
+
+                setChartData({
+                    labels: userRoles,
+                    datasets: [
+                        {
+                            label: 'Number of Users',
+                            data: roleCounts,
+                            backgroundColor: ['#7599ff', '#57D5EC'],
+                        }
+                    ]
+                });
+
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (
-        <div className="card">
-            <div className="card-body">
-                <div className="row alig n-items-start">
-                    <div className="col-8">
-                        <h5 className="card-title mb-9 fw-semibold"> Monthly Earnings </h5>
-                        <h4 className="fw-semibold mb-3">$6,820</h4>
-                        <div className="d-flex align-items-center pb-1">
-                            <span
-                                className="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
-                                <i className="ti ti-arrow-down-right text-danger"></i>
-                            </span>
-                            <p className="text-dark me-1 fs-3 mb-0">+9%</p>
-                            <p className="fs-3 mb-0">last year</p>
-                        </div>
-                    </div>
-                    <div className="col-4">
-                        <div className="d-flex justify-content-end">
-                            <div
-                                className="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
-                                <i className="ti ti-currency-dollar fs-6"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="earning"></div>
-        </div>
-    )
-}
+
+        <Card>
+            <Card.Header className='fw-semibold fs-6'>
+                <Row>
+                    <Col className='text-start'>Total Users</Col>
+                    <Col className='text-end'>{totalUsers}</Col>
+                </Row>
+            </Card.Header>
+            <Card.Body>
+                <Row>
+                    <Col>
+                        <Card.Text>
+                            <Doughnut data={chartData} options={{ maintainAspectRatio: false }} />
+                        </Card.Text>
+                    </Col>
+                </Row>
+            </Card.Body>
+        </Card>
+    );
+};

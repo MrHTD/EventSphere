@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconLayoutDashboardFilled, IconX, IconArticle, IconReportAnalytics, IconDeviceAnalytics, IconMap, IconBuilding, IconPhoto, IconCalendar, IconArchive, IconTicket, IconBookmark, IconReservedLine, IconRegistered, IconCalendarEvent, IconMap2, IconMessageReport, IconMessage } from '@tabler/icons-react';
+import { IconLayoutDashboardFilled, IconX, IconHelpOctagon, IconReportAnalytics, IconDeviceAnalytics, IconMap, IconBuilding, IconPhoto, IconCalendar, IconArchive, IconTicket, IconBookmark, IconReservedLine, IconRegistered, IconCalendarEvent, IconMap2, IconMessageReport, IconMessage } from '@tabler/icons-react';
 import { Link, NavLink } from 'react-router-dom';
 import logo from '/logo.png';
 
@@ -12,7 +12,7 @@ export const Sidebar = () => {
         <aside className="left-sidebar">
             {/* <!-- Sidebar scroll--> */}
             <div>
-            <div className="brand-logo d-flex align-items-center justify-content-center">
+                <div className="brand-logo d-flex align-items-center justify-content-center">
                     <Link to="/dashboard" className="text-nowrap logo-img">
                         <img src={logo} width="200" alt="" />
                     </Link>
@@ -74,7 +74,7 @@ export const Sidebar = () => {
                                         <span>
                                             <IconMessage />
                                         </span>
-                                        <span className="hide-menu">View Exhibitor</span>
+                                        <span className="hide-menu">Chat Exhibitor</span>
                                     </NavLink>
                                 </li>
                             </>
@@ -97,13 +97,13 @@ export const Sidebar = () => {
                                         </span>
                                         <span className="hide-menu">Schedule</span>
                                     </NavLink>
-                                    <NavLink className="sidebar-link" to="/booths" aria-expanded="false">
+                                    <NavLink className="sidebar-link" to="/exhibitorlist" aria-expanded="false">
                                         <span>
                                             <IconArchive />
                                         </span>
                                         <span className="hide-menu">Exhibitor List</span>
                                     </NavLink>
-                                    <NavLink className="sidebar-link" to="/booths" aria-expanded="false">
+                                    <NavLink className="sidebar-link" to="/aviewfloorplan" aria-expanded="false">
                                         <span>
                                             <IconMap />
                                         </span>
@@ -137,6 +137,12 @@ export const Sidebar = () => {
                                             <IconCalendar />
                                         </span>
                                         <span className="hide-menu">Browse Schedule</span>
+                                    </NavLink>
+                                    <NavLink className="sidebar-link" to="/viewexhibitors" aria-expanded="false">
+                                        <span>
+                                            <IconHelpOctagon />
+                                        </span>
+                                        <span className="hide-menu">Support</span>
                                     </NavLink>
                                 </li>
                             </>

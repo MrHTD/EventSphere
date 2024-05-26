@@ -102,8 +102,8 @@ export const FloorPlan = () => {
                                                                 const booth = booths.find(booth => booth._id === floor.boothNumber);
                                                                 return (
                                                                     <tr key={index}>
-                                                                        <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo.title}</h6></td>
-                                                                        <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{booth.boothNumber}</h6></td>
+                                                                        <td className="border-bottom-0 text-wrap"><h6 className="fw-semibold mb-0">{expo ? expo.title : 'N/A'}</h6></td>
+                                                                        <td className="border-bottom-0"><h6 className="fw-semibold mb-0">{booth ? booth.boothNumber : 'N/A'}</h6></td>
                                                                         <td className="border-bottom-0">
                                                                             <span className="fw-normal">{floor.description}</span>
                                                                         </td>

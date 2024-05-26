@@ -2,6 +2,7 @@ import React from 'react';
 import { Header } from './header';
 import { EventSection } from './ExpoEventSection';
 import { SliderSection } from './SliderSection';
+import { Footer } from './Footer';
 
 const Home = () => {
   return (
@@ -9,6 +10,7 @@ const Home = () => {
       <Header />
       <SliderSection />
       <EventSection />
+      <Footer/>
     </>
   );
 }

@@ -9,9 +9,7 @@ const AddSession = () => {
     description: "",
     startTime: "",
     endTime: "",
-    event: "",
-    timeSlot: "",
-    speakers: [],
+    speaker: "",
     topic: "",
     location: "",
   });
@@ -40,36 +38,9 @@ const AddSession = () => {
   }
 
   useEffect(() => {
-    axios.get('http://localhost:3000/getSchedule')
+    axios.get('http://localhost:3000/getexpoevents')
       .then(response => {
         setEvents(response.data);
-        console.log(response.data)
-      })
-      .catch(error => console.log(error));
-  }, []);
-
-  useEffect(() => {
-    axios.get('http://localhost:3000/getTimeSlot')
-      .then(response => {
-        setTimeslot(response.data);
-        console.log(response.data)
-      })
-      .catch(error => console.log(error));
-  }, []);
-
-  useEffect(() => {
-    axios.get('http://localhost:3000/getSpeaker')
-      .then(response => {
-        setSpeaker(response.data);
-        console.log(response.data)
-      })
-      .catch(error => console.log(error));
-  }, []);
-
-  useEffect(() => {
-    axios.get('http://localhost:3000/getLocations')
-      .then(response => {
-        setLocation(response.data);
         console.log(response.data)
       })
       .catch(error => console.log(error));
@@ -85,47 +56,7 @@ const AddSession = () => {
       setdata(prevData => ({
         ...prevData,
         // boothNumber: selectedEvent.boothNumber || "",
-        event: selectedEvent._id || ""
-      }));
-    }
-  };
-
-  const handleTimeSlotChange = (e) => {
-    const selectedEventTitle = e.target.value;
-    const selectedTimeSlot = timeslots.find(timeSlot => timeSlot._id === selectedEventTitle);
-    console.log(selectedTimeSlot)
-
-    if (selectedTimeSlot) {
-      // Update boothNumber and expoId in the state
-      setdata(prevData => ({
-        ...prevData,
-        timeSlot: selectedTimeSlot._id || ""
-      }));
-    }
-  };
-
-  const handleSpeakerChange = (index, e) => {
-    const newSelectedSpeakers = [...selectedSpeakers];
-    newSelectedSpeakers[index] = e.target.value;
-    setSelectedSpeakers(newSelectedSpeakers);
-
-    // Update data state with all selected speakers
-    setdata(prevData => ({
-      ...prevData,
-      speakers: newSelectedSpeakers,
-    }));
-  };
-
-  const handleLocationChange = (e) => {
-    const selectedEventTitle = e.target.value;
-    const selectedEvent = locations.find(location => location._id === selectedEventTitle);
-
-    if (selectedEvent) {
-      // Update boothNumber and expoId in the state
-      setdata(prevData => ({
-        ...prevData,
-        // boothNumber: selectedEvent.boothNumber || "",
-        location: selectedEvent._id || ""
+        title: selectedEvent._id || ""
       }));
     }
   };
@@ -133,27 +64,30 @@ const AddSession = () => {
   const BoothBtn = (e) => {
     e.preventDefault();
 
-    const startTime = new Date(data.startTime);
-    const endTime = new Date(data.endTime);
+    const startTime = new Date();
+    startTime.setHours(parseInt(data.startTime.split(":")[0]));
+    startTime.setMinutes(parseInt(data.startTime.split(":")[1]));
 
-    if (endTime < startTime) {
-      setError("End Date cannot be older than the start Date.");
-      setTimeout(() => {
-        setError("");
-      }, 3000);
-      return;
-    }
+    const endTime = new Date();
+    endTime.setHours(parseInt(data.endTime.split(":")[0]));
+    endTime.setMinutes(parseInt(data.endTime.split(":")[1]));
 
-    if (!data.title || !data.description || !data.startTime || !data.location) {
+    const requestData = {
+      startTime: startTime.toISOString(),
+      endTime: endTime.toISOString()
+    };
+
+    if (!data.title || !data.description || !data.startTime || !data.endTime || !data.location || !data.speaker || !data.topic) {
       setError("Please fill in all fields.");
       setTimeout(() => {
         setError("");
       }, 3000);
       return;
     }
-    axios.post("http://localhost:3000/createSession", data)
+    axios.post("http://localhost:3000/createSession", { ...data, ...requestData })
       .then(result => {
         console.log(result);
+        console.log(data);
         setSuccess("Session added successfully");
         navigate('/session');
       })
@@ -209,32 +143,9 @@ const AddSession = () => {
                   <h2 className="text-center fw-bold text-uppercase">Add Session</h2>
                   <Card.Body>
                     <Form>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Title</Form.Label>
-                        <Form.Control type="text" name='title' onChange={GetFormValue} value={data.title} required />
-                      </Form.Group>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control type="text" name='description' onChange={GetFormValue} value={data.description} required />
-                      </Form.Group>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Topic</Form.Label>
-                        <Form.Control type="text" name='topic' onChange={GetFormValue} value={data.topic} required />
-                      </Form.Group>
-
-                      <Form.Group className="mb-3">
-                        <Form.Label>Start Date</Form.Label>
-                        <Form.Control type="date" name='startTime' onChange={GetFormValue} value={data.startTime} required />
-                      </Form.Group>
-
-                      <Form.Group className="mb-3">
-                        <Form.Label>End Date</Form.Label>
-                        <Form.Control type="date" name='endTime' onChange={GetFormValue} value={data.endTime} required />
-                      </Form.Group>
-
-                      <Form.Group controlId='event' label='event' className='mb-3 overflow-hidden'>
-                        <Form.Label>Events</Form.Label>
-                        <Form.Select className='rounded-2' name='event' onChange={handleEventChange} value={data.event || ''} required>
+                      <Form.Group controlId='title' label='title' className='mb-3 overflow-hidden'>
+                        <Form.Label>Expo Events</Form.Label>
+                        <Form.Select className='rounded-2' name='title' onChange={handleEventChange} value={data.title || ''} required>
                           <option disabled value=''>Select an Event</option>
                           {events.map(event => (
                             <option key={event._id} value={event._id}>
@@ -244,46 +155,34 @@ const AddSession = () => {
                         </Form.Select>
                       </Form.Group>
 
-                      <Form.Group controlId='timeSlot' label='timeSlot' className='mb-3 overflow-hidden'>
-                        <Form.Label>TimeSlots</Form.Label>
-                        <Form.Select className='rounded-2' name='timeSlot' onChange={handleTimeSlotChange} value={data.timeSlot || ''} required>
-                          <option disabled value=''>Select an TimeSlots</option>
-                          {timeslots.map(timeSlot => (
-                            <option key={timeSlot._id} value={timeSlot._id}>
-                              {new Date(timeSlot.startTime).toLocaleTimeString('en-US')} - {new Date(timeSlot.endTime).toLocaleTimeString('en-US')}
-                            </option>
-                          ))}
-                        </Form.Select>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Description</Form.Label>
+                        <Form.Control type="text" name='description' onChange={GetFormValue} value={data.description} required />
                       </Form.Group>
 
-                      {/* <Form.Group controlId='speakers' label='speakers' className='mb-3 overflow-hidden'>
-                        <Form.Label>Speakers</Form.Label>
-                        <Form.Select className='rounded-2' name='speakers' onChange={handleSpeakerChange} value={data.speakers || ''} required>
-                          <option disabled value=''>Select an Speakers</option>
-                          {speakers.map(speaker => (
-                            <option key={speaker._id} value={speaker._id}>
-                              {speaker.name}
-                            </option>
-                          ))}
-                        </Form.Select>
-                      </Form.Group> */}
-
-                      <Form.Group controlId='speakers' label='speakers' className='mb-3 overflow-hidden'>
-                        {/* <Form.Label>Speakers</Form.Label> */}
-                        <AddSpeakerButton />
+                      <Form.Group className="mb-3">
+                        <Form.Label>Speaker</Form.Label>
+                        <Form.Control type="text" name='speaker' onChange={GetFormValue} value={data.speaker} required />
                       </Form.Group>
 
+                      <Form.Group className="mb-3">
+                        <Form.Label>Start Time</Form.Label>
+                        <Form.Control type="time" name='startTime' onChange={GetFormValue} value={data.startTime} required />
+                      </Form.Group>
 
-                      <Form.Group controlId='location' label='location' className='mb-3 overflow-hidden'>
+                      <Form.Group className="mb-3">
+                        <Form.Label>End Time</Form.Label>
+                        <Form.Control type="time" name='endTime' onChange={GetFormValue} value={data.endTime} required />
+                      </Form.Group>
+
+                      <Form.Group className="mb-3">
                         <Form.Label>Location</Form.Label>
-                        <Form.Select className='rounded-2' name='location' onChange={handleLocationChange} value={data.location || ''} required>
-                          <option disabled value=''>Select an Location</option>
-                          {locations.map(location => (
-                            <option key={location._id} value={location._id}>
-                              {location.address}
-                            </option>
-                          ))}
-                        </Form.Select>
+                        <Form.Control type="text" name='location' onChange={GetFormValue} value={data.location} required />
+                      </Form.Group>
+
+                      <Form.Group className="mb-3">
+                        <Form.Label>Topic</Form.Label>
+                        <Form.Control type="text" name='topic' onChange={GetFormValue} value={data.topic} required />
                       </Form.Group>
 
                       <Button variant="primary" className="w-100 py-2 fs-4 mb-4 rounded-2" onClick={BoothBtn}>Add Session</Button>

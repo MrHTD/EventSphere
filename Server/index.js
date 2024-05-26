@@ -8,11 +8,11 @@ const axios = require('axios');
 const UserModel = require("./User");
 const ExpoModel = require("./Expo");
 const FloorPlanModel = require("./FloorPlan");
+const SessionModel = require("./Models/Session");
 const { BoothModel, ExpoBoothAllocationModel } = require("./Booth");
 const MockAdapter = require('axios-mock-adapter');
 const jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
-const { EventModel, TimeSlotModel, SessionModel, SpeakerModel, LocationModel } = require("./Models/Schedule");
 const ExpoRegistrationModel = require("./Models/ExpoRegistration");
 const {Message, ExhibitorMessage} = require("./Models/Message");
 
@@ -29,7 +29,6 @@ app.use("/Uploads", express.static("Uploads"));
 mongoose.connect("mongodb://localhost:27017/eventsphere");
 
 // Chat Api's
-
 app.get("/api/messages", (req, res) => {
     Message.find({})
         .then(Message => res.json(Message))
@@ -67,6 +66,7 @@ app.get("/api/exhibitormessagesbyid/:id", (req, res) => {
         .then(ExhibitorMessage => res.json(ExhibitorMessage))
         .catch(error => res.status(400).json(error));
 });
+// ----------------
 
 app.post("/forget-password", async (req, res) => {
     try {
@@ -379,30 +379,6 @@ app.post("/login", async (req, res) => {
 });
 
 // Schedule Models
-app.post('/createSchedule', (req, res) => {
-    EventModel.create(req.body)
-        .then(events => res.json(events))
-        .catch(error => res.json(error))
-});
-
-app.get("/getSchedule", (req, res) => {
-    EventModel.find({})
-        .then(events => res.json(events))
-        .catch(error => res.json(error))
-})
-
-app.post('/createTimeSlot', (req, res) => {
-    TimeSlotModel.create(req.body)
-        .then(timeslots => res.json(timeslots))
-        .catch(error => res.json(error))
-});
-
-app.get("/getTimeSlot", (req, res) => {
-    TimeSlotModel.find({})
-        .then(timeslots => res.json(timeslots))
-        .catch(error => res.json(error))
-})
-
 app.post('/createSession', (req, res) => {
     SessionModel.create(req.body)
         .then(sessions => res.json(sessions))
@@ -415,27 +391,17 @@ app.get("/getSession", (req, res) => {
         .catch(error => res.json(error))
 })
 
-app.post('/createSpeaker', (req, res) => {
-    SpeakerModel.create(req.body)
-        .then(speakers => res.json(speakers))
-        .catch(error => res.status(400).json({ error: error.message }));
-});
-
-app.get("/getSpeaker", (req, res) => {
-    SpeakerModel.find({})
-        .then(speakers => res.json(speakers))
+app.put("/editSession/:id", (req, res) => {
+    const id = req.params.id;
+    SessionModel.findByIdAndUpdate({ _id: id }, { $set: req.body })
+        .then(sessions => res.json(sessions))
         .catch(error => res.json(error))
 })
 
-app.post('/createLocation', (req, res) => {
-    LocationModel.create(req.body)
-        .then(locations => res.json(locations))
-        .catch(error => res.status(400).json({ error: error.message }));
-});
-
-app.get("/getLocations", (req, res) => {
-    LocationModel.find({})
-        .then(locations => res.json(locations))
+app.delete("/deleteSession/:id", (req, res) => {
+    const id = req.params.id;
+    SessionModel.findByIdAndDelete({ _id: id })
+        .then(sessions => res.json(sessions))
         .catch(error => res.json(error))
 })
 

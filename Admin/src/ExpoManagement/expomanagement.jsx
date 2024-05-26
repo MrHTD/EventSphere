@@ -10,7 +10,7 @@ import APagination from '../pagination';
 export const ExpoManagement = () => {
     const [events, setEvents] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(10); // Number of users per page
+    const [postsPerPage] = useState(5); // Number of users per page
 
     useEffect(() => {
         axios.get('http://localhost:3000/getexpoevents')
@@ -119,7 +119,7 @@ export const ExpoManagement = () => {
                                                                         <h6 className="mb-0 fw-normal">{expo.location}</h6>
                                                                     </td>
                                                                     <td className="border-bottom-0">
-                                                                        <h6 className="mb-0 fw-normal">{expo.theme}</h6>
+                                                                        <h6 className="mb-0 fw-normal text-wrap">{expo.theme}</h6>
                                                                     </td>
                                                                     <td className="border-bottom-0">
                                                                         <h6 className="fw-normal mb-0">{expo.organizer}</h6>

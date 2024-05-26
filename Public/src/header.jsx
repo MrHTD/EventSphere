@@ -4,6 +4,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Logo from '../public/logo.png'
 
 export const Header = () => {
     const navigate = useNavigate();
@@ -20,11 +21,13 @@ export const Header = () => {
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
             <Container>
-                <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+                <Navbar.Brand href="#">
+                    <img src={Logo} alt="" className='img-fluid p-0' width={'220px'} />
+                </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href="#link">Link</Nav.Link>
+                        {/* <Nav.Link href="#link">Link</Nav.Link>
                         <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">
@@ -35,14 +38,14 @@ export const Header = () => {
                             <NavDropdown.Item href="#action/3.4">
                                 Separated link
                             </NavDropdown.Item>
-                        </NavDropdown>
+                        </NavDropdown> */}
                     </Nav>
                     {object ? (
                         <Nav className="ms-auto">
                             {/* <Nav.Link href="#link">Link</Nav.Link> */}
                             <NavDropdown className='text-hover-dark' title={object.username} id="basic-nav-dropdown">
                                 <NavLink className={"dropdown-item"} title={object.username} to="/signin">Dashboard</NavLink>
-                                <hr className='my-0'/>
+                                <hr className='my-0' />
                                 <NavDropdown.Item className="btn btn-primary" onClick={Logout}>Logout</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>

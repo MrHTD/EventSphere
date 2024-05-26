@@ -6,8 +6,6 @@ import { useNavigate, Link } from 'react-router-dom';
 export const EventSection = () => {
     const [events, setEvents] = useState([]);
     const navigate = useNavigate();
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
     const [alerts, setAlerts] = useState({});
 
 
@@ -36,9 +34,7 @@ export const EventSection = () => {
 
         if (object && object.role === 'Attendee') {
             setAlerts({ [index]: { success: 'You are logged in and can book now!', error: '' } });
-            setTimeout(() => {
-                setAlerts("");
-            }, 2000);
+            navigate('/signin');
         } else if (object) {
             setAlerts({ [index]: { success: '', error: 'Not logged in as Attendee' } });
             setTimeout(() => {
@@ -63,12 +59,13 @@ export const EventSection = () => {
                 </Row>
                 <Row>
                     <Col>
-                        {
+                        {events.length > 0 ? (
+
                             events.map((expo, index) => (
-                                <>
+                                <div key={index}>
                                     {alerts[index] && alerts[index].error && <Alert className='text-center' variant="danger">{alerts[index].error}</Alert>}
                                     {alerts[index] && alerts[index].success && <Alert className='text-center' variant="success">{alerts[index].success}</Alert>}
-                                    <Card key={index} className='border border-2 mb-3'>
+                                    <Card className='border border-2 mb-3'>
                                         <Card.Body className='px-0 d-flex flex-wrap align-items-center'>
                                             <Col md={2} xs={6} className='text-center mb-3 mb-md-0'>
                                                 <h6>Start Date</h6>
@@ -94,16 +91,27 @@ export const EventSection = () => {
                                                         <Card.Text>{new Date(expo.startTime).toLocaleTimeString('en-US')} - {new Date(expo.endTime).toLocaleTimeString('en-US')}</Card.Text>
                                                     </div>
                                                 </div>
+                                                <div className="row text-center">
+                                                    <div className="col-12 col-md-12">
+                                                        <Card.Text>{expo.description}</Card.Text>
+                                                    </div>
+                                                </div>
                                             </Col>
                                             <Col md={2} xs={12} className='text-center'>
                                                 <Button onClick={() => handleBookNow(index)} className="btn btn-dark m-1">Book Now</Button>
                                             </Col>
                                         </Card.Body>
                                     </Card>
-                                </>
+                                </div>
                             )
                             )
-                        }
+                        ) : (
+                            <Card>
+                                <Card.Title className='text-center p-2'>
+                                    No Events Available
+                                </Card.Title>
+                            </Card>
+                        )}
                     </Col>
                 </Row>
             </Container>

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import { Form, FloatingLabel, Container, Row, Col, Card, Button, Alert, InputGroup } from 'react-bootstrap';
 import axios from 'axios';
-import Message from './Message';
 
 function ReplyAdminChat() {
     const { id } = useParams();
@@ -92,7 +91,7 @@ function ReplyAdminChat() {
                                                     <Container key={index} >
                                                         <Row className="mb-2">
                                                             <Col>
-                                                                <Message text={message.text} user={message.user} />
+                                                                <p><strong>{message.user}:</strong> {message.text}</p>
                                                             </Col>
                                                             <Col className="text-end">
                                                                 <small>{formatTimestamp(message.timestamp)}</small>

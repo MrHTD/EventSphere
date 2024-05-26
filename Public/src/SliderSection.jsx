@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import Image1 from './assets/slider1.jpg';
 import Image2 from './assets/slider2.jpg';
-import Image3 from './assets/slider2.jpg';
+import Image3 from './assets/slider3.png';
 
 export const SliderSection = () => {
     const [index, setIndex] = useState(0);

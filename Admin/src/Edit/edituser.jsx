@@ -86,8 +86,7 @@ const EditUser = () => {
 
                             <Card className="mb-3">
                                 <Card.Body>
-                                    <img src={logo} className='img-fluid' width="350" alt="" />
-                                    <p className="text-center">Edit User</p>
+                                    <h3 className="text-center mb-3">Edit User</h3>
                                     <Form encType='multipart/form-data'>
                                         {data.image && !previewImage &&
                                             <div className="text-center">

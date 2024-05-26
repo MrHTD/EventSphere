@@ -36,6 +36,13 @@ const AddExpoEvent = () => {
     const LoginBtn = (e) => {
         e.preventDefault();
 
+        if (!data.title || !data.startDate || !data.endDate || !data.startTime || !data.endTime || !data.description || !data.location || !data.theme || !data.organizer) {
+            setError("Please fill in all fields.");
+            setTimeout(() => {
+                setError("");
+            }, 3000);
+            return;
+        }
         const startDate = new Date(data.startDate);
         const endDate = new Date(data.endDate);
 
@@ -60,13 +67,6 @@ const AddExpoEvent = () => {
             endTime: endTime.toISOString()
         };
 
-        if (!data.title || !data.startDate || !data.endDate || !data.startTime || !data.endTime || !data.description || !data.location || !data.theme || !data.organizer) {
-            setError("Please fill in all fields.");
-            setTimeout(() => {
-                setError("");
-            }, 3000);
-            return;
-        }
         axios.post("http://localhost:3000/addexpoevent", { ...data, ...requestData })
             .then(result => {
                 setSuccess("Event added successfully");

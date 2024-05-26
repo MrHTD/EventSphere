@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Form, FloatingLabel, Container, Row, Col, Card, Button, Alert, InputGroup } from 'react-bootstrap';
-import Message from './Message';
 
 function PublicChat() {
     const user_id = localStorage.getItem('publicuser');
@@ -88,7 +87,7 @@ function PublicChat() {
                                                     <Container>
                                                         <Row key={index} className="mb-2">
                                                             <Col>
-                                                                <Message text={message.text} user={message.user} />
+                                                                <p><strong>{message.user}:</strong> {message.text}</p>
                                                             </Col>
                                                             <Col className="text-end">
                                                                 <small>{formatTimestamp(message.timestamp)}</small>

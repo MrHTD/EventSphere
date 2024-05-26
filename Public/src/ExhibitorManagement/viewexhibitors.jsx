@@ -53,7 +53,7 @@ export const ViewExhibitors = () => {
                                         <div className="card-body p-4">
                                             <Row>
                                                 <Col>
-                                                    <h5 className="card-title fw-semibold mb-4">View Exhibitors</h5>
+                                                    <h5 className="card-title fw-semibold mb-4">Chat Exhibitors</h5>
                                                 </Col>
                                             </Row>
                                             <div className="table-responsive">
@@ -85,7 +85,7 @@ export const ViewExhibitors = () => {
                                                                             <span className="fw-normal">{exhibitor.email}</span>
                                                                         </td>
                                                                         <td className="border-bottom-0">
-                                                                            <Link to={`/exhibitorchat/${exhibitor._id}`} type="button" className="btn btn-dark m-1">Message</Link>
+                                                                            <a href={`mailto:${exhibitor.email}`} className="btn btn-dark m-1">Message</a>
                                                                         </td>
                                                                     </tr>
                                                                 )
